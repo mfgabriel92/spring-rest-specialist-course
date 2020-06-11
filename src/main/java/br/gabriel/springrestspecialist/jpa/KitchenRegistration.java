@@ -25,4 +25,8 @@ public class KitchenRegistration {
 	public Kitchen save(Kitchen kitchen) {
 		return manager.merge(kitchen);
 	}
+	
+	public Kitchen findById(Integer id) {
+		return manager.find(Kitchen.class, id);
+	}
 }

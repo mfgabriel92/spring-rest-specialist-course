@@ -31,5 +31,8 @@ public class KitchenQueryMain {
 		for (Kitchen kitchen : kitchens) {
 			System.out.println(kitchen.getName());
 		}
+		
+		Kitchen kitchen = kitchenRegistration.findById(1);
+		System.out.println(kitchen.getName());
 	}
 }
