@@ -39,5 +39,11 @@ public class KitchenQueryMain {
 		kitchenRegistration.save(kitchen);
 		
 		System.out.println(kitchen.getName());
+		
+		kitchenRegistration.remove(kitchen);
+		
+		for (Kitchen k : kitchens) {
+			System.out.println(k.getName());
+		}
 	}
 }

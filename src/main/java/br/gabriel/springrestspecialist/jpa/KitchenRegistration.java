@@ -29,4 +29,10 @@ public class KitchenRegistration {
 	public Kitchen findById(Integer id) {
 		return manager.find(Kitchen.class, id);
 	}
+	
+	@Transactional
+	public void remove(Kitchen kitchen) {
+		kitchen = findById(kitchen.getId());
+		manager.remove(kitchen);
+	}
 }
