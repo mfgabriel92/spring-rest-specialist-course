@@ -7,9 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@JsonRootName("kitchen")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -20,6 +24,8 @@ public class Kitchen {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+//	@JsonIgnore
+	@JsonProperty("kitchen_name")
 	@Column(nullable = false)
 	private String name;
 }
