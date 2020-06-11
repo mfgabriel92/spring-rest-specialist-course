@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import br.gabriel.springrestspecialist.SpringRestSpecialistApplication;
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
+import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
 
 public class KitchenQueryMain {
 	public static void main(String[] args) throws Exception {
@@ -15,7 +16,7 @@ public class KitchenQueryMain {
 			.web(WebApplicationType.NONE)
 			.run(args);
 		
-		KitchenRegistration kitchenRegistration = applicationContext.getBean(KitchenRegistration.class);
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
 		
 		Kitchen k1 = new Kitchen();
 		k1.setName("Brasilian");
@@ -23,10 +24,10 @@ public class KitchenQueryMain {
 		Kitchen k2 = new Kitchen();
 		k2.setName("Vietnamese");
 		
-		kitchenRegistration.save(k1);
-		kitchenRegistration.save(k2);
+		kitchenRepository.save(k1);
+		kitchenRepository.save(k2);
 		
-		List<Kitchen> kitchens = kitchenRegistration.findAll();
+		List<Kitchen> kitchens = kitchenRepository.findAll();
 		
 		for (Kitchen kitchen : kitchens) {
 			System.out.println(kitchen.getName());
@@ -36,11 +37,11 @@ public class KitchenQueryMain {
 		kitchen.setId(1);
 		kitchen.setName("Russian");
 		
-		kitchenRegistration.save(kitchen);
+		kitchenRepository.save(kitchen);
 		
 		System.out.println(kitchen.getName());
 		
-		kitchenRegistration.remove(kitchen);
+		kitchenRepository.delete(kitchen);
 		
 		for (Kitchen k : kitchens) {
 			System.out.println(k.getName());
