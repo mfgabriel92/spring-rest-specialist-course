@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
 
@@ -18,5 +19,10 @@ public class KitchenRegistration {
 	public List<Kitchen> findAll() {
 		TypedQuery<Kitchen> query = manager.createQuery("FROM Kitchen", Kitchen.class);
 		return query.getResultList();
+	}
+	
+	@Transactional
+	public Kitchen save(Kitchen kitchen) {
+		return manager.merge(kitchen);
 	}
 }
