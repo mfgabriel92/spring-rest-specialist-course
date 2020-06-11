@@ -32,7 +32,12 @@ public class KitchenQueryMain {
 			System.out.println(kitchen.getName());
 		}
 		
-		Kitchen kitchen = kitchenRegistration.findById(1);
+		Kitchen kitchen = new Kitchen();
+		kitchen.setId(1);
+		kitchen.setName("Russian");
+		
+		kitchenRegistration.save(kitchen);
+		
 		System.out.println(kitchen.getName());
 	}
 }
