@@ -13,11 +13,11 @@ import br.gabriel.springrestspecialist.domain.repository.StateRepository;
 @RestController
 @RequestMapping("/states")
 public class StateController {
-    @Autowired
-    private StateRepository repository;
+	@Autowired
+	private StateRepository repository;
 
-    @GetMapping
-    public List<State> findAll() {
-        return repository.findAll();
-    }
+	@GetMapping
+	public List<State> findAll() {
+		return repository.findAll();
+	}
 }

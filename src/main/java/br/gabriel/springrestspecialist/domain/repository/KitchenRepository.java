@@ -11,5 +11,5 @@ public interface KitchenRepository {
 	
 	Kitchen save(Kitchen kitchen);
 	
-	void delete(Kitchen kitchen);
+	void deleteById(Integer id);
 }
