@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
 import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
+import br.gabriel.springrestspecialist.domain.service.KitchenService;
 
 @RestController
 @RequestMapping("/kitchens")
 public class KitchenController {
     @Autowired
     private KitchenRepository repository;
+    
+    @Autowired
+    private KitchenService service;
 
     @GetMapping
     public List<Kitchen> findAll() {
@@ -45,7 +49,7 @@ public class KitchenController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Kitchen save(@RequestBody Kitchen kitchen) {
-    	return repository.save(kitchen);
+    	return service.save(kitchen);
     }
     
     @PutMapping("{id}")
@@ -57,7 +61,7 @@ public class KitchenController {
         }
     	
     	BeanUtils.copyProperties(kitchen, current, "id");
-    	current = repository.save(current);
+    	current = service.save(current);
     	
     	return ResponseEntity.ok(current);
     }
