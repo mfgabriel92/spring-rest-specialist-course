@@ -3,11 +3,10 @@ package br.gabriel.springrestspecialist.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
@@ -24,9 +23,9 @@ public class KitchenController {
         return repository.findAll();
     }
     
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public Kitchen findById(@PathVariable Integer id) {
-        return repository.findById(id);
+    public ResponseEntity<Kitchen> findById(@PathVariable Integer id) {
+        Kitchen kitchen = repository.findById(id);
+        return ResponseEntity.ok(kitchen);
     }
 }
