@@ -26,6 +26,11 @@ public class KitchenController {
     @GetMapping("/{id}")
     public ResponseEntity<Kitchen> findById(@PathVariable Integer id) {
         Kitchen kitchen = repository.findById(id);
+        
+        if (kitchen == null) {
+        	return ResponseEntity.notFound().build();
+        }
+        
         return ResponseEntity.ok(kitchen);
     }
 }
