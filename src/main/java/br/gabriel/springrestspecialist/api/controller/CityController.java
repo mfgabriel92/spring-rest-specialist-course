@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ public class CityController {
 	
 	@GetMapping("{id}")
 	public ResponseEntity<City> findById(@PathVariable Integer id) {
-		City city = repository.findById(id);
+		Optional<City> city = repository.findById(id);
 
-		if (city == null) {
+		if (city.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(city);
+		return ResponseEntity.ok(city.get());
 	}
 	
 	@PostMapping
@@ -52,7 +53,7 @@ public class CityController {
 	public ResponseEntity<?> save(@RequestBody City city) {
 		try {
 			city = service.save(city);
-			return ResponseEntity.status(HttpStatus.CREATED).build();
+			return ResponseEntity.status(HttpStatus.CREATED).body(city);
 		} catch (ResourceNotFoundExeption e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -60,16 +61,16 @@ public class CityController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<City> save(@PathVariable Integer id, @RequestBody City city) {
-		City current = repository.findById(id);
+		Optional<City> current = repository.findById(id);
 
-		if (current == null) {
+		if (current.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		BeanUtils.copyProperties(city, current, "id");
-		current = service.save(current);
+		BeanUtils.copyProperties(city, current.get(), "id");
+		City updatedCity  = service.save(current.get());
 
-		return ResponseEntity.ok(current);
+		return ResponseEntity.ok(updatedCity);
 	}
 
 	@DeleteMapping("{id}")

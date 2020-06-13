@@ -1,15 +1,7 @@
 package br.gabriel.springrestspecialist.domain.repository;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.domain.model.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PermissionRepository {
-	List<Permission> findAll();
-	
-	Permission findById(Integer id);
-	
-	Permission save(Permission permission);
-	
-	void delete(Permission permission);
+public interface PermissionRepository extends JpaRepository<Permission, Integer>  {
 }

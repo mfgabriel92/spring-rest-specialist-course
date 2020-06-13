@@ -22,12 +22,11 @@ public class CityService {
 
 	public City save(City city) {
 		Integer stateId = city.getState().getId();
-		State state = stateRepository.findById(stateId);
-		
-		if (state == null) {
-			throw new ResourceNotFoundExeption(String.format("State ID %d does not exist", stateId));
-		}
-		
+		State state = stateRepository.findById(stateId)
+			.orElseThrow(() -> new ResourceNotFoundExeption(String.format("State ID %d does not exist", stateId)));
+
+		city.setState(state);
+
 		return repository.save(city);
 	}
 

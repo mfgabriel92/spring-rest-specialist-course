@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ public class StateController {
 	
 	@GetMapping("{id}")
 	public ResponseEntity<State> findById(@PathVariable Integer id) {
-		State state = repository.findById(id);
+		Optional<State> state = repository.findById(id);
 
-		if (state == null) {
+		if (state.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(state);
+		return ResponseEntity.ok(state.get());
 	}
 	
 	@PostMapping
@@ -55,16 +56,16 @@ public class StateController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<State> save(@PathVariable Integer id, @RequestBody State state) {
-		State current = repository.findById(id);
+		Optional<State> current = repository.findById(id);
 
-		if (current == null) {
+		if (current.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
 		BeanUtils.copyProperties(state, current, "id");
-		current = service.save(current);
+		State updatedState = service.save(current.get());
 
-		return ResponseEntity.ok(current);
+		return ResponseEntity.ok(updatedState);
 	}
 
 	@DeleteMapping("{id}")

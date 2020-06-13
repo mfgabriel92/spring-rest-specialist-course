@@ -3,6 +3,7 @@ package br.gabriel.springrestspecialist.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,19 +43,19 @@ public class RestaurantController {
 
 	@GetMapping("{id}")
 	public ResponseEntity<Restaurant> findById(@PathVariable Integer id) {
-		Restaurant restaurant = repository.findById(id);
+		Optional<Restaurant> restaurant = repository.findById(id);
 
-		if (restaurant == null) {
+		if (restaurant.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(restaurant);
+		return ResponseEntity.ok(restaurant.get());
 	}
 	
-	@GetMapping("search")
-	public List<Restaurant> findAll(@RequestParam String name) {
-		return repository.findByName(name);
-	}
+//	@GetMapping("search")
+//	public List<Restaurant> findAll(@RequestParam String name) {
+//		return repository.findByName(name);
+//	}
 	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
@@ -69,16 +70,16 @@ public class RestaurantController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> save(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
 		try {
-			Restaurant current = repository.findById(id);
+			Optional<Restaurant> current = repository.findById(id);
 			
-			if (current == null) {
+			if (current.isEmpty()) {
 				return ResponseEntity.notFound().build();
 			}
 			
 			BeanUtils.copyProperties(restaurant, current, "id");
-			current = service.save(current);
+			Restaurant updatedRestaurant = service.save(current.get());
 			
-			return ResponseEntity.ok().body(current);
+			return ResponseEntity.ok().body(updatedRestaurant);
 		} catch (ResourceNotFoundExeption e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -86,15 +87,15 @@ public class RestaurantController {
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> save(@PathVariable Integer id, @RequestBody Map<String, Object> fields) {
-		Restaurant current = repository.findById(id);
-		
-		if (current == null) {
+		Optional<Restaurant> current = repository.findById(id);
+
+		if (current.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		merge(fields, current);
+		merge(fields, current.get());
 		
-		return save(id, current);
+		return save(id, current.get());
 	}
 
 	private void merge(Map<String, Object> fields, Restaurant source) {

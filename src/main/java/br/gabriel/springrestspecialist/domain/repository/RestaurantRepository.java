@@ -1,17 +1,7 @@
 package br.gabriel.springrestspecialist.domain.repository;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RestaurantRepository {
-	List<Restaurant> findAll();
-	
-	List<Restaurant> findByName(String name);
-	
-	Restaurant findById(Integer id);
-	
-	Restaurant save(Restaurant restaurant);
-	
-	void delete(Restaurant restaurant);
+public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 }
