@@ -1,5 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
+import static br.gabriel.springrestspecialist.infrastructure.repository.spec.RestaurantSpecs.withShippingFeeBetween;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,7 +28,6 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
-import br.gabriel.springrestspecialist.infrastructure.repository.spec.RestaurantWithShippingBetweenSpec;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -55,7 +56,7 @@ public class RestaurantController {
 	
 	@GetMapping("shipping-fees")
 	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
-		return repository.findAll(new RestaurantWithShippingBetweenSpec(minFee, maxFee));
+		return repository.findAll(withShippingFeeBetween(minFee, maxFee));
 	}
 	
 	@PostMapping
