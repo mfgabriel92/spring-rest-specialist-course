@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +26,7 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
+import br.gabriel.springrestspecialist.infrastructure.repository.spec.RestaurantWithShippingBetweenSpec;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -53,24 +53,9 @@ public class RestaurantController {
 		return ResponseEntity.ok(restaurant.get());
 	}
 	
-	@GetMapping("name")
-	public List<Restaurant> findByNameContaining(@RequestParam String name) {
-		return repository.findByNameContaining(name);
-	}
-	
-	@GetMapping("first")
-	public Restaurant findFirstByNameContaining(String name) {
-		return repository.findFirstByNameContaining(name).orElse(null);
-	}
-	
 	@GetMapping("shipping-fees")
 	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
-		return repository.findBetweenShippingFees(minFee, maxFee);
-	}
-	
-	@GetMapping("until-fee")
-	public List<Restaurant> findByShippingFeeLessThan(BigDecimal fee) {
-		return repository.findByShippingFeeLessThan(fee);
+		return repository.findAll(new RestaurantWithShippingBetweenSpec(minFee, maxFee));
 	}
 	
 	@PostMapping
