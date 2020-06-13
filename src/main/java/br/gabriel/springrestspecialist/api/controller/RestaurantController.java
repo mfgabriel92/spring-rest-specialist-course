@@ -52,10 +52,10 @@ public class RestaurantController {
 		return ResponseEntity.ok(restaurant.get());
 	}
 	
-//	@GetMapping("search")
-//	public List<Restaurant> findAll(@RequestParam String name) {
-//		return repository.findByName(name);
-//	}
+	@GetMapping("name")
+	public List<Restaurant> findByNameContaining(@RequestParam String name) {
+		return repository.findByNameContaining(name);
+	}
 	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
