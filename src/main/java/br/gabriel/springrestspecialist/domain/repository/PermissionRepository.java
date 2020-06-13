@@ -9,7 +9,7 @@ public interface PermissionRepository {
 	
 	Permission findById(Integer id);
 	
-	Permission save(Permission paymenMethod);
+	Permission save(Permission permission);
 	
-	void delete(Permission paymenMethod);
+	void delete(Permission permission);
 }

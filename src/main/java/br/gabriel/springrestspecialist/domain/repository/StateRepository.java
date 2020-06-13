@@ -9,7 +9,7 @@ public interface StateRepository {
 	
 	State findById(Integer id);
 	
-	State save(State paymenMethod);
+	State save(State state);
 	
-	void delete(State paymenMethod);
+	void deleteById(Integer id);
 }

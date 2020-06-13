@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +37,13 @@ public class StateRepositoryImpl implements StateRepository {
 	
 	@Override
 	@Transactional
-	public void delete(State State) {
-		State = findById(State.getId());
-		manager.remove(State);
+	public void deleteById(Integer id) {
+		State state = findById(id);
+		
+		if (state == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
+		manager.remove(state);
 	}
 }

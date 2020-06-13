@@ -18,50 +18,55 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
-import br.gabriel.springrestspecialist.domain.model.State;
-import br.gabriel.springrestspecialist.domain.repository.StateRepository;
-import br.gabriel.springrestspecialist.domain.service.StateService;
+import br.gabriel.springrestspecialist.domain.model.City;
+import br.gabriel.springrestspecialist.domain.repository.CityRepository;
+import br.gabriel.springrestspecialist.domain.service.CityService;
 
 @RestController
-@RequestMapping("/states")
-public class StateController {
+@RequestMapping("/cities")
+public class CityController {
 	@Autowired
-	private StateRepository repository;
+	private CityRepository repository;
 	
 	@Autowired
-	private StateService service;
+	private CityService service;
 
 	@GetMapping
-	public List<State> findAll() {
+	public List<City> findAll() {
 		return repository.findAll();
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<State> findById(@PathVariable Integer id) {
-		State state = repository.findById(id);
+	public ResponseEntity<City> findById(@PathVariable Integer id) {
+		City city = repository.findById(id);
 
-		if (state == null) {
+		if (city == null) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(state);
+		return ResponseEntity.ok(city);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public State save(@RequestBody State state) {
-		return service.save(state);
+	public ResponseEntity<?> save(@RequestBody City city) {
+		try {
+			city = service.save(city);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (ResourceNotFoundExeption e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<State> save(@PathVariable Integer id, @RequestBody State state) {
-		State current = repository.findById(id);
+	public ResponseEntity<City> save(@PathVariable Integer id, @RequestBody City city) {
+		City current = repository.findById(id);
 
 		if (current == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		BeanUtils.copyProperties(state, current, "id");
+		BeanUtils.copyProperties(city, current, "id");
 		current = service.save(current);
 
 		return ResponseEntity.ok(current);

@@ -9,7 +9,7 @@ public interface CityRepository {
 	
 	City findById(Integer id);
 	
-	City save(City paymenMethod);
+	City save(City city);
 	
-	void delete(City paymenMethod);
+	void deleteById(Integer id);
 }
