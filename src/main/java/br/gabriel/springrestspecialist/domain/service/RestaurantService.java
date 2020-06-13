@@ -19,11 +19,9 @@ public class RestaurantService {
 	
 	public Restaurant save(Restaurant restaurant) {
 		Integer kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
-		
-		if (kitchen == null) {
-			throw new ResourceNotFoundExeption(String.format("Kitchen ID %d does not exist", kitchenId));
-		}
+		Kitchen kitchen = kitchenRepository
+			.findById(kitchenId)
+			.orElseThrow(() -> new ResourceNotFoundExeption(String.format("Kitchen ID %d does not exist", kitchenId)));
 		
 		restaurant.setKitchen(kitchen);
 		

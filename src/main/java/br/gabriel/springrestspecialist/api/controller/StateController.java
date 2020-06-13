@@ -68,14 +68,14 @@ public class StateController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {
 			service.deleteById(id);
 			return ResponseEntity.noContent().build();
 		} catch (ResourceNotFoundExeption e) {
 			return ResponseEntity.notFound().build();
 		} catch (ResourceInUseExeption e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ public class KitchenController {
 
 	@GetMapping("{id}")
 	public ResponseEntity<Kitchen> findById(@PathVariable Integer id) {
-		Kitchen kitchen = repository.findById(id);
+		Optional<Kitchen> kitchen = repository.findById(id);
 
-		if (kitchen == null) {
+		if (kitchen.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return ResponseEntity.ok(kitchen);
+		return ResponseEntity.ok(kitchen.get());
 	}
 
 	@PostMapping
@@ -55,27 +56,27 @@ public class KitchenController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<Kitchen> save(@PathVariable Integer id, @RequestBody Kitchen kitchen) {
-		Kitchen current = repository.findById(id);
+		Optional<Kitchen> current = repository.findById(id);
 
-		if (current == null) {
+		if (current.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		BeanUtils.copyProperties(kitchen, current, "id");
-		current = service.save(current);
+		BeanUtils.copyProperties(kitchen, current.get(), "id");
+		Kitchen newKitchen = service.save(current.get());
 
-		return ResponseEntity.ok(current);
+		return ResponseEntity.ok(newKitchen);
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {
 			service.deleteById(id);
 			return ResponseEntity.noContent().build();
 		} catch (ResourceNotFoundExeption e) {
 			return ResponseEntity.notFound().build();
 		} catch (ResourceInUseExeption e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 }
