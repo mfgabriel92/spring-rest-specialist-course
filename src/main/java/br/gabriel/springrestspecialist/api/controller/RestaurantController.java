@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,6 +56,16 @@ public class RestaurantController {
 	@GetMapping("name")
 	public List<Restaurant> findByNameContaining(@RequestParam String name) {
 		return repository.findByNameContaining(name);
+	}
+	
+	@GetMapping("first")
+	public Restaurant findFirstByNameContaining(String name) {
+		return repository.findFirstByNameContaining(name).orElse(null);
+	}
+	
+	@GetMapping("shipping-fees")
+	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
+		return repository.findByShippingFeeBetween(minFee, maxFee);
 	}
 	
 	@PostMapping
