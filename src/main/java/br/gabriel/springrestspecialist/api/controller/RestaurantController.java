@@ -68,6 +68,11 @@ public class RestaurantController {
 		return repository.findByShippingFeeBetween(minFee, maxFee);
 	}
 	
+	@GetMapping("until-fee")
+	public List<Restaurant> findByShippingFeeLessThan(BigDecimal fee) {
+		return repository.findByShippingFeeLessThan(fee);
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Restaurant restaurant) {
 		try {
