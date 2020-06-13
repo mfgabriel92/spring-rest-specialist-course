@@ -1,12 +1,12 @@
 package br.gabriel.springrestspecialist.infrastructure.repository;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,25 +19,11 @@ public class RestaurantRepositoryImpl implements CustomRestaurantRepository {
 	
 	@Override
 	public List<Restaurant> findBetweenShippingFees(BigDecimal minFee, BigDecimal maxFee) {
-		StringBuilder jpql = new StringBuilder();
-		jpql.append("FROM Restaurant WHERE 0 = 0 ");
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Restaurant> criteria = builder.createQuery(Restaurant.class);
 		
-		HashMap<String, Object> params = new HashMap<>();
+		criteria.from(Restaurant.class);
 		
-		if (minFee != null) {
-			jpql.append("AND shippingFee >= :minFee ");
-			params.put("minFee", minFee);
-		}
-		
-		if (maxFee != null) {
-			jpql.append("AND shippingFee <= :maxFee ");
-			params.put("maxFee", maxFee);
-		}
-		
-		TypedQuery<Restaurant> query = manager.createQuery(jpql.toString(), Restaurant.class);
-		
-		params.forEach((k, v) -> query.setParameter(k, v));
-		
-		return query.getResultList();
+		return manager.createQuery(criteria).getResultList();
 	}
 }
