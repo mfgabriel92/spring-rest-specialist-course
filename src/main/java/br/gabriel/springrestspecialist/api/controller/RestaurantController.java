@@ -52,6 +52,11 @@ public class RestaurantController {
 		return ResponseEntity.ok(restaurant.get());
 	}
 	
+	@GetMapping("first")
+	public Optional<Restaurant> findFirst() {
+		return repository.findFirst();
+	}
+	
 	@GetMapping("shipping-fees")
 	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
 		return repository.findWithShippingFeesBetween(minFee, maxFee);
