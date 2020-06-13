@@ -65,7 +65,7 @@ public class RestaurantController {
 	
 	@GetMapping("shipping-fees")
 	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
-		return repository.findByShippingFeeBetween(minFee, maxFee);
+		return repository.findBetweenShippingFees(minFee, maxFee);
 	}
 	
 	@GetMapping("until-fee")

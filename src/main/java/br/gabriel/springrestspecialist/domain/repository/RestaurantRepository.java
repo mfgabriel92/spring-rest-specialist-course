@@ -7,11 +7,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
+import br.gabriel.springrestspecialist.infrastructure.repository.CustomRestaurantRepository;
 
-public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>, CustomRestaurantRepository {
 	List<Restaurant> findByNameContaining(String name);
-	
-	List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee);
 	
 	Optional<Restaurant> findFirstByNameContaining(String name);
 	
