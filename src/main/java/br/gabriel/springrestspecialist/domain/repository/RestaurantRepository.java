@@ -7,6 +7,8 @@ import br.gabriel.springrestspecialist.domain.model.Restaurant;
 public interface RestaurantRepository {
 	List<Restaurant> findAll();
 	
+	List<Restaurant> findByName(String name);
+	
 	Restaurant findById(Integer id);
 	
 	Restaurant save(Restaurant restaurant);
