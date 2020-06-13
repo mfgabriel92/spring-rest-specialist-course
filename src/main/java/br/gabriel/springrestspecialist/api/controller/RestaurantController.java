@@ -1,7 +1,5 @@
 package br.gabriel.springrestspecialist.api.controller;
 
-import static br.gabriel.springrestspecialist.infrastructure.repository.spec.RestaurantSpecs.withShippingFeeBetween;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -56,7 +54,7 @@ public class RestaurantController {
 	
 	@GetMapping("shipping-fees")
 	public List<Restaurant> findByShippingFeeBetween(BigDecimal minFee, BigDecimal maxFee) {
-		return repository.findAll(withShippingFeeBetween(minFee, maxFee));
+		return repository.findWithShippingFeesBetween(minFee, maxFee);
 	}
 	
 	@PostMapping
