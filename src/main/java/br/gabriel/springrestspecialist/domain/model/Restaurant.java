@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -57,6 +58,10 @@ public class Restaurant {
 	@JsonIgnore
 	@Embedded
 	private Address address;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "restaurant")
+	private List<Product> products = new ArrayList<>();
 	
 	@JsonIgnore
 	@CreationTimestamp
