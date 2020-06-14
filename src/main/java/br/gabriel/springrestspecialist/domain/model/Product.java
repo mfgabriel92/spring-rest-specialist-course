@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "products")
+@Table(name = "t_products")
 public class Product {
 	@EqualsAndHashCode.Include
 	@Id

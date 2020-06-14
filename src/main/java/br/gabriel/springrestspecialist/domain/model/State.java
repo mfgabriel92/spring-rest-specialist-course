@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "states")
+@Table(name = "t_states")
 public class State {
 	@EqualsAndHashCode.Include
 	@Id
