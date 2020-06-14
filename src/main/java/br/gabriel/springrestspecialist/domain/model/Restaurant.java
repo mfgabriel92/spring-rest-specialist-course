@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,14 +35,11 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false)
 	private String name;
 	
-	@Column(nullable = false)
 	private BigDecimal shippingFee;
 	
 	@ManyToOne
-	@JoinColumn(nullable = false)
 	private Kitchen kitchen;
 	
 	@JsonIgnore
@@ -65,11 +61,9 @@ public class Restaurant {
 	
 	@JsonIgnore
 	@CreationTimestamp
-	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime createdAt;
 	
 	@JsonIgnore
 	@UpdateTimestamp
-	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime updatedAt;
 }
