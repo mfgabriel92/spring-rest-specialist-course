@@ -50,6 +50,7 @@ public class Restaurant {
 	)
 	private List<PaymentMethod> paymentMethods = new ArrayList<>();
 	
+	@JsonIgnore
 	@Embedded
 	private Address address;
 }

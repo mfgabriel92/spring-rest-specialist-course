@@ -70,7 +70,7 @@ public class RestaurantController {
 				return ResponseEntity.notFound().build();
 			}
 			
-			BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods");
+			BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address");
 			Restaurant updatedRestaurant = service.save(current.get());
 			
 			return ResponseEntity.ok().body(updatedRestaurant);
