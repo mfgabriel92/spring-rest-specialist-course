@@ -46,7 +46,7 @@ public class Restaurant {
 	@JoinColumn(nullable = false)
 	private Kitchen kitchen;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 		name = "t_restaurants_payment_methods",
