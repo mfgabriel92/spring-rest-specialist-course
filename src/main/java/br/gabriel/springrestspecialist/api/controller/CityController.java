@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
@@ -74,14 +73,8 @@ public class CityController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		try {
-			service.deleteById(id);
-			return ResponseEntity.noContent().build();
-		} catch (ResourceNotFoundExeption e) {
-			return ResponseEntity.notFound().build();
-		} catch (ResourceInUseExeption e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Integer id) {
+		service.deleteById(id);
 	}
 }

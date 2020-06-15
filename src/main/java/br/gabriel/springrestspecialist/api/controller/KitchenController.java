@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
 import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
 import br.gabriel.springrestspecialist.domain.service.KitchenService;
@@ -69,14 +67,8 @@ public class KitchenController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		try {
-			service.deleteById(id);
-			return ResponseEntity.noContent().build();
-		} catch (ResourceNotFoundExeption e) {
-			return ResponseEntity.notFound().build();
-		} catch (ResourceInUseExeption e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Integer id) {
+		service.deleteById(id);
 	}
 }
