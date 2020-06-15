@@ -8,6 +8,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ExceptionMessage {
-	private LocalDateTime timestamp;
+	@Builder.Default
+	private LocalDateTime timestamp = LocalDateTime.now();
+	
 	private String message;
 }

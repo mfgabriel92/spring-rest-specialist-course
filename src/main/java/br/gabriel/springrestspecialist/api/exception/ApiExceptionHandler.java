@@ -1,11 +1,11 @@
 package br.gabriel.springrestspecialist.api.exception;
 
-import java.time.LocalDateTime;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
@@ -15,29 +15,36 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ApiException.class)
-	public ResponseEntity<?> handleApiException(ApiException e) {
-		return handleException(HttpStatus.BAD_REQUEST, e);
+	public ResponseEntity<?> handleApiException(ApiException e, WebRequest request) {
+		return handleException(HttpStatus.BAD_REQUEST, e, request);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundExeption.class)
-	public ResponseEntity<?> handleResourceNotFouncException(ResourceNotFoundExeption e) {
-		return handleException(HttpStatus.NOT_FOUND, e);
+	public ResponseEntity<?> handleResourceNotFouncException(ResourceNotFoundExeption e, WebRequest request) {
+		return handleException(HttpStatus.NOT_FOUND, e, request);
 	}
 	
 	@ExceptionHandler(ResourceInUseExeption.class)
-	public ResponseEntity<?> handleResourceInUseExeption(ResourceInUseExeption e) {
-		return handleException(HttpStatus.CONFLICT, e);
+	public ResponseEntity<?> handleResourceInUseExeption(ResourceInUseExeption e, WebRequest request) {
+		return handleException(HttpStatus.CONFLICT, e, request);
 	}
 	
-	private ResponseEntity<?> handleException(HttpStatus status, Exception e) {
-		ExceptionMessage exceptionMessage = buildExceptionMessage(e);
-		return ResponseEntity.status(status).body(exceptionMessage);
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (body == null) {
+			body = buildExceptionMessage(status.getReasonPhrase());
+		} else if (body instanceof String) {
+			body = buildExceptionMessage(ex.getMessage());
+		}
+		
+		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 	
-	private ExceptionMessage buildExceptionMessage(Exception e) {
-		return ExceptionMessage.builder()
-			.timestamp(LocalDateTime.now())
-			.message(e.getMessage())
-			.build();
+	private ResponseEntity<?> handleException(HttpStatus status, Exception e, WebRequest request) {
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), status, request);
+	}
+	
+	private ExceptionMessage buildExceptionMessage(String message) {
+		return ExceptionMessage.builder().message(message).build();
 	}
 }
