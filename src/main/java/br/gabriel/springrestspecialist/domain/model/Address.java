@@ -2,7 +2,6 @@ package br.gabriel.springrestspecialist.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -26,7 +25,7 @@ public class Address {
 	@Column(name = "address_neighborhood")
 	private String neighborhood;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "address_city_id")
 	private City city;
 }

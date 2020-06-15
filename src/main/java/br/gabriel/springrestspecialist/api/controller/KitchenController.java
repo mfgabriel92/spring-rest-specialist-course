@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
 import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
 import br.gabriel.springrestspecialist.domain.service.KitchenService;
@@ -49,7 +51,11 @@ public class KitchenController {
 		Kitchen current = repository.findOrFail(id);
 		BeanUtils.copyProperties(kitchen, current, "id");
 		
-		return service.save(current);
+		try {
+			return service.save(current);
+		} catch (ResourceNotFoundExeption e) {
+			throw new ApiException(e.getMessage());
+		}
 	}
 
 	@DeleteMapping("{id}")

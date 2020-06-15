@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
@@ -42,23 +42,24 @@ public class CityController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> save(@RequestBody City city) {
+	public City save(@RequestBody City city) {
 		try {
-			city = service.save(city);
-			return ResponseEntity.status(HttpStatus.CREATED).body(city);
+			return service.save(city);
 		} catch (ResourceNotFoundExeption e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			throw new ApiException(e.getMessage());
 		}
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<City> save(@PathVariable Integer id, @RequestBody City city) {
+	public City save(@PathVariable Integer id, @RequestBody City city) {
 		City current = repository.findOrFail(id);
-		
 		BeanUtils.copyProperties(city, current, "id");
-		City updatedCity  = service.save(current);
 
-		return ResponseEntity.ok(updatedCity);
+		try {
+			return service.save(current);
+		} catch (ResourceNotFoundExeption e) {
+			throw new ApiException(e.getMessage());
+		}
 	}
 
 	@DeleteMapping("{id}")
