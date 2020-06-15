@@ -8,29 +8,35 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<?> handleApiException(ApiException e) {
-		ExceptionMessage exceptionMessage = ExceptionMessage
-			.builder()
-			.timestamp(LocalDateTime.now())
-			.message(e.getMessage())
-			.build();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionMessage);
+		return handleException(HttpStatus.BAD_REQUEST, e);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundExeption.class)
 	public ResponseEntity<?> handleResourceNotFouncException(ResourceNotFoundExeption e) {
-		ExceptionMessage exceptionMessage = ExceptionMessage
-			.builder()
+		return handleException(HttpStatus.NOT_FOUND, e);
+	}
+	
+	@ExceptionHandler(ResourceInUseExeption.class)
+	public ResponseEntity<?> handleResourceInUseExeption(ResourceInUseExeption e) {
+		return handleException(HttpStatus.CONFLICT, e);
+	}
+	
+	private ResponseEntity<?> handleException(HttpStatus status, Exception e) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(e);
+		return ResponseEntity.status(status).body(exceptionMessage);
+	}
+	
+	private ExceptionMessage buildExceptionMessage(Exception e) {
+		return ExceptionMessage.builder()
 			.timestamp(LocalDateTime.now())
 			.message(e.getMessage())
 			.build();
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionMessage);
 	}
 }
