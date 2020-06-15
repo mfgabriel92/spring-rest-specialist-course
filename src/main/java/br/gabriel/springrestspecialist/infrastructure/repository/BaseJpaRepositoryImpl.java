@@ -27,7 +27,11 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
 	            .setParameter("id", id)
 	            .getSingleResult();
 	    } catch (NoResultException e) {
-	        throw new ResourceNotFoundExeption(String.format("Resource type %s of ID %d not found", getDomainClass().getName(), id));
+	        throw new ResourceNotFoundExeption(String.format(
+	        	"The %s ID %d does not exist", 
+	        	getDomainClass().getSimpleName().toLowerCase(), 
+	        	id
+	        ));
 	    }
 	}
 }
