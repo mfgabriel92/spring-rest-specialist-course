@@ -25,7 +25,7 @@ public class KitchenService {
 		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundExeption(String.format("The kitchen ID %d does not exist", id));
 		} catch (DataIntegrityViolationException e) {
-			throw new ResourceInUseExeption(String.format("The kitchen ID %d is being used by a restaurant", id));
+			throw new ResourceInUseExeption(String.format("The kitchen ID %d is being used by another resource", id));
 		}
 	}
 }

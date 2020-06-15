@@ -3,7 +3,6 @@ package br.gabriel.springrestspecialist.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +40,8 @@ public class RestaurantController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Restaurant> findById(@PathVariable Integer id) {
-		Optional<Restaurant> restaurant = repository.findById(id);
-
-		if (restaurant.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(restaurant.get());
+	public Restaurant findById(@PathVariable Integer id) {
+		return repository.findOrFail(id);
 	}
 	
 	@PostMapping
@@ -64,16 +57,10 @@ public class RestaurantController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> save(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
 		try {
-			Optional<Restaurant> current = repository.findById(id);
+			Restaurant current = repository.findOrFail(id);
+			BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address", "createdAt", "products");
 			
-			if (current.isEmpty()) {
-				return ResponseEntity.notFound().build();
-			}
-			
-			BeanUtils.copyProperties(restaurant, current.get(), "id", "paymentMethods", "address", "createdAt", "products");
-			Restaurant updatedRestaurant = service.save(current.get());
-			
-			return ResponseEntity.ok().body(updatedRestaurant);
+			return ResponseEntity.ok().body(service.save(current));
 		} catch (ResourceNotFoundExeption e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -81,15 +68,10 @@ public class RestaurantController {
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> save(@PathVariable Integer id, @RequestBody Map<String, Object> fields) {
-		Optional<Restaurant> current = repository.findById(id);
-
-		if (current.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		Restaurant current = repository.findOrFail(id);
+		merge(fields, current);
 		
-		merge(fields, current.get());
-		
-		return save(id, current.get());
+		return save(id, current);
 	}
 
 	private void merge(Map<String, Object> fields, Restaurant source) {

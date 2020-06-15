@@ -1,12 +1,10 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,14 +34,8 @@ public class KitchenController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Kitchen> findById(@PathVariable Integer id) {
-		Optional<Kitchen> kitchen = repository.findById(id);
-
-		if (kitchen.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(kitchen.get());
+	public Kitchen findById(@PathVariable Integer id) {
+		return repository.findOrFail(id);
 	}
 
 	@PostMapping
@@ -53,17 +45,11 @@ public class KitchenController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Kitchen> save(@PathVariable Integer id, @RequestBody Kitchen kitchen) {
-		Optional<Kitchen> current = repository.findById(id);
-
-		if (current.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		BeanUtils.copyProperties(kitchen, current.get(), "id");
-		Kitchen newKitchen = service.save(current.get());
-
-		return ResponseEntity.ok(newKitchen);
+	public Kitchen save(@PathVariable Integer id, @RequestBody Kitchen kitchen) {
+		Kitchen current = repository.findOrFail(id);
+		BeanUtils.copyProperties(kitchen, current, "id");
+		
+		return service.save(current);
 	}
 
 	@DeleteMapping("{id}")

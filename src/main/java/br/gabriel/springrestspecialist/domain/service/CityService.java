@@ -36,7 +36,7 @@ public class CityService {
 		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundExeption(String.format("The city ID %d does not exist", id));
 		} catch (DataIntegrityViolationException e) {
-			throw new ResourceInUseExeption(String.format("The city ID %d is being used by a restaurant", id));
+			throw new ResourceInUseExeption(String.format("The city ID %d is being used by another resource", id));
 		}
 	}
 }

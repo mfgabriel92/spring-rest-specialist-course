@@ -1,12 +1,10 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,14 +34,8 @@ public class StateController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<State> findById(@PathVariable Integer id) {
-		Optional<State> state = repository.findById(id);
-
-		if (state.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(state.get());
+	public State findById(@PathVariable Integer id) {
+		return repository.findOrFail(id);
 	}
 	
 	@PostMapping
@@ -53,17 +45,11 @@ public class StateController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<State> save(@PathVariable Integer id, @RequestBody State state) {
-		Optional<State> current = repository.findById(id);
-
-		if (current.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		
+	public State save(@PathVariable Integer id, @RequestBody State state) {
+		State current = repository.findOrFail(id);
 		BeanUtils.copyProperties(state, current, "id");
-		State updatedState = service.save(current.get());
-
-		return ResponseEntity.ok(updatedState);
+		
+		return service.save(current);
 	}
 
 	@DeleteMapping("{id}")

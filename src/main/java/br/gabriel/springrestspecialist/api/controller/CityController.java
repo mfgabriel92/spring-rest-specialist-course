@@ -1,7 +1,6 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +36,8 @@ public class CityController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<City> findById(@PathVariable Integer id) {
-		Optional<City> city = repository.findById(id);
-
-		if (city.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(city.get());
+	public City findById(@PathVariable Integer id) {
+		return repository.findOrFail(id);
 	}
 	
 	@PostMapping
@@ -60,14 +53,10 @@ public class CityController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<City> save(@PathVariable Integer id, @RequestBody City city) {
-		Optional<City> current = repository.findById(id);
-
-		if (current.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		City current = repository.findOrFail(id);
 		
-		BeanUtils.copyProperties(city, current.get(), "id");
-		City updatedCity  = service.save(current.get());
+		BeanUtils.copyProperties(city, current, "id");
+		City updatedCity  = service.save(current);
 
 		return ResponseEntity.ok(updatedCity);
 	}

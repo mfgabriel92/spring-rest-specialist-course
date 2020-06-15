@@ -1,12 +1,12 @@
 package br.gabriel.springrestspecialist.infrastructure.repository;
 
-import java.util.Optional;
-
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.repository.BaseJpaRepository;
 
 public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements BaseJpaRepository<T, ID> {
@@ -18,15 +18,16 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
 	}
 
 	@Override
-	public Optional<T> findFirst() {
-		String jpql = String.format("FROM %s", getDomainClass().getName());
-		
-		T entity = entityManager
-			.createQuery(jpql, getDomainClass())
-			.setMaxResults(1)
-			.getSingleResult();
-		
-		return Optional.ofNullable(entity);
+	public T findOrFail(ID id) {
+	    String jpql = String.format("FROM %s WHERE id = :id", getDomainClass().getName());
+
+	    try {
+	        return entityManager
+	            .createQuery(jpql, getDomainClass())
+	            .setParameter("id", id)
+	            .getSingleResult();
+	    } catch (NoResultException e) {
+	        throw new ResourceNotFoundExeption(String.format("Resource type %s of ID %d not found", getDomainClass().getName(), id));
+	    }
 	}
 }
-	
