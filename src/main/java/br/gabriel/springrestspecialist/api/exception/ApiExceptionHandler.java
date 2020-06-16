@@ -23,20 +23,17 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest request) {
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.BAD_REQUEST, ex.getMessage()).build();
-        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return throwException(ExceptionType.BAD_REQUEST, ex, request);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundExeption.class)
 	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundExeption ex, WebRequest request) {
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.NOT_FOUND, ex.getMessage()).build();
-        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		return throwException(ExceptionType.NOT_FOUND, ex, request);
 	}
 	
 	@ExceptionHandler(ResourceInUseExeption.class)
 	public ResponseEntity<Object> handleResourceInUseExeption(ResourceInUseExeption ex, WebRequest request) {
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.CONFLICT, ex.getMessage()).build();
-        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return throwException(ExceptionType.CONFLICT, ex, request);
 	}
 	
 	@Override
@@ -47,8 +44,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			return handleInvalidFormatException((InvalidFormatException) rootCause, request);
 		}
 		
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
-        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
+        return throwException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
 	}
 	
 	@Override
@@ -73,7 +70,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex.getValue().getClass().getSimpleName(), 
 			ex.getTargetType().getSimpleName()
 		);
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, message).build();
-        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+
+		return throwException(ExceptionType.MESSAGE_NOT_READABLE, ex, message, request);
+	}
+	
+	private ResponseEntity<Object> throwException(ExceptionType exceptionType, Exception ex, WebRequest request) {
+		return throwException(exceptionType, ex, ex.getMessage(), request);
+	}
+	
+	private ResponseEntity<Object> throwException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(exceptionType, detail).build();
+        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), exceptionType.getStatus(), request);
 	}
 }
