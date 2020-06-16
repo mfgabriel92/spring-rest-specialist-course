@@ -32,9 +32,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		if (body == null) {
-			body = buildExceptionMessage(status.getReasonPhrase());
+			body = buildExceptionMessage(status).build();
 		} else if (body instanceof String) {
-			body = buildExceptionMessage(ex.getMessage());
+			body = buildExceptionMessage(status, ex.getMessage()).build();
 		}
 		
 		return super.handleExceptionInternal(ex, body, headers, status, request);
@@ -44,7 +44,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), status, request);
 	}
 	
-	private ExceptionMessage buildExceptionMessage(String message) {
-		return ExceptionMessage.builder().message(message).build();
+	private ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(HttpStatus status) {
+		return buildExceptionMessage(status, status.getReasonPhrase());
+	}
+	
+	private ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(HttpStatus status, String detail) {
+		ExceptionType exception = ExceptionType.get(status);
+		
+		return ExceptionMessage.builder()
+			.status(exception.getStatusCode())
+			.type(exception.getPath())
+			.title(exception.getTitle())
+			.detail(detail);
 	}
 }
