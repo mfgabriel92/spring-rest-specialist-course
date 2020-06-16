@@ -6,23 +6,20 @@ import lombok.Getter;
 
 @Getter
 public enum ExceptionType {
-	BAD_REQUEST(HttpStatus.BAD_REQUEST),
-	NOT_FOUND(HttpStatus.NOT_FOUND),
-	CONFLICT(HttpStatus.CONFLICT);
+	BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad request"),
+	MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "Message not readable"),
+	NOT_FOUND(HttpStatus.NOT_FOUND, "Not found"),
+	CONFLICT(HttpStatus.CONFLICT, "Conflict");
 	
-	private Integer statusCode;
-
+	private HttpStatus status;
+	
 	private String title;
 	
 	private String path;
 	
-	ExceptionType(HttpStatus status) {
-		this.title = status.getReasonPhrase();
-		this.path = String.format("/%s", status.getReasonPhrase().toLowerCase().replace(" ", "-"));
-		this.statusCode = status.value();
-	}
-	
-	public static ExceptionType get(HttpStatus status) {
-		return ExceptionType.valueOf(status.getReasonPhrase().toUpperCase().replace(" ", "_"));
+	ExceptionType(HttpStatus status, String title) {
+		this.status = status;
+		this.title = title;
+		this.path = String.format("/%s", title.toLowerCase().replace(" ", "-"));
 	}
 }

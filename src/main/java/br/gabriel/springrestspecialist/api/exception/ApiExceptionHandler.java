@@ -3,6 +3,7 @@ package br.gabriel.springrestspecialist.api.exception;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -15,46 +16,48 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ApiException.class)
-	public ResponseEntity<?> handleApiException(ApiException e, WebRequest request) {
-		return handleException(HttpStatus.BAD_REQUEST, e, request);
+	public ResponseEntity<?> handleApiException(ApiException ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.BAD_REQUEST, ex.getMessage()).build();
+        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundExeption.class)
-	public ResponseEntity<?> handleResourceNotFouncException(ResourceNotFoundExeption e, WebRequest request) {
-		return handleException(HttpStatus.NOT_FOUND, e, request);
+	public ResponseEntity<?> handleResourceNotFouncException(ResourceNotFoundExeption ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.NOT_FOUND, ex.getMessage()).build();
+        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
 	@ExceptionHandler(ResourceInUseExeption.class)
-	public ResponseEntity<?> handleResourceInUseExeption(ResourceInUseExeption e, WebRequest request) {
-		return handleException(HttpStatus.CONFLICT, e, request);
+	public ResponseEntity<?> handleResourceInUseExeption(ResourceInUseExeption ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.CONFLICT, ex.getMessage()).build();
+        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.CONFLICT, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
+        return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		if (body == null) {
-			body = buildExceptionMessage(status).build();
-		} else if (body instanceof String) {
-			body = buildExceptionMessage(status, ex.getMessage()).build();
-		}
-		
+		ExceptionMessage.ExceptionMessageBuilder exceptionBody = ExceptionMessage.builder();
+        exceptionBody.status(status.value());
+        
+        if (body == null) {
+            body = exceptionBody.title(status.getReasonPhrase()).build();
+        } else if (body instanceof String) {
+            body = exceptionBody.title((String) body).build();
+        }
+
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 	
-	private ResponseEntity<?> handleException(HttpStatus status, Exception e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), status, request);
-	}
-	
-	private ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(HttpStatus status) {
-		return buildExceptionMessage(status, status.getReasonPhrase());
-	}
-	
-	private ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(HttpStatus status, String detail) {
-		ExceptionType exception = ExceptionType.get(status);
-		
+	private ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(ExceptionType exceptionType, String detail) {
 		return ExceptionMessage.builder()
-			.status(exception.getStatusCode())
-			.type(exception.getPath())
-			.title(exception.getTitle())
+			.status(exceptionType.getStatus().value())
+			.type(exceptionType.getPath())
+			.title(exceptionType.getTitle())
 			.detail(detail);
 	}
 }
