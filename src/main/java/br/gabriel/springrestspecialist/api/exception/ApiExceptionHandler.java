@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
@@ -36,6 +37,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ResourceInUseExeption.class)
 	public ResponseEntity<Object> handleResourceInUseExeption(ResourceInUseExeption ex, WebRequest request) {
         return handleException(ExceptionType.CONFLICT, ex, request);
+	}
+	
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+		String detail = String.format(
+			"The parameter of value '%s' is invalid because it requires a type '%s'",
+			ex.getValue(),
+			ex.getRequiredType().getSimpleName()
+		);
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, detail).build();
+        return handleException(ExceptionType.PARAMETER_MISMATCH, ex, message.getDetail(), request);
 	}
 	
 	@Override

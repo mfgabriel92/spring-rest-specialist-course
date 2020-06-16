@@ -11,7 +11,8 @@ public enum ExceptionType {
 	CONFLICT(HttpStatus.CONFLICT, "Conflict"),
 	MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "Message not readable"),
 	PROPERTY_UNRECOGNIZABLE(HttpStatus.BAD_REQUEST, "Property ignored"),
-	PROPERTY_IGNORED(HttpStatus.BAD_REQUEST, "Property ignored");
+	PROPERTY_IGNORED(HttpStatus.BAD_REQUEST, "Property ignored"),
+	PARAMETER_MISMATCH(HttpStatus.BAD_REQUEST, "Parameter mistmatch");
 	
 	private HttpStatus status;
 	
