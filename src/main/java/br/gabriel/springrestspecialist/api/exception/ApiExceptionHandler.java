@@ -52,6 +52,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format(
+			"The resource '%s' was not found",
+			ex.getRequestURL()
+		);
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.NOT_FOUND, detail).build();
+        return handleException(ExceptionType.NOT_FOUND, ex, message.getDetail(), request);
+	}
+	
+	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Throwable rootCause = rootCause(ex);
 		
@@ -65,16 +75,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
         return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format(
-			"The resource '%s' was not found",
-			ex.getRequestURL()
-		);
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.NOT_FOUND, detail).build();
-        return handleException(ExceptionType.NOT_FOUND, ex, message.getDetail(), request);
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
-		String message = String.format(
+		String detail = String.format(
 			"Property '%s' received value '%s' of type '%s' but requires a type '%s'",
 			getPropertyPath(ex),
 			ex.getValue(),
@@ -100,25 +100,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex.getTargetType().getSimpleName()
 		);
 
-		return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message, request);
+		return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
-		String message = String.format(
+		String detail = String.format(
 			"Property '%s' is not a known property",
 			getPropertyPath(ex)
 		);
 
-		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, message, request);
+		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
-		String message = String.format(
+		String detail = String.format(
 			"Property '%s' not meant to be passed",
 			getPropertyPath(ex)
 		);
 
-		return handleException(ExceptionType.PROPERTY_IGNORED, ex, message, request);
+		return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, WebRequest request) {
