@@ -25,6 +25,12 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleUnhandledExceptions(Exception ex, WebRequest request) {
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.INTERNAL_SERVER_ERROR, "An internal error happened. Try again or contact us.").build();
+        return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, message.getDetail(), request);
+	}
+	
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest request) {
         return handleException(ExceptionType.BAD_REQUEST, ex, request);
