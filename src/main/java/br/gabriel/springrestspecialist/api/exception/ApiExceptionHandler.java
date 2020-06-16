@@ -80,7 +80,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String detail = String.format("One or more fields are invalid. Correct them and try again.");
-		return handleException(ExceptionType.INVALID_PROPERTIES, ex, detail, request);
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ex.getBindingResult(), ExceptionType.INVALID_PROPERTIES, detail).build();
+		return handleException(ExceptionType.INVALID_PROPERTIES, exceptionMessage, ex, exceptionMessage.getDetail(), request);
 	}
 	
 	@Override
@@ -127,6 +128,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
 		ExceptionMessage exceptionMessage = buildExceptionMessage(exceptionType, detail).build();
+        return handleException(exceptionType, exceptionMessage, ex, exceptionMessage.getDetail(), request);
+	}
+	
+	private ResponseEntity<Object> handleException(ExceptionType exceptionType, ExceptionMessage exceptionMessage, Exception ex, String detail, WebRequest request) {
         return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), exceptionType.getStatus(), request);
 	}
 }
