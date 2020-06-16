@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
@@ -23,17 +25,17 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest request) {
-        return throwException(ExceptionType.BAD_REQUEST, ex, request);
+        return handleException(ExceptionType.BAD_REQUEST, ex, request);
 	}
 	
 	@ExceptionHandler(ResourceNotFoundExeption.class)
 	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundExeption ex, WebRequest request) {
-		return throwException(ExceptionType.NOT_FOUND, ex, request);
+		return handleException(ExceptionType.NOT_FOUND, ex, request);
 	}
 	
 	@ExceptionHandler(ResourceInUseExeption.class)
 	public ResponseEntity<Object> handleResourceInUseExeption(ResourceInUseExeption ex, WebRequest request) {
-        return throwException(ExceptionType.CONFLICT, ex, request);
+        return handleException(ExceptionType.CONFLICT, ex, request);
 	}
 	
 	@Override
@@ -42,10 +44,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		if (rootCause instanceof InvalidFormatException) {
 			return handleInvalidFormatException((InvalidFormatException) rootCause, request);
+		} else if (rootCause instanceof UnrecognizedPropertyException) {
+			return handleUnrecognizedPropertyException((UnrecognizedPropertyException) rootCause, request);
+		} else if (rootCause instanceof IgnoredPropertyException) {
+			return handleIgnoredPropertyException((IgnoredPropertyException) rootCause, request);
 		}
 		
 		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
-        return throwException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
+        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
 	}
 	
 	@Override
@@ -71,14 +77,32 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex.getTargetType().getSimpleName()
 		);
 
-		return throwException(ExceptionType.MESSAGE_NOT_READABLE, ex, message, request);
+		return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message, request);
 	}
 	
-	private ResponseEntity<Object> throwException(ExceptionType exceptionType, Exception ex, WebRequest request) {
-		return throwException(exceptionType, ex, ex.getMessage(), request);
+	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
+		String message = String.format(
+			"Property '%s' is not a known property",
+			getPropertyPath(ex)
+		);
+
+		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, message, request);
 	}
 	
-	private ResponseEntity<Object> throwException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
+	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
+		String message = String.format(
+			"Property '%s' not meant to be passed",
+			getPropertyPath(ex)
+		);
+
+		return handleException(ExceptionType.PROPERTY_IGNORED, ex, message, request);
+	}
+	
+	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, WebRequest request) {
+		return handleException(exceptionType, ex, ex.getMessage(), request);
+	}
+	
+	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
 		ExceptionMessage exceptionMessage = buildExceptionMessage(exceptionType, detail).build();
         return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), exceptionType.getStatus(), request);
 	}

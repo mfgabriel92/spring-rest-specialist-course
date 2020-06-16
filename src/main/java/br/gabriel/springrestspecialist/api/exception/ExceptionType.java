@@ -7,9 +7,11 @@ import lombok.Getter;
 @Getter
 public enum ExceptionType {
 	BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad request"),
-	MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "Message not readable"),
 	NOT_FOUND(HttpStatus.NOT_FOUND, "Not found"),
-	CONFLICT(HttpStatus.CONFLICT, "Conflict");
+	CONFLICT(HttpStatus.CONFLICT, "Conflict"),
+	MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "Message not readable"),
+	PROPERTY_UNRECOGNIZABLE(HttpStatus.BAD_REQUEST, "Property ignored"),
+	PROPERTY_IGNORED(HttpStatus.BAD_REQUEST, "Property ignored");
 	
 	private HttpStatus status;
 	
