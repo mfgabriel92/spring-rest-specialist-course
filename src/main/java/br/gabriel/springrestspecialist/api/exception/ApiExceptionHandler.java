@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
@@ -46,7 +47,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex.getValue(),
 			ex.getRequiredType().getSimpleName()
 		);
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, detail).build();
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.PARAMETER_MISMATCH, detail).build();
         return handleException(ExceptionType.PARAMETER_MISMATCH, ex, message.getDetail(), request);
 	}
 	
@@ -64,6 +65,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
         return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format(
+			"The resource '%s' was not found",
+			ex.getRequestURL()
+		);
+		ExceptionMessage message = buildExceptionMessage(ExceptionType.NOT_FOUND, detail).build();
+        return handleException(ExceptionType.NOT_FOUND, ex, message.getDetail(), request);
 	}
 	
 	@Override
