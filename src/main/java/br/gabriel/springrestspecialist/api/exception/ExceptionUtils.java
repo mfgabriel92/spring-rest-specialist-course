@@ -22,7 +22,7 @@ public class ExceptionUtils {
 			.detail(detail);
 	}
 	
-	public static ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(BindingResult result, ExceptionType exceptionType, String detail) {
+	public static ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(ExceptionType exceptionType, String detail, BindingResult result) {
 		List<ExceptionMessage.Field> fields = result.getFieldErrors()
 			.stream()
 			.map(field -> ExceptionMessage.Field.builder()

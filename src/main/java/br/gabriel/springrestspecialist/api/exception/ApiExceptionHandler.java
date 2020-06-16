@@ -46,6 +46,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleException(ExceptionType.CONFLICT, ex, request);
 	}
 	
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
+		return handleException(ExceptionType.NOT_FOUND, ex, detail, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format("One or more fields are invalid. Correct them and try again.");
+		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
+		return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
+	}
+	
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
 		String detail = String.format(
@@ -69,19 +82,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		
         return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, "There are one or more syntax errors on the request", request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
-		return handleException(ExceptionType.NOT_FOUND, ex, detail, request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format("One or more fields are invalid. Correct them and try again.");
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ex.getBindingResult(), ExceptionType.INVALID_PROPERTIES, detail).build();
-		return handleException(ExceptionType.INVALID_PROPERTIES, exceptionMessage, ex, exceptionMessage.getDetail(), request);
 	}
 	
 	@Override
@@ -128,10 +128,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
 		ExceptionMessage exceptionMessage = buildExceptionMessage(exceptionType, detail).build();
-        return handleException(exceptionType, exceptionMessage, ex, exceptionMessage.getDetail(), request);
+        return handleException(exceptionType, ex, exceptionMessage.getDetail(), exceptionMessage, request);
 	}
 	
-	private ResponseEntity<Object> handleException(ExceptionType exceptionType, ExceptionMessage exceptionMessage, Exception ex, String detail, WebRequest request) {
+	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, ExceptionMessage exceptionMessage, WebRequest request) {
         return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), exceptionType.getStatus(), request);
 	}
 }
