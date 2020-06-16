@@ -2,6 +2,8 @@ package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +43,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant save(@RequestBody Restaurant restaurant) {
+	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
 		try {
 			return service.save(restaurant);
 		} catch (ResourceNotFoundExeption e) {

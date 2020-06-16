@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -27,8 +28,7 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUnhandledExceptions(Exception ex, WebRequest request) {
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.INTERNAL_SERVER_ERROR, "An internal error happened. Try again or contact us.").build();
-        return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, message.getDetail(), request);
+        return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, "An internal error happened. Try again or contact us.", request);
 	}
 	
 	@ExceptionHandler(ApiException.class)
@@ -53,18 +53,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			ex.getValue(),
 			ex.getRequiredType().getSimpleName()
 		);
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.PARAMETER_MISMATCH, detail).build();
-        return handleException(ExceptionType.PARAMETER_MISMATCH, ex, message.getDetail(), request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format(
-			"The resource '%s' was not found",
-			ex.getRequestURL()
-		);
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.NOT_FOUND, detail).build();
-        return handleException(ExceptionType.NOT_FOUND, ex, message.getDetail(), request);
+        return handleException(ExceptionType.PARAMETER_MISMATCH, ex, detail, request);
 	}
 	
 	@Override
@@ -79,8 +68,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			return handleIgnoredPropertyException((IgnoredPropertyException) rootCause, request);
 		}
 		
-		ExceptionMessage message = buildExceptionMessage(ExceptionType.MESSAGE_NOT_READABLE, "There are one or more syntax errors on the request").build();
-        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, message.getDetail(), request);
+        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, "There are one or more syntax errors on the request", request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
+		return handleException(ExceptionType.NOT_FOUND, ex, detail, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String detail = String.format("One or more fields are invalid. Correct them and try again.");
+		return handleException(ExceptionType.INVALID_PROPERTIES, ex, detail, request);
 	}
 	
 	@Override
@@ -89,9 +89,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionBody.status(status.value());
         
         if (body == null) {
-            body = exceptionBody.title(status.getReasonPhrase()).build();
-        } else if (body instanceof String) {
-            body = exceptionBody.title((String) body).build();
+            body = exceptionBody
+            	.title(status.getReasonPhrase())
+            	.status(status.value())
+            	.detail("An internal error happened. Try again or contact us.")
+            	.build();
         }
 
 		return super.handleExceptionInternal(ex, body, headers, status, request);
@@ -110,20 +112,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
-		String detail = String.format(
-			"Property '%s' is not a known property",
-			getPropertyPath(ex)
-		);
-
+		String detail = String.format("Property '%s' is not a known property", getPropertyPath(ex));
 		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
-		String detail = String.format(
-			"Property '%s' not meant to be passed",
-			getPropertyPath(ex)
-		);
-
+		String detail = String.format("Property '%s' not meant to be passed", getPropertyPath(ex));
 		return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
 	}
 	
