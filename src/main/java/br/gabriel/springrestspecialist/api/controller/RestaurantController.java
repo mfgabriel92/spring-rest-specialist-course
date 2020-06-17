@@ -46,7 +46,7 @@ public class RestaurantController {
 	}
 	
 	@PutMapping("/{id}")
-	public Restaurant save(@PathVariable Integer id, @RequestBody Restaurant restaurant) {
+	public Restaurant save(@PathVariable Integer id, @RequestBody @Valid Restaurant restaurant) {
 		Restaurant current = repository.findOrFail(id);
 		BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address", "createdAt", "products");
 			

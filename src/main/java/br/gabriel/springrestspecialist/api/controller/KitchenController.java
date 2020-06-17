@@ -47,7 +47,7 @@ public class KitchenController {
 	}
 
 	@PutMapping("{id}")
-	public Kitchen save(@PathVariable Integer id, @RequestBody Kitchen kitchen) {
+	public Kitchen save(@PathVariable Integer id, @RequestBody @Valid Kitchen kitchen) {
 		Kitchen current = repository.findOrFail(id);
 		BeanUtils.copyProperties(kitchen, current, "id");
 		

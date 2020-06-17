@@ -2,6 +2,8 @@ package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,12 +42,12 @@ public class StateController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public State save(@RequestBody State state) {
+	public State save(@RequestBody @Valid State state) {
 		return service.save(state);
 	}
 
 	@PutMapping("{id}")
-	public State save(@PathVariable Integer id, @RequestBody State state) {
+	public State save(@PathVariable Integer id, @RequestBody @Valid State state) {
 		State current = repository.findOrFail(id);
 		BeanUtils.copyProperties(state, current, "id");
 		

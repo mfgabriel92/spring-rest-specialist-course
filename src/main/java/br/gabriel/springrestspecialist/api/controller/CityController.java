@@ -2,6 +2,8 @@ package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,12 +42,12 @@ public class CityController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public City save(@RequestBody City city) {
+	public City save(@RequestBody @Valid City city) {
 		return service.save(city);
 	}
 
 	@PutMapping("{id}")
-	public City save(@PathVariable Integer id, @RequestBody City city) {
+	public City save(@PathVariable Integer id, @RequestBody @Valid City city) {
 		City current = repository.findOrFail(id);
 		BeanUtils.copyProperties(city, current, "id");
 
