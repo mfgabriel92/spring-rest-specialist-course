@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gabriel.springrestspecialist.api.Groups.RestaurantCreation;
+import br.gabriel.springrestspecialist.api.Groups.KitchenId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "t_kitchens")
 public class Kitchen {
-	@NotNull(groups = RestaurantCreation.class)
+	@NotNull(groups = KitchenId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

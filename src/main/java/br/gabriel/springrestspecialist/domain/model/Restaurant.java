@@ -20,13 +20,15 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gabriel.springrestspecialist.api.Groups.RestaurantCreation;
+import br.gabriel.springrestspecialist.api.Groups.KitchenId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,15 +42,16 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotBlank(groups = RestaurantCreation.class)
+	@NotBlank
 	private String name;
 	
-	@NotNull(groups = RestaurantCreation.class)
-	@PositiveOrZero(groups = RestaurantCreation.class)
+	@NotNull
+	@PositiveOrZero
 	private BigDecimal shippingFee;
 	
+	@ConvertGroup(from = Default.class, to = KitchenId.class)
 	@Valid
-	@NotNull(groups = RestaurantCreation.class)
+	@NotNull
 	@ManyToOne
 	private Kitchen kitchen;
 	
