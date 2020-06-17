@@ -1,9 +1,6 @@
 package br.gabriel.springrestspecialist.api.exception;
 
-import static br.gabriel.springrestspecialist.api.exception.ExceptionUtils.buildExceptionMessage;
-import static br.gabriel.springrestspecialist.api.exception.ExceptionUtils.getPropertyPath;
-import static br.gabriel.springrestspecialist.api.exception.ExceptionUtils.rootCause;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +23,9 @@ import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+	@Autowired
+	private ExceptionUtils utils;
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUnhandledExceptions(Exception ex, WebRequest request) {
         return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, "An internal error happened. Try again or contact us.", request);
@@ -55,7 +55,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String detail = String.format("One or more fields are invalid. Correct them and try again.");
-		ExceptionMessage exceptionMessage = buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
+		ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
 		return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
 	}
 	
@@ -71,7 +71,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		Throwable rootCause = rootCause(ex);
+		Throwable rootCause = utils.rootCause(ex);
 		
 		if (rootCause instanceof InvalidFormatException) {
 			return handleInvalidFormatException((InvalidFormatException) rootCause, request);
@@ -103,7 +103,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
 		String detail = String.format(
 			"Property '%s' received value '%s' of type '%s' but requires a type '%s'",
-			getPropertyPath(ex),
+			utils.getPropertyPath(ex),
 			ex.getValue(),
 			ex.getValue().getClass().getSimpleName(), 
 			ex.getTargetType().getSimpleName()
@@ -113,12 +113,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
-		String detail = String.format("Property '%s' is not a known property", getPropertyPath(ex));
+		String detail = String.format("Property '%s' is not a known property", utils.getPropertyPath(ex));
 		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
-		String detail = String.format("Property '%s' not meant to be passed", getPropertyPath(ex));
+		String detail = String.format("Property '%s' not meant to be passed", utils.getPropertyPath(ex));
 		return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
 	}
 	
@@ -127,7 +127,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
-		ExceptionMessage exceptionMessage = buildExceptionMessage(exceptionType, detail).build();
+		ExceptionMessage exceptionMessage = utils.buildExceptionMessage(exceptionType, detail).build();
         return handleException(exceptionType, ex, exceptionMessage.getDetail(), exceptionMessage, request);
 	}
 	
