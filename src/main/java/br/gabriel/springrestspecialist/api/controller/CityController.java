@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;
@@ -43,11 +41,7 @@ public class CityController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public City save(@RequestBody City city) {
-		try {
-			return service.save(city);
-		} catch (ResourceNotFoundExeption e) {
-			throw new ApiException(e.getMessage());
-		}
+		return service.save(city);
 	}
 
 	@PutMapping("{id}")
@@ -55,11 +49,7 @@ public class CityController {
 		City current = repository.findOrFail(id);
 		BeanUtils.copyProperties(city, current, "id");
 
-		try {
-			return service.save(current);
-		} catch (ResourceNotFoundExeption e) {
-			throw new ApiException(e.getMessage());
-		}
+		return service.save(current);
 	}
 
 	@DeleteMapping("{id}")

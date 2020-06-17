@@ -29,7 +29,7 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
 	    } catch (NoResultException e) {
 	        throw new ResourceNotFoundExeption(String.format(
 	        	"The %s ID %d was not found",
-	        	getDomainClass().getSimpleName().toLowerCase(), 
+	        	getDomainClass().getSimpleName().toLowerCase(),
 	        	id
 	        ));
 	    }

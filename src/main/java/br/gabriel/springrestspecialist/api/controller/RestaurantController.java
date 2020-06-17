@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
@@ -44,11 +42,7 @@ public class RestaurantController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
-		try {
-			return service.save(restaurant);
-		} catch (ResourceNotFoundExeption e) {
-			throw new ApiException(e.getMessage());
-		}
+		return service.save(restaurant);
 	}
 	
 	@PutMapping("/{id}")
@@ -56,10 +50,6 @@ public class RestaurantController {
 		Restaurant current = repository.findOrFail(id);
 		BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address", "createdAt", "products");
 			
-		try {
-			return service.save(current);
-		} catch (ResourceNotFoundExeption e) {
-			throw new ApiException(e.getMessage());
-		}
+		return service.save(current);
 	}
 }
