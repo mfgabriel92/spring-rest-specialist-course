@@ -2,11 +2,10 @@ package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.Groups.RestaurantCreation;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
@@ -41,7 +41,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
+	public Restaurant save(@RequestBody @Validated(RestaurantCreation.class) Restaurant restaurant) {
 		return service.save(restaurant);
 	}
 	

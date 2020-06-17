@@ -26,6 +26,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.gabriel.springrestspecialist.api.Groups.RestaurantCreation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,15 +40,15 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotBlank
+	@NotBlank(groups = RestaurantCreation.class)
 	private String name;
 	
-	@NotNull
-	@PositiveOrZero
+	@NotNull(groups = RestaurantCreation.class)
+	@PositiveOrZero(groups = RestaurantCreation.class)
 	private BigDecimal shippingFee;
 	
 	@Valid
-	@NotNull
+	@NotNull(groups = RestaurantCreation.class)
 	@ManyToOne
 	private Kitchen kitchen;
 	

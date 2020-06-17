@@ -2,6 +2,8 @@ package br.gabriel.springrestspecialist.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +42,7 @@ public class KitchenController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen save(@RequestBody Kitchen kitchen) {
+	public Kitchen save(@RequestBody @Valid Kitchen kitchen) {
 		return service.save(kitchen);
 	}
 
