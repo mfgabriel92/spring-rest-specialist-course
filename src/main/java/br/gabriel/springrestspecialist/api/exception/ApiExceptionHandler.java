@@ -127,7 +127,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
 		String detail = String.format("Property '%s' is not a known property", utils.getPropertyPath(ex));
-		return handleException(ExceptionType.PROPERTY_UNRECOGNIZABLE, ex, detail, request);
+		return handleException(ExceptionType.PROPERTY_UNKOWN, ex, detail, request);
 	}
 	
 	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {

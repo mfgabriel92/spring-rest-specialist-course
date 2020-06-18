@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,10 +53,8 @@ public class RestaurantController {
 	
 	@PutMapping("/{id}")
 	public RestaurantResponse save(@PathVariable Integer id, @RequestBody @Valid RestaurantRequest restaurantRequest) {
-	    Restaurant restaurant = mapper.toDomainObject(restaurantRequest);
-		Restaurant current = repository.findOrFail(id);
-		BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address", "createdAt", "products");
-			
-		return mapper.toModel(service.save(current));
+		Restaurant restaurant = repository.findOrFail(id);
+		mapper.copyToDomainObject(restaurantRequest, restaurant);
+		return mapper.toModel(service.save(restaurant));
 	}
 }

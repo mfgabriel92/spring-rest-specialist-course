@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
 import br.gabriel.springrestspecialist.api.model.response.RestaurantResponse;
+import br.gabriel.springrestspecialist.domain.model.Kitchen;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 
 @Component
@@ -26,5 +27,10 @@ public class RestaurantMapper {
     
     public Restaurant toDomainObject(RestaurantRequest request) {
         return mapper.map(request, Restaurant.class);
+    }
+    
+    public void copyToDomainObject(RestaurantRequest request, Restaurant restaurant) {
+        restaurant.setKitchen(new Kitchen());
+        mapper.map(request, restaurant);
     }
 }
