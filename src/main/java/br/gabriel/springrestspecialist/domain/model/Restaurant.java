@@ -27,11 +27,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gabriel.springrestspecialist.core.validation.ShippingFee;
+import br.gabriel.springrestspecialist.core.validation.FreeShippingFlag;
 import br.gabriel.springrestspecialist.core.validation.Groups.KitchenId;
+import br.gabriel.springrestspecialist.core.validation.ShippingFee;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@FreeShippingFlag(fieldValue = "shippingFee", fieldDescription = "name", mandatoryFlag = "Free shipping!")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity

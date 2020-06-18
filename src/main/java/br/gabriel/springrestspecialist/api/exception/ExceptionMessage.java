@@ -20,11 +20,11 @@ public class ExceptionMessage {
 	
 	private String detail;
 	
-	private List<Field> fields;
+	private List<Object> objects;
 	
 	@Getter
 	@Builder
-	public static class Field {
+	public static class Object {
 		private String name;
 		
 		private String message;

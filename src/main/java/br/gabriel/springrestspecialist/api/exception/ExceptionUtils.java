@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -29,18 +30,23 @@ public class ExceptionUtils {
 	}
 	
 	public ExceptionMessage.ExceptionMessageBuilder buildExceptionMessage(ExceptionType exceptionType, String detail, BindingResult result) {
-		List<ExceptionMessage.Field> fields = result.getFieldErrors()
+		List<ExceptionMessage.Object> objs = result.getAllErrors()
 			.stream()
-			.map(field -> {
-				String message = messageSource.getMessage(field, LocaleContextHolder.getLocale());
+			.map(error -> {
+				String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
+				String name = error.getObjectName();
 				
-				return ExceptionMessage.Field.builder()
-					.name(field.getField())
+				if (error instanceof FieldError) {
+				    name = ((FieldError) error).getField();
+				}
+				
+				return ExceptionMessage.Object.builder()
+					.name(name)
 					.message(message)
 					.build();
 			}).collect(Collectors.toList());
 		
-		return buildExceptionMessage(exceptionType, detail).fields(fields);
+		return buildExceptionMessage(exceptionType, detail).objects(objs);
 	}
 
 	public String getPropertyPath(JsonMappingException ex) {
