@@ -1,7 +1,7 @@
 package br.gabriel.springrestspecialist.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -34,11 +34,11 @@ public class Order {
 	
 	private BigDecimal grandTotal;
 	
-	private LocalDateTime confirmedAt;
+	private OffsetDateTime confirmedAt;
 	
-	private LocalDateTime canceledAt;
+	private OffsetDateTime canceledAt;
 	
-	private LocalDateTime deliveredAt;
+	private OffsetDateTime deliveredAt;
 	
 	@Embedded
 	private Address deliveryAddress;
@@ -55,7 +55,7 @@ public class Order {
 	private OrderStatus status;
 	
 	@CreationTimestamp
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> items;

@@ -1,6 +1,9 @@
 package br.gabriel.springrestspecialist.api.exception;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +21,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 
 @ControllerAdvice
@@ -41,10 +43,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleException(ExceptionType.NOT_FOUND, ex, request);
 	}
 	
-	@ExceptionHandler(ResourceInUseExeption.class)
-	public ResponseEntity<Object> handleResourceInUseExeption(ResourceInUseExeption ex, WebRequest request) {
-        return handleException(ExceptionType.CONFLICT, ex, request);
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+	    Throwable rootCause = utils.rootCause(ex);
+	    String detail = ex.getMostSpecificCause().toString();
+	    
+	    if (rootCause instanceof SQLIntegrityConstraintViolationException) {
+	        return handleSQLIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause, request);
+	    }
+	    
+        return handleException(ExceptionType.CONFLICT, ex, detail, request);
 	}
+	
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        String detail = String.format(
+            "The parameter of value '%s' is invalid because it requires a type '%s'",
+            ex.getValue(),
+            ex.getRequiredType().getSimpleName()
+        );
+        return handleException(ExceptionType.PARAMETER_MISMATCH, ex, detail, request);
+    }
 	
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -57,16 +76,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format("One or more fields are invalid. Correct them and try again.");
 		ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
 		return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
-	}
-	
-	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
-		String detail = String.format(
-			"The parameter of value '%s' is invalid because it requires a type '%s'",
-			ex.getValue(),
-			ex.getRequiredType().getSimpleName()
-		);
-        return handleException(ExceptionType.PARAMETER_MISMATCH, ex, detail, request);
 	}
 	
 	@Override
@@ -99,6 +108,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
+	
+	private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, WebRequest request) {
+        return handleException(ExceptionType.CONFLICT, ex, "The resource is being used by another and cannot be deleted", request);
+    }
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
 		String detail = String.format(

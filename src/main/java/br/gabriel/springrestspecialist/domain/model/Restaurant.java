@@ -1,7 +1,7 @@
 package br.gabriel.springrestspecialist.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,11 +74,11 @@ public class Restaurant {
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@CreationTimestamp
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 	
 	@JsonIgnore
 	@UpdateTimestamp
-	private LocalDateTime updatedAt;
+	private OffsetDateTime updatedAt;
 }

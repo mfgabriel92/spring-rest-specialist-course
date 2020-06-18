@@ -5,6 +5,7 @@ import javax.persistence.NoResultException;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.repository.BaseJpaRepository;
@@ -34,4 +35,10 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
 	        ));
 	    }
 	}
+	
+	@Transactional
+	@Override
+    public void deleteOrFail(ID id) {
+        entityManager.remove(findOrFail(id));
+    }
 }
