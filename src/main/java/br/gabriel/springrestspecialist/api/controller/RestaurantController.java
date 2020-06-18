@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.model.mapper.RestaurantMapper;
+import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
+import br.gabriel.springrestspecialist.api.model.response.RestaurantResponse;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
@@ -28,28 +31,33 @@ public class RestaurantController {
 
 	@Autowired
 	private RestaurantService service;
+	
+	@Autowired
+	private RestaurantMapper mapper;
 
 	@GetMapping
-	public List<Restaurant> findAll() {
-		return repository.findAll();
+	public List<RestaurantResponse> findAll() {
+		return mapper.toCollectionModel(repository.findAll());
 	}
 
 	@GetMapping("{id}")
-	public Restaurant findById(@PathVariable Integer id) {
-		return repository.findOrFail(id);
+	public RestaurantResponse findById(@PathVariable Integer id) {
+		return mapper.toModel(repository.findOrFail(id));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
-		return service.save(restaurant);
+	public RestaurantResponse save(@RequestBody @Valid RestaurantRequest restaurantRequest) {
+	    Restaurant restaurant = mapper.toDomainObject(restaurantRequest);
+		return mapper.toModel(service.save(restaurant));
 	}
 	
 	@PutMapping("/{id}")
-	public Restaurant save(@PathVariable Integer id, @RequestBody @Valid Restaurant restaurant) {
+	public RestaurantResponse save(@PathVariable Integer id, @RequestBody @Valid RestaurantRequest restaurantRequest) {
+	    Restaurant restaurant = mapper.toDomainObject(restaurantRequest);
 		Restaurant current = repository.findOrFail(id);
 		BeanUtils.copyProperties(restaurant, current, "id", "paymentMethods", "address", "createdAt", "products");
 			
-		return service.save(current);
+		return mapper.toModel(service.save(current));
 	}
 }

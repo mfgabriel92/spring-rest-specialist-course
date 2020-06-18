@@ -17,23 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import br.gabriel.springrestspecialist.core.validation.FreeShippingFlag;
-import br.gabriel.springrestspecialist.core.validation.Groups.KitchenId;
-import br.gabriel.springrestspecialist.core.validation.ShippingFee;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@FreeShippingFlag(fieldValue = "shippingFee", fieldDescription = "name", mandatoryFlag = "Free shipping!")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -44,20 +34,14 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotBlank
 	private String name;
 	
-	@NotNull
-	@ShippingFee
 	private BigDecimal shippingFee;
 	
-	@ConvertGroup(from = Default.class, to = KitchenId.class)
 	@Valid
-	@NotNull
 	@ManyToOne
 	private Kitchen kitchen;
 	
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 		name = "t_restaurants_payment_methods",
@@ -66,19 +50,15 @@ public class Restaurant {
 	)
 	private List<PaymentMethod> paymentMethods = new ArrayList<>();
 	
-	@JsonIgnore
 	@Embedded
 	private Address address;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 	
-//	@JsonIgnore
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
 	
-	@JsonIgnore
 	@UpdateTimestamp
 	private OffsetDateTime updatedAt;
 }
