@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.gabriel.springrestspecialist.domain.exception.ResourceInUseExeption;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
@@ -20,6 +21,7 @@ public class CityService {
 	@Autowired
 	private StateRepository stateRepository;
 
+	@Transactional
 	public City save(City city) {
 		Integer stateId = city.getState().getId();
 		State state = stateRepository.findOrFail(stateId);
@@ -29,6 +31,7 @@ public class CityService {
 		return repository.save(city);
 	}
 
+	@Transactional
 	public void deleteById(Integer id) {
 		try {
 			repository.deleteById(id);
