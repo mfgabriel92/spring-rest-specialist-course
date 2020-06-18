@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import br.gabriel.springrestspecialist.api.Groups.StateId;
+import br.gabriel.springrestspecialist.core.validation.Groups.StateId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

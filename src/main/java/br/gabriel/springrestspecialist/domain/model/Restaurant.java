@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -28,7 +27,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gabriel.springrestspecialist.api.Groups.KitchenId;
+import br.gabriel.springrestspecialist.core.validation.ShippingFee;
+import br.gabriel.springrestspecialist.core.validation.Groups.KitchenId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -46,7 +46,7 @@ public class Restaurant {
 	private String name;
 	
 	@NotNull
-	@PositiveOrZero
+	@ShippingFee
 	private BigDecimal shippingFee;
 	
 	@ConvertGroup(from = Default.class, to = KitchenId.class)

@@ -1,4 +1,4 @@
-package br.gabriel.springrestspecialist.api.config;
+package br.gabriel.springrestspecialist.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

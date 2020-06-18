@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gabriel.springrestspecialist.api.Groups.KitchenId;
+import br.gabriel.springrestspecialist.core.validation.Groups.KitchenId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

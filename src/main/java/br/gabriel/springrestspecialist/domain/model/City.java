@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import br.gabriel.springrestspecialist.api.Groups.StateId;
+import br.gabriel.springrestspecialist.core.validation.Groups.StateId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
