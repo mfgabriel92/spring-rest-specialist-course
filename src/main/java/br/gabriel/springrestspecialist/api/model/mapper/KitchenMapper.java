@@ -16,15 +16,19 @@ public class KitchenMapper {
     @Autowired
     private ModelMapper mapper;
     
-    public KitchenResponse toModel(Kitchen restaurant) {
-        return mapper.map(restaurant, KitchenResponse.class);
+    public KitchenResponse toModel(Kitchen kitchen) {
+        return mapper.map(kitchen, KitchenResponse.class);
     }
     
-    public List<KitchenResponse> toCollectionModel(List<Kitchen> restaurants) {
-        return restaurants.stream().map(restaurant -> toModel(restaurant)).collect(Collectors.toList());
+    public List<KitchenResponse> toCollectionModel(List<Kitchen> kitchens) {
+        return kitchens.stream().map(kitchen -> toModel(kitchen)).collect(Collectors.toList());
     }
     
     public Kitchen toDomainObject(KitchenRequest request) {
         return mapper.map(request, Kitchen.class);
+    }
+    
+    public void copyToDomainObject(KitchenRequest request, Kitchen kitchen) {
+        mapper.map(request, kitchen);
     }
 }

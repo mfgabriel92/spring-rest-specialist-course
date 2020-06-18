@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.model.mapper.StateMapper;
+import br.gabriel.springrestspecialist.api.model.request.StateRequest;
+import br.gabriel.springrestspecialist.api.model.response.StateResponse;
 import br.gabriel.springrestspecialist.domain.model.State;
 import br.gabriel.springrestspecialist.domain.repository.StateRepository;
 import br.gabriel.springrestspecialist.domain.service.StateService;
@@ -29,29 +31,32 @@ public class StateController {
 	
 	@Autowired
 	private StateService service;
+	
+	@Autowired
+	private StateMapper mapper;
 
 	@GetMapping
-	public List<State> findAll() {
-		return repository.findAll();
+	public List<StateResponse> findAll() {
+		return mapper.toCollectionModel(repository.findAll());
 	}
 	
 	@GetMapping("{id}")
-	public State findById(@PathVariable Integer id) {
-		return repository.findOrFail(id);
+	public StateResponse findById(@PathVariable Integer id) {
+		return mapper.toModel(repository.findOrFail(id));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public State save(@RequestBody @Valid State state) {
-		return service.save(state);
+	public StateResponse save(@RequestBody @Valid StateRequest stateRequest) {
+	    State state = mapper.toDomainObject(stateRequest);
+		return mapper.toModel(service.save(state));
 	}
 
 	@PutMapping("{id}")
-	public State save(@PathVariable Integer id, @RequestBody @Valid State state) {
-		State current = repository.findOrFail(id);
-		BeanUtils.copyProperties(state, current, "id");
-		
-		return service.save(current);
+	public StateResponse save(@PathVariable Integer id, @RequestBody @Valid StateRequest stateRequest) {
+		State state = repository.findOrFail(id);
+		mapper.copyToDomainObject(stateRequest, state);
+		return mapper.toModel(service.save(state));
 	}
 
 	@DeleteMapping("{id}")
