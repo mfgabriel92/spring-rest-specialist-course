@@ -57,4 +57,16 @@ public class RestaurantController {
 		mapper.copyToDomainObject(restaurantRequest, restaurant);
 		return mapper.toModel(service.save(restaurant));
 	}
+	
+	@PutMapping("/{id}/activate")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void activate(@PathVariable Integer id) {
+	    service.activate(id);
+	}
+	
+	@PutMapping("/{id}/deactivate")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deactivate(@PathVariable Integer id) {
+        service.deactivate(id);
+    }
 }

@@ -26,4 +26,14 @@ public class RestaurantService {
 		
 		return repository.save(restaurant);
 	}
+	
+	@Transactional
+	public void activate(Integer id) {
+	    repository.findOrFail(id).activate();
+	}
+	
+	@Transactional
+    public void deactivate(Integer id) {
+        repository.findOrFail(id).deactivate();
+    }
 }

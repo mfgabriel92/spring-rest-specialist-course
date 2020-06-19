@@ -18,4 +18,6 @@ public class RestaurantResponse {
     
     @JsonProperty("kitchen")
     private String kitchenName;
+    
+    private Boolean active;
 }
