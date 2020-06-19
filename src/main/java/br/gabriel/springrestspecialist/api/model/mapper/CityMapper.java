@@ -25,12 +25,12 @@ public class CityMapper {
         return cities.stream().map(city -> toModel(city)).collect(Collectors.toList());
     }
     
-    public City toDomainObject(CityRequest request) {
-        return mapper.map(request, City.class);
+    public City toDomainObject(CityRequest cityRequest) {
+        return mapper.map(cityRequest, City.class);
     }
     
-    public void copyToDomainObject(CityRequest request, City city) {
+    public void copyToDomainObject(CityRequest cityRequest, City city) {
         city.setState(new State());
-        mapper.map(request, city);
+        mapper.map(cityRequest, city);
     }
 }

@@ -25,12 +25,12 @@ public class RestaurantMapper {
         return restaurants.stream().map(restaurant -> toModel(restaurant)).collect(Collectors.toList());
     }
     
-    public Restaurant toDomainObject(RestaurantRequest request) {
-        return mapper.map(request, Restaurant.class);
+    public Restaurant toDomainObject(RestaurantRequest restaurantRequest) {
+        return mapper.map(restaurantRequest, Restaurant.class);
     }
     
-    public void copyToDomainObject(RestaurantRequest request, Restaurant restaurant) {
+    public void copyToDomainObject(RestaurantRequest restaurantRequest, Restaurant restaurant) {
         restaurant.setKitchen(new Kitchen());
-        mapper.map(request, restaurant);
+        mapper.map(restaurantRequest, restaurant);
     }
 }

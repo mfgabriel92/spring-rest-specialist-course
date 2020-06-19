@@ -24,11 +24,11 @@ public class KitchenMapper {
         return kitchens.stream().map(kitchen -> toModel(kitchen)).collect(Collectors.toList());
     }
     
-    public Kitchen toDomainObject(KitchenRequest request) {
-        return mapper.map(request, Kitchen.class);
+    public Kitchen toDomainObject(KitchenRequest kitchenRequest) {
+        return mapper.map(kitchenRequest, Kitchen.class);
     }
     
-    public void copyToDomainObject(KitchenRequest request, Kitchen kitchen) {
-        mapper.map(request, kitchen);
+    public void copyToDomainObject(KitchenRequest kitchenRequest, Kitchen kitchen) {
+        mapper.map(kitchenRequest, kitchen);
     }
 }
