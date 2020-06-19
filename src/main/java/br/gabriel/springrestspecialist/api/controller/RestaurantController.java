@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.model.mapper.RestaurantDetailedMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantMapper;
 import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
+import br.gabriel.springrestspecialist.api.model.response.RestaurantDetailResponse;
 import br.gabriel.springrestspecialist.api.model.response.RestaurantResponse;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
@@ -33,6 +35,9 @@ public class RestaurantController {
 	
 	@Autowired
 	private RestaurantMapper mapper;
+	
+	@Autowired
+    private RestaurantDetailedMapper detailedMapper;
 
 	@GetMapping
 	public List<RestaurantResponse> findAll() {
@@ -40,8 +45,8 @@ public class RestaurantController {
 	}
 
 	@GetMapping("{id}")
-	public RestaurantResponse findById(@PathVariable Integer id) {
-		return mapper.toModel(repository.findOrFail(id));
+	public RestaurantDetailResponse findById(@PathVariable Integer id) {
+		return detailedMapper.toModel(repository.findOrFail(id));
 	}
 	
 	@PostMapping
