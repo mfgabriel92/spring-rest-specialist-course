@@ -28,7 +28,7 @@ public class PaymentMethodMapper {
         return mapper.map(paymentMethodRequest, PaymentMethod.class);
     }
     
-    public void copyToDomainObject(PaymentMethodRequest request, PaymentMethod paymentMethod) {
-        mapper.map(request, paymentMethod);
+    public void copyToDomainObject(PaymentMethodRequest paymentMethodRequest, PaymentMethod paymentMethod) {
+        mapper.map(paymentMethodRequest, paymentMethod);
     }
 }

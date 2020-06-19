@@ -24,11 +24,11 @@ public class StateMapper {
         return states.stream().map(state -> toModel(state)).collect(Collectors.toList());
     }
     
-    public State toDomainObject(StateRequest request) {
-        return mapper.map(request, State.class);
+    public State toDomainObject(StateRequest stateRequest) {
+        return mapper.map(stateRequest, State.class);
     }
     
-    public void copyToDomainObject(StateRequest request, State state) {
-        mapper.map(request, state);
+    public void copyToDomainObject(StateRequest stateRequest, State state) {
+        mapper.map(stateRequest, state);
     }
 }
