@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddressResponse {
-private String zipCode;
+    private String zipCode;
+    
     private String streetName;
 
     private String number;

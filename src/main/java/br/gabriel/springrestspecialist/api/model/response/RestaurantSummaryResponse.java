@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RestaurantDetailResponse {
+public class RestaurantSummaryResponse {
     private Integer id;
     
     private String name;
@@ -20,6 +20,4 @@ public class RestaurantDetailResponse {
     private String kitchenName;
     
     private Boolean active;
-    
-    private AddressResponse address;
 }

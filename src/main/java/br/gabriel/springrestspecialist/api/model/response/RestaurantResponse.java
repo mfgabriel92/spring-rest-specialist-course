@@ -21,12 +21,5 @@ public class RestaurantResponse {
     
     private Boolean active;
     
-    @JsonProperty("streetName")
-    private String addressStreetName;
-    
-    @JsonProperty("city")
-    private String addressCityName;
-    
-    @JsonProperty("state")
-    private String addressCityStateName;
+    private AddressResponse address;
 }

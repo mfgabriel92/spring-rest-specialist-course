@@ -2,6 +2,7 @@ package br.gabriel.springrestspecialist.api.model.request;
 
 import java.math.BigDecimal;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -23,4 +24,8 @@ public class RestaurantRequest {
     
     @NotNull
     private Integer kitchenId;
+    
+    @Valid
+    @NotNull
+    private AddressRequest address;
 }

@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.model.mapper.RestaurantDetailedMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantMapper;
+import br.gabriel.springrestspecialist.api.model.mapper.RestaurantSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
-import br.gabriel.springrestspecialist.api.model.response.RestaurantDetailResponse;
 import br.gabriel.springrestspecialist.api.model.response.RestaurantResponse;
+import br.gabriel.springrestspecialist.api.model.response.RestaurantSummaryResponse;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
@@ -37,16 +37,16 @@ public class RestaurantController {
 	private RestaurantMapper mapper;
 	
 	@Autowired
-    private RestaurantDetailedMapper detailedMapper;
+    private RestaurantSummaryMapper summaryMapper;
 
 	@GetMapping
-	public List<RestaurantResponse> findAll() {
-		return mapper.toCollectionModel(repository.findAll());
+	public List<RestaurantSummaryResponse> findAll() {
+		return summaryMapper.toCollectionModel(repository.findAll());
 	}
 
 	@GetMapping("{id}")
-	public RestaurantDetailResponse findById(@PathVariable Integer id) {
-		return detailedMapper.toModel(repository.findOrFail(id));
+	public RestaurantResponse findById(@PathVariable Integer id) {
+		return mapper.toModel(repository.findOrFail(id));
 	}
 	
 	@PostMapping
