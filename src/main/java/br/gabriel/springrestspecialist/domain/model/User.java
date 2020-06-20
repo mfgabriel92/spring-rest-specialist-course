@@ -52,4 +52,8 @@ public class User {
 		inverseJoinColumns = @JoinColumn(name = "group_id")
 	)
 	private List<Group> groups = new ArrayList<>();
+	
+	public boolean isPasswordCorrect(String newPassword) {
+	    return getPassword().equals(newPassword);
+	}
 }
