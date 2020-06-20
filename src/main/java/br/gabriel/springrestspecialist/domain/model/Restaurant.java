@@ -61,6 +61,8 @@ public class Restaurant {
 	
 	private Boolean active = Boolean.TRUE;
 	
+	private Boolean open = Boolean.TRUE;
+	
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
 	
@@ -75,11 +77,19 @@ public class Restaurant {
         setActive(false);
     }
 	
-	public boolean addPaymentMethod(PaymentMethod paymentMethod) {
-	    return getPaymentMethods().add(paymentMethod);
+	public void addPaymentMethod(PaymentMethod paymentMethod) {
+	    getPaymentMethods().add(paymentMethod);
 	}
 	
-	public boolean removePaymentMethod(PaymentMethod paymentMethod) {
-        return getPaymentMethods().remove(paymentMethod);
+	public void removePaymentMethod(PaymentMethod paymentMethod) {
+        getPaymentMethods().remove(paymentMethod);
+    }
+	
+	public void open() {
+        setOpen(true);
+    }
+    
+    public void close() {
+        setOpen(false);
     }
 }

@@ -21,5 +21,7 @@ public class RestaurantResponse {
     
     private Boolean active;
     
+    private Boolean open;
+    
     private AddressResponse address;
 }

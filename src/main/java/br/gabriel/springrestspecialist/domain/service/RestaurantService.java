@@ -70,4 +70,14 @@ public class RestaurantService {
         PaymentMethod paymentMethod = paymentMethodRepository.findOrFail(paymentMethodId);
         restaurant.removePaymentMethod(paymentMethod);
     }
+	
+	@Transactional
+    public void open(Integer id) {
+        repository.findOrFail(id).open();
+    }
+    
+    @Transactional
+    public void close(Integer id) {
+        repository.findOrFail(id).close();
+    }
 }
