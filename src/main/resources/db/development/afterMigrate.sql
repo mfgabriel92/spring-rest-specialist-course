@@ -27,3 +27,15 @@ VALUES (1, 'Apple Pie', 'The simple combination of sugar, buttery pastry and tar
        (4, 'Sushi', 'Japanese dish of prepared vinegared rice, usually with some sugar and salt', 17.50, 1, 2),
        (5, 'Sashimi', 'A Japanese delicacy consisting of fresh raw fish or meat sliced into thin pieces', 18.80, 1, 2),
        (6, 'Tempura', 'A typical Japanese dish usually consisting of seafood, meat, and vegetables', 16.75, 1, 2);
+       
+INSERT IGNORE INTO t_groups (id, name)
+VALUES (1, 'Admin'), (2, 'Developer');
+
+INSERT IGNORE INTO t_permissions (id, name, description)
+VALUES (1, 'Merge', 'Merge code'),
+       (2, 'Review', 'Review code and write comments'), 
+       (3, 'OPR', 'Open pull requests'), 
+       (4, 'APR', 'Approve pull requests');
+
+INSERT IGNORE INTO t_groups_permissions (group_id, permission_id)
+VALUES (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3);
