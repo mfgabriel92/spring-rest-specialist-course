@@ -41,4 +41,9 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
     public void deleteOrFail(ID id) {
         entityManager.remove(findOrFail(id));
     }
+
+    @Override
+    public void detach(T entity) {
+        entityManager.detach(entity);
+    }
 }

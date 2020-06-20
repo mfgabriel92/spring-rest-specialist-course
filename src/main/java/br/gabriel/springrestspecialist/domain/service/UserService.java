@@ -1,5 +1,7 @@
 package br.gabriel.springrestspecialist.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +16,15 @@ public class UserService {
 	private UserRepository repository;
 
 	@Transactional
-	public User save(User state) {
-		return repository.save(state);
+	public User save(User user) {
+	    repository.detach(user);
+	    Optional<User> existingUser = repository.findByEmail(user.getEmail());
+	    
+	    if (existingUser.isPresent() && !existingUser.get().equals(user)) {
+	        throw new ApiException(String.format("Another user is alredy using the e-mail %s", user.getEmail()));
+	    }
+	    
+		return repository.save(user);
 	}
 	
 	@Transactional
