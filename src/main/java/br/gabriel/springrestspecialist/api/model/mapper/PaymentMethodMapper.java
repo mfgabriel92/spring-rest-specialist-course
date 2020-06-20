@@ -1,5 +1,6 @@
 package br.gabriel.springrestspecialist.api.model.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class PaymentMethodMapper {
         return mapper.map(paymentMethod, PaymentMethodResponse.class);
     }
     
-    public List<PaymentMethodResponse> toCollectionModel(List<PaymentMethod> paymentMethods) {
+    public List<PaymentMethodResponse> toCollectionModel(Collection<PaymentMethod> paymentMethods) {
         return paymentMethods.stream().map(paymentMethod -> toModel(paymentMethod)).collect(Collectors.toList());
     }
     

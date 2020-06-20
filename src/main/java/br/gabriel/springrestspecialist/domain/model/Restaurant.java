@@ -3,7 +3,9 @@ package br.gabriel.springrestspecialist.domain.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -48,7 +50,7 @@ public class Restaurant {
 		joinColumns = @JoinColumn(name = "restaurant_id"),
 		inverseJoinColumns = @JoinColumn(name = "payment_method_id")
 	)
-	private List<PaymentMethod> paymentMethods = new ArrayList<>();
+	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 	
 	@Embedded
 	private Address address;
@@ -70,5 +72,13 @@ public class Restaurant {
 	
 	public void deactivate() {
         setActive(false);
+    }
+	
+	public boolean addPaymentMethod(PaymentMethod paymentMethod) {
+	    return getPaymentMethods().add(paymentMethod);
+	}
+	
+	public boolean removePaymentMethod(PaymentMethod paymentMethod) {
+        return getPaymentMethods().remove(paymentMethod);
     }
 }

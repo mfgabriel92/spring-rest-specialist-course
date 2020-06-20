@@ -8,9 +8,11 @@ import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
+import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
+import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 
 @Service
@@ -23,6 +25,9 @@ public class RestaurantService {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+	private PaymentMethodRepository paymentMethodRepository;
 	
 	@Transactional
 	public Restaurant save(Restaurant restaurant) {
@@ -50,5 +55,19 @@ public class RestaurantService {
 	@Transactional
     public void deactivate(Integer id) {
         repository.findOrFail(id).deactivate();
+    }
+	
+	@Transactional
+    public void addPaymentMethod(Integer id, Integer paymentMethodId) {
+        Restaurant restaurant = repository.findOrFail(id);
+        PaymentMethod paymentMethod = paymentMethodRepository.findOrFail(paymentMethodId);
+        restaurant.addPaymentMethod(paymentMethod);
+    }
+	
+	@Transactional
+    public void removePaymentMethod(Integer id, Integer paymentMethodId) {
+        Restaurant restaurant = repository.findOrFail(id);
+        PaymentMethod paymentMethod = paymentMethodRepository.findOrFail(paymentMethodId);
+        restaurant.removePaymentMethod(paymentMethod);
     }
 }

@@ -17,8 +17,8 @@ VALUES (1, 'Credit Card'), (2, 'Debit Card'), (3, 'Cash');
 INSERT IGNORE INTO t_permissions (id, name, description)
 VALUES (1, 'Admin', 'Allowed to perform all the operations');
 
-INSERT IGNORE INTO t_restaurants_payment_methods (id, restaurant_id, payment_method_id)
-VALUES (1, 1, 1), (2, 1, 2), (3, 1, 3), (4, 2, 3);
+INSERT IGNORE INTO t_restaurants_payment_methods (restaurant_id, payment_method_id)
+VALUES (1, 1), (1, 2), (1, 3), (2, 3);
 
 INSERT IGNORE INTO t_products (id, name, description, price, active, restaurant_id)
 VALUES (1, 'Apple Pie', 'The simple combination of sugar, buttery pastry and tart sliced apples', 19.00, 1, 1),
