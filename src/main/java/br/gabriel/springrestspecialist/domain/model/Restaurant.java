@@ -63,6 +63,14 @@ public class Restaurant {
 	
 	private Boolean open = Boolean.TRUE;
 	
+	@ManyToMany
+    @JoinTable(
+        name = "t_restaurants_users",
+        joinColumns = @JoinColumn(name = "restaurant_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
+	
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
 	
@@ -91,5 +99,13 @@ public class Restaurant {
     
     public void close() {
         setOpen(false);
+    }
+    
+    public void addUser(User user) {
+        getUsers().add(user);
+    }
+    
+    public void removeUser(User user) {
+        getUsers().remove(user);
     }
 }

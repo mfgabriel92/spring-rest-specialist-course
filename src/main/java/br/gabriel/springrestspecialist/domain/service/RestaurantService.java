@@ -10,10 +10,12 @@ import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.model.Kitchen;
 import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
+import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
 import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
+import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 
 @Service
 public class RestaurantService {
@@ -25,6 +27,9 @@ public class RestaurantService {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+    private UserRepository userRepository;
 	
 	@Autowired
 	private PaymentMethodRepository paymentMethodRepository;
@@ -79,5 +84,19 @@ public class RestaurantService {
     @Transactional
     public void close(Integer id) {
         repository.findOrFail(id).close();
+    }
+    
+    @Transactional
+    public void addUser(Integer id, Integer userId) {
+        Restaurant restaurant = repository.findOrFail(id);
+        User user = userRepository.findOrFail(userId);
+        restaurant.addUser(user);
+    }
+    
+    @Transactional
+    public void removeUser(Integer id, Integer userId) {
+        Restaurant restaurant = repository.findOrFail(id);
+        User user = userRepository.findOrFail(userId);
+        restaurant.removeUser(user);
     }
 }

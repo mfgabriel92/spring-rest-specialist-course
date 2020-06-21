@@ -64,4 +64,7 @@ public class User {
 	public void removeFromGroup(Group group) {
         getGroups().remove(group);
     }
+	
+	public void addRestaurant(Restaurant restaurant) {
+    }
 }

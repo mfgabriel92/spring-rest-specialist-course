@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gabriel.springrestspecialist.api.model.mapper.UserMapper;
-import br.gabriel.springrestspecialist.api.model.mapper.UserPasswordMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.UserSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.UserPasswordRequest;
 import br.gabriel.springrestspecialist.api.model.request.UserRequest;
@@ -41,9 +40,6 @@ public class UserController {
 	
 	@Autowired
     private UserSummaryMapper summaryMapper;
-	
-	@Autowired
-    private UserPasswordMapper passwordMapper;
 
 	@GetMapping
 	public List<UserResponse> findAll() {
