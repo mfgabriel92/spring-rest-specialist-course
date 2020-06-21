@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,6 +54,7 @@ public class Order {
 	@ManyToOne
 	private User user;
 	
+	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 	
 	@CreationTimestamp
@@ -59,4 +62,16 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> items;
+	
+	public void calculateGrandTotal() {
+	    subtotal = getItems().stream()
+	        .map(item -> item.getTotalPrice())
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
+	   
+	    setGrandTotal(getSubtotal().add(getShippingFee()));
+	}
+	
+	public void setOrderToItems() {
+	    getItems().forEach(item -> item.setOrder(this));
+	}
 }

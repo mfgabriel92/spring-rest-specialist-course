@@ -1,3 +1,6 @@
+INSERT INTO t_users (id, name, email, password, created_at)
+VALUES (1, 'John Doe', 'johndoe@gmail.com', '123123123', UTC_TIMESTAMP);
+
 INSERT IGNORE INTO t_states (id, name)
 VALUES (1, 'Rio Grande do Sul'), (2, 'Santa Catarina'), (3, 'São Paulo'), (4, 'New York'), (5, 'Honshu');
 
@@ -36,3 +39,10 @@ VALUES (1, 'Merge', 'Merge code'),
 
 INSERT IGNORE INTO t_groups_permissions (group_id, permission_id)
 VALUES (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3);
+
+INSERT INTO t_orders (id, shipping_fee, subtotal, grand_total, address_apartment, address_neighborhood, address_number, address_street_name, address_zip_code, address_city_id, restaurant_id, payment_method_id, user_id, status, confirmed_at, delivered_at, canceled_at, created_at)
+VALUES (1, 5.80, 85.00, 90.80, 'F00', 'Bar', '70', 'Lorem Ipsum', '9560090', 1, 1, 1, 1, 'CREATED', NULL, NULL, NULL, UTC_TIMESTAMP);
+
+INSERT INTO spring_rest_specialist.t_order_items (id, quantity, unit_price, total_price, observation, order_id, product_id)
+VALUES (1, 3, 15.00, 45.00, 'Lorem ipsum dolor sit amet', 1, 1),
+       (2, 2, 20.00, 40.00, 'Lorem ipsum dolor sit amet', 1, 2);
