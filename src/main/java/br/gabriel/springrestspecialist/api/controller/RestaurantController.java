@@ -69,10 +69,22 @@ public class RestaurantController {
 	    service.activate(id);
 	}
 	
+	@PutMapping("/activate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void activate(@RequestBody List<Integer> ids) {
+        service.activate(ids);
+    }
+	
 	@PutMapping("/{id}/deactivate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
     public void deactivate(@PathVariable Integer id) {
         service.deactivate(id);
+    }
+	
+	@PutMapping("/deactivate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deactivate(@RequestBody List<Integer> ids) {
+        service.deactivate(ids);
     }
 	
 	@PutMapping("/{id}/open")

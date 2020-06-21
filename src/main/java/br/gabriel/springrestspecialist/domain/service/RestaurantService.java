@@ -1,5 +1,7 @@
 package br.gabriel.springrestspecialist.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,8 +60,26 @@ public class RestaurantService {
 	}
 	
 	@Transactional
+    public void activate(List<Integer> ids) {
+        try {
+            ids.forEach(this::activate);
+        } catch (ResourceNotFoundExeption e) {
+            throw new ApiException(e.getMessage());
+        }
+    }
+	
+	@Transactional
     public void deactivate(Integer id) {
         repository.findOrFail(id).deactivate();
+    }
+	
+	@Transactional
+    public void deactivate(List<Integer> ids) {
+	    try {
+            ids.forEach(this::deactivate);
+        } catch (ResourceNotFoundExeption e) {
+            throw new ApiException(e.getMessage());
+        }
     }
 	
 	@Transactional
