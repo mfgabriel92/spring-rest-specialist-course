@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "t_kitchens")
-public class Kitchen {
+@Table(name = "t_cuisines")
+public class Cuisine {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,6 @@ public class Kitchen {
 
 	private String name;
 	
-	@OneToMany(mappedBy = "kitchen")
+	@OneToMany(mappedBy = "cuisine")
 	private List<Restaurant> restaurants = new ArrayList<>();
 }

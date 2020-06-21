@@ -16,8 +16,8 @@ public class RestaurantSummaryResponse {
     
     private BigDecimal shippingFee;
     
-    @JsonProperty("kitchen")
-    private String kitchenName;
+    @JsonProperty("cuisine")
+    private String cuisineName;
     
     private Boolean active;
 }

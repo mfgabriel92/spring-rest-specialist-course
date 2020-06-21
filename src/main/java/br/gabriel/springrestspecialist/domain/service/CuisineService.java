@@ -4,17 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gabriel.springrestspecialist.domain.model.Kitchen;
-import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
+import br.gabriel.springrestspecialist.domain.model.Cuisine;
+import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
 
 @Service
-public class KitchenService {
+public class CuisineService {
 	@Autowired
-	private KitchenRepository repository;
+	private CuisineRepository repository;
 
 	@Transactional
-	public Kitchen save(Kitchen kitchen) {
-		return repository.save(kitchen);
+	public Cuisine save(Cuisine cuisine) {
+		return repository.save(cuisine);
 	}
 
 	@Transactional

@@ -17,47 +17,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.model.mapper.KitchenMapper;
-import br.gabriel.springrestspecialist.api.model.request.KitchenRequest;
-import br.gabriel.springrestspecialist.api.model.response.KitchenResponse;
-import br.gabriel.springrestspecialist.domain.model.Kitchen;
-import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
-import br.gabriel.springrestspecialist.domain.service.KitchenService;
+import br.gabriel.springrestspecialist.api.model.mapper.CuisineMapper;
+import br.gabriel.springrestspecialist.api.model.request.CuisineRequest;
+import br.gabriel.springrestspecialist.api.model.response.CuisineResponse;
+import br.gabriel.springrestspecialist.domain.model.Cuisine;
+import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
+import br.gabriel.springrestspecialist.domain.service.CuisineService;
 
 @RestController
-@RequestMapping("/kitchens")
-public class KitchenController {
+@RequestMapping("/cuisines")
+public class CuisineController {
 	@Autowired
-	private KitchenRepository repository;
+	private CuisineRepository repository;
 
 	@Autowired
-	private KitchenService service;
+	private CuisineService service;
 	
 	@Autowired
-	private KitchenMapper mapper;
+	private CuisineMapper mapper;
 
 	@GetMapping
-	public List<KitchenResponse> findAll() {
+	public List<CuisineResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 
 	@GetMapping("{id}")
-	public KitchenResponse findById(@PathVariable Integer id) {
+	public CuisineResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public KitchenResponse save(@RequestBody @Valid KitchenRequest kitchenRequest) {
-	    Kitchen kitchen = mapper.toDomainObject(kitchenRequest);
-		return mapper.toModel(service.save(kitchen));
+	public CuisineResponse save(@RequestBody @Valid CuisineRequest cuisineRequest) {
+	    Cuisine cuisine = mapper.toDomainObject(cuisineRequest);
+		return mapper.toModel(service.save(cuisine));
 	}
 
 	@PutMapping("{id}")
-	public KitchenResponse save(@PathVariable Integer id, @RequestBody @Valid KitchenRequest kitchenRequest) {
-	    Kitchen kitchen = mapper.toDomainObject(kitchenRequest);
-		Kitchen current = repository.findOrFail(id);
-		BeanUtils.copyProperties(kitchen, current, "id");
+	public CuisineResponse save(@PathVariable Integer id, @RequestBody @Valid CuisineRequest cuisineRequest) {
+	    Cuisine cuisine = mapper.toDomainObject(cuisineRequest);
+		Cuisine current = repository.findOrFail(id);
+		BeanUtils.copyProperties(cuisine, current, "id");
 		
 		return mapper.toModel(service.save(current));
 	}

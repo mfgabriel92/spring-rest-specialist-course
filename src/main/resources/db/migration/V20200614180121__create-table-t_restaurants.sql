@@ -10,10 +10,10 @@ CREATE TABLE t_restaurants (
     shipping_fee decimal(19,2) NOT NULL,
     updated_at datetime NOT NULL,
     address_city_id int  NULL,
-    kitchen_id int NOT NULL,
+    cuisine_id int NOT NULL,
     PRIMARY KEY (id),
     KEY FKimxpj2cx4ici06dfcwja4340q (address_city_id),
-    KEY FK7pgr366b6tq7mrwgcncmo2el0 (kitchen_id),
-    CONSTRAINT FK7pgr366b6tq7mrwgcncmo2el0 FOREIGN KEY (kitchen_id) REFERENCES t_kitchens (id),
+    KEY FK7pgr366b6tq7mrwgcncmo2el0 (cuisine_id),
+    CONSTRAINT FK7pgr366b6tq7mrwgcncmo2el0 FOREIGN KEY (cuisine_id) REFERENCES t_cuisines (id),
     CONSTRAINT FKimxpj2cx4ici06dfcwja4340q FOREIGN KEY (address_city_id) REFERENCES t_cities (id)
 )

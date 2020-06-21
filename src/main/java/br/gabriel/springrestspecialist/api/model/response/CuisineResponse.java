@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class KitchenResponse {
+public class CuisineResponse {
     private Integer id;
     
     private String name;

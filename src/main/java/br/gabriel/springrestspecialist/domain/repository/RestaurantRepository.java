@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 
 public interface RestaurantRepository extends BaseJpaRepository<Restaurant, Integer>, JpaSpecificationExecutor<Restaurant> {
-	@Query("SELECT DISTINCT r FROM Restaurant r JOIN FETCH r.kitchen LEFT JOIN FETCH r.paymentMethods")
+	@Query("SELECT DISTINCT r FROM Restaurant r JOIN FETCH r.cuisine LEFT JOIN FETCH r.paymentMethods")
 	List<Restaurant> findAll();
 }

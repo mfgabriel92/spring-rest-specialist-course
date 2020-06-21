@@ -23,7 +23,7 @@ public class RestaurantRequest {
     private BigDecimal shippingFee;
     
     @NotNull
-    private Integer kitchenId;
+    private Integer cuisineId;
     
     @Valid
     @NotNull

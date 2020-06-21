@@ -43,7 +43,7 @@ public class Restaurant {
 	
 	@Valid
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Kitchen kitchen;
+	private Cuisine cuisine;
 	
 	@ManyToMany
 	@JoinTable(

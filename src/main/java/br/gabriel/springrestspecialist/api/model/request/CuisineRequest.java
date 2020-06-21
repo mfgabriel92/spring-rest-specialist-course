@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class KitchenRequest {
+public class CuisineRequest {
     @NotNull
     private String name;
 }

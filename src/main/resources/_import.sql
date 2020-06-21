@@ -4,10 +4,10 @@ VALUES (1, 'Rio Grande do Sul'), (2, 'Santa Catarina'), (3, 'São Paulo'), (4, '
 INSERT INTO t_cities (id, name, state_id) 
 VALUES (1, 'Novo Hamburgo', 1), (2, 'Florianópolis', 2), (3, 'São Paulo', 3), (4, 'Maryland', 4), (5, 'Iwate', 5);
 
-INSERT INTO t_kitchens (id, name)
+INSERT INTO t_cuisines (id, name)
 VALUES (1, 'American'), (2, 'Mexican'), (3, 'Japanese');
 
-INSERT INTO t_restaurants (id, name, shipping_fee, kitchen_id, address_zip_code, address_street_name, address_number, address_apartment, address_neighborhood, address_city_id, created_at, updated_at)
+INSERT INTO t_restaurants (id, name, shipping_fee, cuisine_id, address_zip_code, address_street_name, address_number, address_apartment, address_neighborhood, address_city_id, created_at, updated_at)
 VALUES (1, 'Army Navy', 5.80, 1, '20746', 'Academy Ave', '8853', null, 'Suitland', 4, UTC_TIMESTAMP, UTC_TIMESTAMP),
        (2, 'Momochi', 7.30, 3, '028-6934', 'Jobojimachi Sawada', '453', null, 'Ninohe-shi', 5, UTC_TIMESTAMP, UTC_TIMESTAMP);
 

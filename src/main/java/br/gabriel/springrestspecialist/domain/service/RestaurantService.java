@@ -9,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
-import br.gabriel.springrestspecialist.domain.model.Kitchen;
+import br.gabriel.springrestspecialist.domain.model.Cuisine;
 import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
-import br.gabriel.springrestspecialist.domain.repository.KitchenRepository;
+import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
 import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
@@ -25,7 +25,7 @@ public class RestaurantService {
 	private RestaurantRepository repository;
 	
 	@Autowired
-	private KitchenRepository kitchenRepository;
+	private CuisineRepository cuisineRepository;
 	
 	@Autowired
 	private CityRepository cityRepository;
@@ -39,13 +39,13 @@ public class RestaurantService {
 	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		try {
-		    Integer kitchenId = restaurant.getKitchen().getId();
-	        Kitchen kitchen = kitchenRepository.findOrFail(kitchenId);
+		    Integer cuisineId = restaurant.getCuisine().getId();
+	        Cuisine cuisine = cuisineRepository.findOrFail(cuisineId);
 	        
 	        Integer cityId = restaurant.getAddress().getCity().getId();
 	        City city = cityRepository.findOrFail(cityId);
 	        
-	        restaurant.setKitchen(kitchen);
+	        restaurant.setCuisine(cuisine);
 	        restaurant.getAddress().setCity(city);
 	        
 	        return repository.save(restaurant);

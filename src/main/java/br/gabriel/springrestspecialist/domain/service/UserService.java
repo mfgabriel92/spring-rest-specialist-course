@@ -10,7 +10,6 @@ import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.model.Group;
 import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.GroupRepository;
-import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 
 @Service
@@ -21,9 +20,6 @@ public class UserService {
 	@Autowired
     private GroupRepository groupRepository;
 	
-	@Autowired
-    private RestaurantRepository restaurantRepository;
-
 	@Transactional
 	public User save(User user) {
 	    repository.detach(user);

@@ -2,7 +2,7 @@ SET foreign_key_checks = 0;
 
 TRUNCATE TABLE t_states;
 TRUNCATE TABLE t_cities;
-TRUNCATE TABLE t_kitchens;
+TRUNCATE TABLE t_cuisines;
 TRUNCATE TABLE t_restaurants;
 TRUNCATE TABLE t_products;
 TRUNCATE TABLE t_payment_methods;
