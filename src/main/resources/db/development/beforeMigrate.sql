@@ -13,5 +13,7 @@ TRUNCATE TABLE t_groups;
 TRUNCATE TABLE t_users_groups;
 TRUNCATE TABLE t_orders;
 TRUNCATE TABLE t_order_items;
+TRUNCATE TABLE t_groups_permissions;
+TRUNCATE TABLE t_users_groups;
 
 SET foreign_key_checks = 1;

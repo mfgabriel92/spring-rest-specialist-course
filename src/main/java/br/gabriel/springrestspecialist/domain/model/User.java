@@ -56,4 +56,12 @@ public class User {
 	public boolean isPasswordCorrect(String newPassword) {
 	    return getPassword().equals(newPassword);
 	}
+	
+	public void addToGroup(Group group) {
+	    getGroups().add(group);
+	}
+	
+	public void removeFromGroup(Group group) {
+        getGroups().remove(group);
+    }
 }

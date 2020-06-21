@@ -20,7 +20,7 @@ import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 
 @RestController
 @RequestMapping("/restaurants/{id}/payment-methods")
-public class RestaurantPaymentMethodsController {
+public class RestaurantPaymentMethodController {
     @Autowired
     private RestaurantRepository restaurantRepository;
     

@@ -38,13 +38,13 @@ public class GroupPermissionController {
     
     @PutMapping("{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addPermission(@PathVariable Integer id, @PathVariable Integer permissionId) {
+    public void save(@PathVariable Integer id, @PathVariable Integer permissionId) {
         service.addPermission(id, permissionId);
     }
     
     @DeleteMapping("{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removePermission(@PathVariable Integer id, @PathVariable Integer permissionId) {
+    public void delete(@PathVariable Integer id, @PathVariable Integer permissionId) {
         service.removePermission(id, permissionId);
     }
 }

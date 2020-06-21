@@ -14,9 +14,6 @@ VALUES (1, 'Army Navy', 5.80, 1, '20746', 'Academy Ave', '8853', null, 'Suitland
 INSERT IGNORE INTO t_payment_methods (id, description)
 VALUES (1, 'Credit Card'), (2, 'Debit Card'), (3, 'Cash');
 
-INSERT IGNORE INTO t_permissions (id, name, description)
-VALUES (1, 'Admin', 'Allowed to perform all the operations');
-
 INSERT IGNORE INTO t_restaurants_payment_methods (restaurant_id, payment_method_id)
 VALUES (1, 1), (1, 2), (1, 3), (2, 3);
 
