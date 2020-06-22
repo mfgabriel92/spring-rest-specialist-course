@@ -35,4 +35,9 @@ public class OrderItem {
 	
 	@ManyToOne
 	private Order order;
+	
+	public void calculateTotals() {
+	    setUnitPrice(product.getPrice());
+	    setTotalPrice(getUnitPrice().multiply(new BigDecimal(quantity)));
+	}
 }

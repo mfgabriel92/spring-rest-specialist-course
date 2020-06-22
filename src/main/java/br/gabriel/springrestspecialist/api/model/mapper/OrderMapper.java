@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.gabriel.springrestspecialist.api.model.request.OrderRequest;
 import br.gabriel.springrestspecialist.api.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.domain.model.Order;
 
@@ -23,11 +24,11 @@ public class OrderMapper {
         return orders.stream().map(order -> toModel(order)).collect(Collectors.toList());
     }
     
-//    public Order toDomainObject(OrderRequest orderRequest) {
-//        return mapper.map(orderRequest, Order.class);
-//    }
-//    
-//    public void copyToDomainObject(OrderRequest orderRequest, Order order) {
-//        mapper.map(orderRequest, order);
-//    }
+    public Order toDomainObject(OrderRequest orderRequest) {
+        return mapper.map(orderRequest, Order.class);
+    }
+    
+    public void copyToDomainObject(OrderRequest orderRequest, Order order) {
+        mapper.map(orderRequest, order);
+    }
 }

@@ -7,8 +7,6 @@ CREATE TABLE t_order_items (
     order_id int NOT NULL,
     product_id int NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY order_id (order_id,product_id),
-    KEY t_order_items_ibfk_2 (product_id),
     CONSTRAINT t_order_items_ibfk_1 FOREIGN KEY (order_id) REFERENCES t_orders (id),
     CONSTRAINT t_order_items_ibfk_2 FOREIGN KEY (product_id) REFERENCES t_products (id)
 )

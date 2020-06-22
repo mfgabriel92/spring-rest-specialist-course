@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -55,19 +56,19 @@ public class Order {
 	private User user;
 	
 	@Enumerated(EnumType.STRING)
-	private OrderStatus status;
+	private OrderStatus status = OrderStatus.CREATED;
 	
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> items;
 	
-	public void calculateGrandTotal() {
+	public void calculateTotals() {
 	    subtotal = getItems().stream()
 	        .map(item -> item.getTotalPrice())
 	        .reduce(BigDecimal.ZERO, BigDecimal::add);
-	   
+	    
 	    setGrandTotal(getSubtotal().add(getShippingFee()));
 	}
 	

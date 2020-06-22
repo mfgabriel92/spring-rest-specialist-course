@@ -110,7 +110,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, WebRequest request) {
-        return handleException(ExceptionType.CONFLICT, ex, "The resource is being used by another and cannot be deleted", request);
+	    return handleException(ExceptionType.CONFLICT, ex, "The resource is being used by another and cannot be deleted", request);
     }
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
