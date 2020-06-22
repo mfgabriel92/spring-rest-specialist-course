@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -46,7 +48,7 @@ public class Order {
 	@Embedded
 	private Address deliveryAddress;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private PaymentMethod paymentMethod;
 	
 	@ManyToOne
@@ -74,5 +76,32 @@ public class Order {
 	
 	public void setOrderToItems() {
 	    getItems().forEach(item -> item.setOrder(this));
+	}
+	
+	public void confirm() {
+	    setStatus(OrderStatus.CONFIRMED);
+	    setConfirmedAt(OffsetDateTime.now());
+	}
+	
+	public void deliver() {
+        setStatus(OrderStatus.DELIVERED);
+        setDeliveredAt(OffsetDateTime.now());
+    }
+	
+	public void cancel() {
+        setStatus(OrderStatus.CANCELED);
+        setCanceledAt(OffsetDateTime.now());
+    }
+	
+	private void setStatus(OrderStatus status) {
+	    if (!getStatus().canAlterTo(status)) {
+	        throw new ApiException(String.format(
+	            "Cannot alter from status %s to %s",
+	            getStatus(),
+	            status
+	        ));
+	    }
+	    
+	    this.status = status;
 	}
 }
