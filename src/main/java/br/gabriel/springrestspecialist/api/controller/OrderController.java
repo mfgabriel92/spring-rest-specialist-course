@@ -43,9 +43,9 @@ public class OrderController {
         return summaryMapper.toCollectionModel(repository.findAll());
     }
     
-    @GetMapping("{id}")
-    public OrderResponse findById(@PathVariable Integer id) {
-        return mapper.toModel(repository.findOrFail(id));
+    @GetMapping("{code}")
+    public OrderResponse findById(@PathVariable String code) {
+        return mapper.toModel(service.findByCodeOrFail(code));
     }
     
     @PostMapping

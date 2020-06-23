@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderSummaryResponse {
-    private Integer id;
+    private String code;
 
     private BigDecimal grandTotal;
     

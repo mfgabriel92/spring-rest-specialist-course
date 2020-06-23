@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 import br.gabriel.springrestspecialist.domain.service.OrderStatusService;
 
 @RestController
-@RequestMapping("/orders/{id}")
+@RequestMapping("/orders/{code}")
 public class OrderStatusController {
     @Autowired
     private OrderStatusService service;
     
     @PutMapping("confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirm(@PathVariable Integer id) {
-        service.confirm(id);
+    public void confirm(@PathVariable String code) {
+        service.confirm(code);
     }
     
     @PutMapping("deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliver(@PathVariable Integer id) {
-        service.deliver(id);
+    public void deliver(@PathVariable String code) {
+        service.deliver(code);
     }
     
     @PutMapping("cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancel(@PathVariable Integer id) {
-        service.cancel(id);
+    public void cancel(@PathVariable String code) {
+        service.cancel(code);
     }
 }

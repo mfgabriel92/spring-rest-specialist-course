@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.model.Order;
 import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
@@ -35,6 +36,15 @@ public class OrderService {
 	
 	@Autowired
     private CityRepository cityRepository;
+	
+	public Order findByCodeOrFail(String code) {
+	    return repository.findByCode(code)
+	        .orElseThrow(() -> new ResourceNotFoundExeption(String.format(
+                "The order code %s was not found",
+                code
+            )
+        ));
+	}
 	
 	@Transactional
 	public Order save(Order order) {

@@ -6,28 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.gabriel.springrestspecialist.domain.model.Order;
-import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
 
 @Service
 public class OrderStatusService {
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService service;
     
     @Transactional
-    public void confirm(Integer id) {
-        Order order = orderRepository.findOrFail(id);
+    public void confirm(String code) {
+        Order order = service.findByCodeOrFail(code);
         order.confirm();
     }
     
     @Transactional
-    public void deliver(Integer id) {
-        Order order = orderRepository.findOrFail(id);
+    public void deliver(String code) {
+        Order order = service.findByCodeOrFail(code);
         order.deliver();
     }
     
     @Transactional
-    public void cancel(Integer id) {
-        Order order = orderRepository.findOrFail(id);
+    public void cancel(String code) {
+        Order order = service.findByCodeOrFail(code);
         order.cancel();
     }
 }
