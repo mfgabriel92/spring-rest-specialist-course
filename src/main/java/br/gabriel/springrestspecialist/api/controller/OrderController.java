@@ -1,5 +1,7 @@
 package br.gabriel.springrestspecialist.api.controller;
 
+import static br.gabriel.springrestspecialist.infrastructure.repository.spec.OrderSpecs.filteringBy;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,6 +23,7 @@ import br.gabriel.springrestspecialist.api.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.api.model.response.OrderSummaryResponse;
 import br.gabriel.springrestspecialist.domain.model.Order;
 import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
+import br.gabriel.springrestspecialist.domain.repository.filter.OrderFilter;
 import br.gabriel.springrestspecialist.domain.service.OrderService;
 
 @RestController
@@ -39,8 +42,9 @@ public class OrderController {
     private OrderSummaryMapper summaryMapper;
     
     @GetMapping
-    public List<OrderSummaryResponse> findAll() {
-        return summaryMapper.toCollectionModel(repository.findAll());
+    public List<OrderSummaryResponse> findAll(OrderFilter filter) {
+        List<Order> orders = repository.findAll(filteringBy(filter));
+        return summaryMapper.toCollectionModel(orders);
     }
     
     @GetMapping("{code}")
