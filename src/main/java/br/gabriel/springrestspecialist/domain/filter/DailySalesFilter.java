@@ -1,4 +1,4 @@
-package br.gabriel.springrestspecialist.domain.repository.filter;
+package br.gabriel.springrestspecialist.domain.filter;
 
 import java.time.OffsetDateTime;
 
@@ -8,11 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class OrderFilter {
-    private Integer userId;
-    
+@Getter
+public class DailySalesFilter {
     private Integer restaurantId;
     
     @DateTimeFormat(iso = ISO.DATE_TIME)

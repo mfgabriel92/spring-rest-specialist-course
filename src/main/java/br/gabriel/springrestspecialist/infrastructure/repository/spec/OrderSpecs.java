@@ -7,8 +7,8 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import br.gabriel.springrestspecialist.domain.model.Order;
-import br.gabriel.springrestspecialist.domain.repository.filter.OrderFilter;
 
 public class OrderSpecs {
 	public static Specification<Order> filteringBy(OrderFilter filter) {
