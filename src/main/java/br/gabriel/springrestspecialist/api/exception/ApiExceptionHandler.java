@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -107,6 +108,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
 		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+	    String detail = String.format("One or more fields are invalid. Correct them and try again.");
+        ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
+        return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
 	}
 	
 	private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, WebRequest request) {
