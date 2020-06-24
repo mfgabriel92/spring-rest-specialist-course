@@ -34,11 +34,12 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         Root<Order> root = query.from(Order.class);
         List<Predicate> predicates = new ArrayList<>();
         
-        Expression<Date> functionDateCratedAt = builder.function("DATE", Date.class, root.get("createdAt"));
+        Expression<Date> functionConvertTzCreatedAt = builder.function("CONVERT_TZ", Date.class, root.get("createdAt"), builder.literal("+00:00"), builder.literal("-03:00"));
+        Expression<Date> functionDateCreatedAt = builder.function("DATE", Date.class, functionConvertTzCreatedAt);
         
         CompoundSelection<DailySales> select = builder.construct(
             DailySales.class, 
-            functionDateCratedAt,
+            functionDateCreatedAt,
             builder.count(root.get("id")),
             builder.sum(root.get("grandTotal"))
         );
@@ -55,7 +56,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         
         query.select(select);
         query.where(builder.and(predicates.toArray(new Predicate[0])));
-        query.groupBy(functionDateCratedAt);
+        query.groupBy(functionDateCreatedAt);
         
         return entityManager.createQuery(query).getResultList();
     }
