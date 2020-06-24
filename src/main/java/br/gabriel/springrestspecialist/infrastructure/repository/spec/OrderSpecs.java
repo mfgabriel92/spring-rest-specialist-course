@@ -13,8 +13,10 @@ import br.gabriel.springrestspecialist.domain.repository.filter.OrderFilter;
 public class OrderSpecs {
 	public static Specification<Order> filteringBy(OrderFilter filter) {
 		return (root, query, builder) -> {
-		    root.fetch("restaurant").fetch("cuisine");
-		    root.fetch("user");
+		    if (query.getResultType().equals(Order.class)) {
+		        root.fetch("restaurant").fetch("cuisine");
+	            root.fetch("user");
+		    }
 		    
 			List<Predicate> predicates = new ArrayList<>();
 			
