@@ -19,7 +19,6 @@ public class StatisticController {
     
     @GetMapping("daily-sales")
     public List<DailySales> dailySales(DailySalesFilter filter) {
-        orderQueryService.getDailySales(filter);
-        return null;
+        return orderQueryService.getDailySales(filter);
     }
 }
