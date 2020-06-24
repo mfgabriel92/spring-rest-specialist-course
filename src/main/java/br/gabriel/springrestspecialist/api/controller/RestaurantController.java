@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +43,10 @@ public class RestaurantController {
     private RestaurantSummaryMapper summaryMapper;
 
 	@GetMapping
-	public List<RestaurantSummaryResponse> findAll() {
-		return summaryMapper.toCollectionModel(repository.findAll());
+	public Page<RestaurantSummaryResponse> findAll(Pageable pageable) {
+	    Page<Restaurant> pagedRestaurants = repository.findAll(pageable);
+	    List<RestaurantSummaryResponse> restaurants = summaryMapper.toCollectionModel(pagedRestaurants.getContent());
+		return new PageImpl<>(restaurants, pageable, pagedRestaurants.getTotalElements());
 	}
 
 	@GetMapping("{id}")
