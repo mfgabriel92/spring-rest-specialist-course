@@ -1,33 +1,48 @@
 package br.gabriel.springrestspecialist.api.controller;
 
-import java.nio.file.Path;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.model.mapper.ProductPhotoMapper;
 import br.gabriel.springrestspecialist.api.model.request.ProductPhotoRequest;
+import br.gabriel.springrestspecialist.api.model.response.ProductPhotoResponse;
+import br.gabriel.springrestspecialist.domain.model.Product;
+import br.gabriel.springrestspecialist.domain.model.ProductPhoto;
+import br.gabriel.springrestspecialist.domain.repository.ProductRepository;
+import br.gabriel.springrestspecialist.domain.service.ProductPhotoService;
 
 @RestController
 @RequestMapping("/restaurants/{id}/products/{productId}/photo")
 public class ProductPhotoController {
+    @Autowired
+    private ProductPhotoService service;
+    
+    @Autowired
+    private ProductRepository productRepository;
+    
+    @Autowired
+    private ProductPhotoMapper mapper;
+    
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) {
+    public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) {
         String filename = UUID.randomUUID().toString() + "_" + photoRequest.getFile().getOriginalFilename();
-        Path dest = Path.of("/home/gabriel/Downloads", filename);
+        Product product = productRepository.findOrFail(productId);
+        ProductPhoto photo = new ProductPhoto();
         
-        System.out.println(filename);
-        System.out.println(photoRequest.getDescription());
+        photo.setFilename(filename);
+        photo.setContentType(photoRequest.getFile().getContentType());
+        photo.setDescription(photoRequest.getDescription());
+        photo.setSize((int) photoRequest.getFile().getSize());
+        photo.setProduct(product);
         
-        try {
-            photoRequest.getFile().transferTo(dest);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return mapper.toModel(service.save(photo));
     }
 }
