@@ -11,13 +11,13 @@ import javax.validation.Payload;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = { FileSizeValidator.class })
-public @interface FileSize {
+@Constraint(validatedBy = { ContentTypeValidator.class })
+public @interface ContentType {
     String message() default "";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
     
-    String value();
+    String[] value();
 }
