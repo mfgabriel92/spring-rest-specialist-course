@@ -1,5 +1,7 @@
 package br.gabriel.springrestspecialist.domain.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,15 @@ public class ProductPhotoService {
     
     @Transactional
     public ProductPhoto save(ProductPhoto photo) {
+        Integer productId = photo.getProduct().getId();
+        Integer restaurantId = photo.getProduct().getRestaurant().getId();
+        
+        Optional<ProductPhoto> existingPhoto = productRepository.findPhotoById(productId, restaurantId);
+        
+        if (existingPhoto.isPresent()) {
+            productRepository.delete(existingPhoto.get());
+        }
+        
         return productRepository.save(photo);
     }
 }

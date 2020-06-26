@@ -20,4 +20,8 @@ public class ProductRepositoryImpl implements ProductPhotoRepository {
         return entityManager.merge(photo);
     }
 
+    @Override
+    public void delete(ProductPhoto photo) {
+        entityManager.remove(photo);
+    }
 }
