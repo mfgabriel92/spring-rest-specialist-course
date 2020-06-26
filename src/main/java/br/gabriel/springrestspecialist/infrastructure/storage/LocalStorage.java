@@ -4,11 +4,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.infrastructure.exception.StorageException;
 
+@Service
 public class LocalStorage implements StorageService {
     @Value("${srs.storage.local.destination}")
     private Path path;

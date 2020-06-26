@@ -17,6 +17,14 @@ public class BaseJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
 		super(entityInformation, entityManager);
 		this.entityManager = entityManager;
 	}
+	
+	@Transactional
+	@Override
+	public <S extends T> S save(S entity) {
+	    entity = super.save(entity);
+	    entityManager.flush();
+	    return entity;
+	}
 
 	@Override
 	public T findOrFail(ID id) {

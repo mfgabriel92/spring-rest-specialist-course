@@ -17,7 +17,9 @@ public class ProductRepositoryImpl implements ProductPhotoRepository {
     @Transactional
     @Override
     public ProductPhoto save(ProductPhoto photo) {
-        return entityManager.merge(photo);
+        photo = entityManager.merge(photo);
+        entityManager.flush();
+        return photo;
     }
 
     @Override

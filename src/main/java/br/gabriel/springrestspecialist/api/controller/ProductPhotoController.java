@@ -1,6 +1,6 @@
 package br.gabriel.springrestspecialist.api.controller;
 
-import java.util.UUID;
+import java.io.IOException;
 
 import javax.validation.Valid;
 
@@ -32,17 +32,16 @@ public class ProductPhotoController {
     private ProductPhotoMapper mapper;
     
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) {
-        String filename = UUID.randomUUID().toString() + "_" + photoRequest.getFile().getOriginalFilename();
+    public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) throws IOException {
         Product product = productRepository.findOrFail(productId);
         ProductPhoto photo = new ProductPhoto();
         
-        photo.setFilename(filename);
+        photo.setFilename(photoRequest.getFile().getOriginalFilename());
         photo.setContentType(photoRequest.getFile().getContentType());
         photo.setDescription(photoRequest.getDescription());
         photo.setSize((int) photoRequest.getFile().getSize());
         photo.setProduct(product);
         
-        return mapper.toModel(service.save(photo));
+        return mapper.toModel(service.save(photo, photoRequest.getFile().getInputStream()));
     }
 }
