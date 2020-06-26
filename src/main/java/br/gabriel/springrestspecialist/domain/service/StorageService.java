@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 public interface StorageService {
+    InputStream find(String filename);
+    
     void store(NewFile file);
     
     void remove(String filename);

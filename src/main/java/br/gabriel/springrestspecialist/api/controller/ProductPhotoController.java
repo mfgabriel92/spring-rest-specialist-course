@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +32,16 @@ public class ProductPhotoController {
     @Autowired
     private ProductPhotoMapper mapper;
     
+    @GetMapping
+    public ProductPhotoResponse find(@PathVariable Integer id, @PathVariable Integer productId) {
+        return mapper.toModel(service.findOrFail(productId, id));
+    }
+    
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) throws IOException {
         Product product = productRepository.findOrFail(productId);
+
         ProductPhoto photo = new ProductPhoto();
-        
         photo.setFilename(photoRequest.getFile().getOriginalFilename());
         photo.setContentType(photoRequest.getFile().getContentType());
         photo.setDescription(photoRequest.getDescription());

@@ -1,5 +1,6 @@
 package br.gabriel.springrestspecialist.infrastructure.storage;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -15,6 +16,16 @@ public class LocalStorage implements StorageService {
     @Value("${srs.storage.local.destination}")
     private Path path;
     
+    @Override
+    public InputStream find(String filename) {
+        try {
+            Path path = getPath(filename);
+            return Files.newInputStream(path);
+        } catch (Exception e) {
+            throw new StorageException(String.format("Error while trying to find file '%s'", filename), e);
+        }
+    }
+
     @Override
     public void store(NewFile file) {
         try {

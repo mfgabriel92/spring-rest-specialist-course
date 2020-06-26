@@ -7,14 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
+import br.gabriel.springrestspecialist.domain.model.Product;
 import br.gabriel.springrestspecialist.domain.model.ProductPhoto;
+import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.ProductRepository;
+import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.StorageService.NewFile;
 
 @Service
 public class ProductPhotoService {
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private RestaurantRepository restaurantRepository;
     
     @Autowired
     private StorageService storage;
@@ -46,5 +53,17 @@ public class ProductPhotoService {
             .build();
         
         storage.store(newFile);
+    }
+    
+    public ProductPhoto findOrFail(Integer id, Integer restaurantId) {
+        Product product = productRepository.findOrFail(id);
+        Restaurant restaurant = restaurantRepository.findOrFail(restaurantId);
+        
+        return productRepository.findPhotoById(product.getId(), restaurant.getId())
+            .orElseThrow(() -> new ResourceNotFoundExeption(String.format(
+                "The photo for the product ID %d of the restaurant ID %d was not found", 
+                product.getId(),
+                restaurant.getId()
+            )));
     }
 }
