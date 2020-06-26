@@ -26,6 +26,7 @@ public class ProductPhotoService {
         Optional<ProductPhoto> existingPhoto = productRepository.findPhotoById(productId, restaurantId);
         
         if (existingPhoto.isPresent()) {
+            storage.remove(existingPhoto.get().getFilename());
             productRepository.delete(existingPhoto.get());
         }
         
@@ -40,7 +41,7 @@ public class ProductPhotoService {
     
     private void store(ProductPhoto photo, InputStream inputStream) {
         NewFile newFile = NewFile.builder()
-            .filename(storage.generateFilename(photo.getFilename()))
+            .filename(photo.getFilename())
             .inputStream(inputStream)
             .build();
         

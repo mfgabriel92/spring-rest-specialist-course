@@ -9,6 +9,8 @@ import lombok.Getter;
 public interface StorageService {
     void store(NewFile file);
     
+    void remove(String filename);
+    
     default String generateFilename(String originalFilename) {
         return UUID.randomUUID().toString() + "_" + originalFilename;
     }
