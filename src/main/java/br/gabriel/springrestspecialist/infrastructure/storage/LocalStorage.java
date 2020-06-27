@@ -10,7 +10,6 @@ import br.gabriel.springrestspecialist.core.property.StorageProperties;
 import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.infrastructure.exception.StorageException;
 
-//@Service
 public class LocalStorage implements StorageService {
     @Autowired
     private StorageProperties properties;

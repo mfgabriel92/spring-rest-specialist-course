@@ -3,7 +3,6 @@ package br.gabriel.springrestspecialist.infrastructure.storage;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -15,7 +14,6 @@ import br.gabriel.springrestspecialist.core.property.StorageProperties;
 import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.infrastructure.exception.StorageException;
 
-@Service
 public class S3Storage implements StorageService {
     @Autowired
     private AmazonS3 s3;

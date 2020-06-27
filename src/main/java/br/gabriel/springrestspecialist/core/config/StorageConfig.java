@@ -11,9 +11,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import br.gabriel.springrestspecialist.core.property.StorageProperties;
+import br.gabriel.springrestspecialist.domain.service.StorageService;
+import br.gabriel.springrestspecialist.infrastructure.storage.LocalStorage;
+import br.gabriel.springrestspecialist.infrastructure.storage.S3Storage;
 
 @Configuration
-public class AmazonS3Config {
+public class StorageConfig {
     @Autowired
     private StorageProperties storageProperties;
     
@@ -29,5 +32,15 @@ public class AmazonS3Config {
             .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion(region)
             .build();
+    }
+    
+    @Bean
+    public StorageService storageService() {
+        switch (storageProperties.getStrategy()) {
+            case S3:
+                return new S3Storage();
+            default:
+                return new LocalStorage();
+        }
     }
 }
