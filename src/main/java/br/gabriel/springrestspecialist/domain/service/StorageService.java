@@ -22,6 +22,8 @@ public interface StorageService {
     class NewFile {
         private String filename;
         
+        private String contentType;
+        
         private InputStream inputStream;
     }
 }

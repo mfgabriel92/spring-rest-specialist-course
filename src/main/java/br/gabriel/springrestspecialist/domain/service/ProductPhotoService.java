@@ -56,6 +56,7 @@ public class ProductPhotoService {
     private void store(ProductPhoto photo, InputStream inputStream) {
         NewFile newFile = NewFile.builder()
             .filename(photo.getFilename())
+            .contentType(photo.getContentType())
             .inputStream(inputStream)
             .build();
         
