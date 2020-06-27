@@ -1,6 +1,6 @@
 package br.gabriel.springrestspecialist.infrastructure.storage;
 
-import java.io.InputStream;
+import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,12 @@ public class S3Storage implements StorageService {
     private StorageProperties properties;
     
     @Override
-    public InputStream find(String filename) {
-        return null;
+    public FileObject find(String filename) {
+        String bucketName = properties.getS3().getBucketName();
+        String key = getKey(filename);
+        URL url = s3.getUrl(bucketName, key);
+        
+        return FileObject.builder().url(url.toString()).build();
     }
 
     @Override

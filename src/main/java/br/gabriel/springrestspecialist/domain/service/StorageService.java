@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 public interface StorageService {
-    InputStream find(String filename);
+    FileObject find(String filename);
     
     void store(NewFile file);
     
@@ -25,5 +25,21 @@ public interface StorageService {
         private String contentType;
         
         private InputStream inputStream;
+    }
+    
+    @Getter
+    @Builder
+    class FileObject {
+        private InputStream inputStream;
+        
+        private String url;
+        
+        public Boolean hasUrl() {
+            return url != null;
+        }
+        
+        public Boolean hasInputStream() {
+            return inputStream != null;
+        }
     }
 }

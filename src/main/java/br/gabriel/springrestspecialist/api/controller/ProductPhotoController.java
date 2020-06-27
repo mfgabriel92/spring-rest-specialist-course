@@ -1,12 +1,12 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.net.HttpHeaders;
 
 import br.gabriel.springrestspecialist.api.model.mapper.ProductPhotoMapper;
 import br.gabriel.springrestspecialist.api.model.request.ProductPhotoRequest;
@@ -25,6 +27,7 @@ import br.gabriel.springrestspecialist.domain.model.ProductPhoto;
 import br.gabriel.springrestspecialist.domain.repository.ProductRepository;
 import br.gabriel.springrestspecialist.domain.service.ProductPhotoService;
 import br.gabriel.springrestspecialist.domain.service.StorageService;
+import br.gabriel.springrestspecialist.domain.service.StorageService.FileObject;
 
 @RestController
 @RequestMapping("/restaurants/{id}/products/{productId}/photo")
@@ -50,11 +53,17 @@ public class ProductPhotoController {
     public ResponseEntity<InputStreamResource> show(@PathVariable Integer id, @PathVariable Integer productId) {
         try {
             ProductPhoto photo = service.findOrFail(productId, id);
-            InputStream inputStream = storage.find(photo.getFilename());
+            FileObject fileObject = storage.find(photo.getFilename());
             
-            return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(photo.getContentType()))
-                .body(new InputStreamResource(inputStream));
+            if (fileObject.hasUrl()) {
+                return ResponseEntity.status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION, fileObject.getUrl())
+                    .build();
+            } else {
+                return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(photo.getContentType()))
+                    .body(new InputStreamResource(fileObject.getInputStream()));
+            }
         } catch (ResourceNotFoundExeption e) {
             return ResponseEntity.notFound().build();
         }
