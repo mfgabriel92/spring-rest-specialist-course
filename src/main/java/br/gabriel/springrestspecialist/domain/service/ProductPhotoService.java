@@ -46,6 +46,13 @@ public class ProductPhotoService {
         return photo;
     }
     
+    @Transactional
+    public void delete(Integer id, Integer restaurantId) {
+        ProductPhoto photo = findOrFail(id, restaurantId);
+        storage.remove(photo.getFilename());
+        productRepository.delete(photo);
+    }
+    
     private void store(ProductPhoto photo, InputStream inputStream) {
         NewFile newFile = NewFile.builder()
             .filename(photo.getFilename())

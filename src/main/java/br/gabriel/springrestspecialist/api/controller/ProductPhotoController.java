@@ -7,12 +7,15 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gabriel.springrestspecialist.api.model.mapper.ProductPhotoMapper;
@@ -46,13 +49,13 @@ public class ProductPhotoController {
     }
     
     @GetMapping(produces = { MediaType.IMAGE_JPEG_VALUE , MediaType.IMAGE_PNG_VALUE })
-    public ResponseEntity<InputStreamResource> serve(@PathVariable Integer id, @PathVariable Integer productId) {
+    public ResponseEntity<InputStreamResource> show(@PathVariable Integer id, @PathVariable Integer productId) {
         try {
             ProductPhoto photo = service.findOrFail(productId, id);
             InputStream inputStream = storage.find(photo.getFilename());
             
             return ResponseEntity.ok()
-                .contentType(MediaType.valueOf(photo.getContentType()))
+                .contentType(MediaType.parseMediaType(photo.getContentType()))
                 .body(new InputStreamResource(inputStream));
         } catch (ResourceNotFoundExeption e) {
             return ResponseEntity.notFound().build();
@@ -71,5 +74,11 @@ public class ProductPhotoController {
         photo.setProduct(product);
         
         return mapper.toModel(service.save(photo, photoRequest.getFile().getInputStream()));
+    }
+    
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id, @PathVariable Integer productId) {
+        service.delete(productId, id);
     }
 }
