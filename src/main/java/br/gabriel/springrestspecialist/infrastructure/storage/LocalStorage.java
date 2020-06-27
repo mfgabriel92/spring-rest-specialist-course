@@ -4,17 +4,18 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import br.gabriel.springrestspecialist.core.property.StorageProperties;
 import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.infrastructure.exception.StorageException;
 
 @Service
 public class LocalStorage implements StorageService {
-    @Value("${srs.storage.local.destination}")
-    private Path path;
+    @Autowired
+    private StorageProperties properties;
     
     @Override
     public InputStream find(String filename) {
@@ -47,6 +48,7 @@ public class LocalStorage implements StorageService {
     }
     
     private Path getPath(String filename) {
-        return path.resolve(Path.of(filename));
+        return properties.getLocal().getDestination().resolve(Path.of(filename));
+//        return resolve(Path.of(filename));
     }
 }
