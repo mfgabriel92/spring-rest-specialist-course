@@ -1,11 +1,14 @@
 package br.gabriel.springrestspecialist.api.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.gabriel.springrestspecialist.api.model.mapper.ProductPhotoMapper;
 import br.gabriel.springrestspecialist.api.model.request.ProductPhotoRequest;
 import br.gabriel.springrestspecialist.api.model.response.ProductPhotoResponse;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
 import br.gabriel.springrestspecialist.domain.model.Product;
 import br.gabriel.springrestspecialist.domain.model.ProductPhoto;
 import br.gabriel.springrestspecialist.domain.repository.ProductRepository;
 import br.gabriel.springrestspecialist.domain.service.ProductPhotoService;
+import br.gabriel.springrestspecialist.domain.service.StorageService;
 
 @RestController
 @RequestMapping("/restaurants/{id}/products/{productId}/photo")
@@ -32,9 +37,26 @@ public class ProductPhotoController {
     @Autowired
     private ProductPhotoMapper mapper;
     
+    @Autowired
+    private StorageService storage;
+    
     @GetMapping
     public ProductPhotoResponse find(@PathVariable Integer id, @PathVariable Integer productId) {
         return mapper.toModel(service.findOrFail(productId, id));
+    }
+    
+    @GetMapping(produces = { MediaType.IMAGE_JPEG_VALUE , MediaType.IMAGE_PNG_VALUE })
+    public ResponseEntity<InputStreamResource> serve(@PathVariable Integer id, @PathVariable Integer productId) {
+        try {
+            ProductPhoto photo = service.findOrFail(productId, id);
+            InputStream inputStream = storage.find(photo.getFilename());
+            
+            return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(photo.getContentType()))
+                .body(new InputStreamResource(inputStream));
+        } catch (ResourceNotFoundExeption e) {
+            return ResponseEntity.notFound().build();
+        }
     }
     
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
