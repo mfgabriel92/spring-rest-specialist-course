@@ -5,14 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import br.gabriel.springrestspecialist.core.property.StorageProperties;
 import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.infrastructure.exception.StorageException;
 
-@Service
+//@Service
 public class LocalStorage implements StorageService {
     @Autowired
     private StorageProperties properties;
