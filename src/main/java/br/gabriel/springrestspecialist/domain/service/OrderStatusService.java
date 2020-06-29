@@ -24,7 +24,8 @@ public class OrderStatusService {
         EMail mail = EMail.builder()
             .recipient(order.getUser().getEmail())
             .subject(order.getRestaurant().getName() + " - order confirmed")
-            .body("Order code <strong>" + order.getCode() + "</strong> has been confirmed and is being prepared")
+            .body("order-confirmed.html")
+            .variable("order", order)
             .build();
         
         mailSender.send(mail);

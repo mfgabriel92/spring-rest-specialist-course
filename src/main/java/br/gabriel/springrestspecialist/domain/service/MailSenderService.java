@@ -1,5 +1,6 @@
 package br.gabriel.springrestspecialist.domain.service;
 
+import java.util.Map;
 import java.util.Set;
 
 import lombok.Builder;
@@ -22,5 +23,8 @@ public interface MailSenderService {
         
         @NonNull
         private String body;
+        
+        @Singular
+        private Map<String, Object> variables;
     }
 }
