@@ -38,7 +38,7 @@ public class SmtpMailSender implements MailSenderService {
             
             mailSender.send(mimeMessage);
         } catch (Exception e) {
-            throw new MailException("Error when trying to send e-mail", e);
+            throw new MailException("Error when trying to send e-mail. " + e.getMessage(), e);
         }
     }
     
@@ -47,7 +47,7 @@ public class SmtpMailSender implements MailSenderService {
             Template template = freemarker.getTemplate(mail.getBody());
             return FreeMarkerTemplateUtils.processTemplateIntoString(template, mail.getVariables());
         } catch (Exception e) {
-            throw new MailException("Error while getting template", e);
+            throw new MailException("Error while getting template. " + e.getMessage(), e);
         }
     }
 }

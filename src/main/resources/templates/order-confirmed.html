@@ -1,10 +1,26 @@
 <html>
-  <body>
-    <h2 style="font-family: sans-serif; font-weight: normal;">
-      Your order has been confirmed!
-    </h2>
-    <p style="font-family: sans-serif;">
-      ${order.user.name}, your order code ${order.code} has been confirmed by the restaurant and it is being prepared right now.
-    </p>
-  </body>
+	<body>
+		<h2>Order confirmed!</h2>
+		<p>${order.user.name}, your order has been confirmed and it is being prepared right now!</p>
+		<table style="max-width: 400px; color: #6f6f6f;" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tbody>
+				<#list order.items as item>
+			    <tr>
+                    <td style="padding: 10px 0;">${item.quantity}x ${item.product.name}</td>
+                    <td style="width: 30px;">${item.totalPrice}</td>
+                </tr>
+				</#list>
+				<tr>
+					<td style="padding: 10px 0;">Shipping fee</td>
+					<td>${order.shippingFee}</td>
+				</tr>
+				<tr style="font-weight: bold;">
+					<td style="padding: 10px 0;">Total</td>
+					<td>${order.grandTotal}</td>
+				</tr>
+			</tbody>
+		</table>
+		<h2 style="font-size: 20px;">Payment method</h2>
+		<p style="color: #6f6f6f;">${order.paymentMethod.description}</p>
+	</body>
 </html>
