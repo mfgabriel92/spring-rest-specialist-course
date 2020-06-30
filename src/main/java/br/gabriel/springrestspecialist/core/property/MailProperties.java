@@ -17,4 +17,11 @@ import lombok.Setter;
 public class MailProperties {
     @NotNull
     private String from;
+    
+    private Protocol protocol = Protocol.FAKE;
+    
+    public enum Protocol {
+        FAKE,
+        SMTP
+    }
 }
