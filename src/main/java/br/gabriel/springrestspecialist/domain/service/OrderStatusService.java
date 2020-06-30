@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.gabriel.springrestspecialist.domain.model.Order;
-import br.gabriel.springrestspecialist.domain.service.MailSenderService.EMail;
+import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
 
 @Service
 public class OrderStatusService {
@@ -14,21 +14,14 @@ public class OrderStatusService {
     private OrderService service;
     
     @Autowired
-    private MailSenderService mailSender;
+    private OrderRepository repository;
     
     @Transactional
     public void confirm(String code) {
         Order order = service.findByCodeOrFail(code);
         order.confirm();
         
-        EMail mail = EMail.builder()
-            .recipient(order.getUser().getEmail())
-            .subject(order.getRestaurant().getName() + " - order confirmed")
-            .body("order-confirmed.html")
-            .variable("order", order)
-            .build();
-        
-        mailSender.send(mail);
+        repository.save(order);
     }
     
     @Transactional

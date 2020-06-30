@@ -20,16 +20,18 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import br.gabriel.springrestspecialist.domain.event.OrderConfirmedEvent;
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "t_orders")
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,6 +87,8 @@ public class Order {
 	public void confirm() {
 	    setStatus(OrderStatus.CONFIRMED);
 	    setConfirmedAt(OffsetDateTime.now());
+	    
+	    registerEvent(new OrderConfirmedEvent(this));
 	}
 	
 	public void deliver() {
