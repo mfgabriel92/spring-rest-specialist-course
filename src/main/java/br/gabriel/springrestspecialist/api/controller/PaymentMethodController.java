@@ -48,8 +48,12 @@ public class PaymentMethodController {
 	}
 	
 	@GetMapping("{id}")
-	public PaymentMethodResponse findById(@PathVariable Integer id) {
-		return mapper.toModel(repository.findOrFail(id));
+	public ResponseEntity<PaymentMethodResponse> findById(@PathVariable Integer id) {
+	    PaymentMethodResponse paymentMethod = mapper.toModel(repository.findOrFail(id));
+	    
+	    return ResponseEntity.ok()
+            .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+            .body(paymentMethod);
 	}
 	
 	@PostMapping
