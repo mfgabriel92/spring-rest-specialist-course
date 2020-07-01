@@ -17,7 +17,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("br.gabriel.springrestspecialist.api"))
                 .build();
     }
     
