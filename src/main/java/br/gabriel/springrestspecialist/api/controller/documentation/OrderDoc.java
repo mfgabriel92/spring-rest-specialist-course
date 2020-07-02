@@ -9,6 +9,7 @@ import br.gabriel.springrestspecialist.api.model.response.OrderSummaryResponse;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Order")
 public interface OrderDoc {
@@ -16,8 +17,8 @@ public interface OrderDoc {
     Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable);
 
     @ApiOperation("Find an order")
-    OrderResponse findById(String code);
+    OrderResponse findById(@ApiParam(value = "The code of the order", example = "e84397d9-e1aa-4116-b110-f032c0a13b16") String code);
 
     @ApiOperation("Create a new order")
-    OrderResponse save(OrderRequest orderRequest);
+    OrderResponse save(@ApiParam("The body of the order") OrderRequest orderRequest);
 }

@@ -8,6 +8,7 @@ import br.gabriel.springrestspecialist.api.model.request.UserSummaryRequest;
 import br.gabriel.springrestspecialist.api.model.response.UserResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "User")
 public interface UserDoc {
@@ -15,17 +16,23 @@ public interface UserDoc {
     List<UserResponse> findAll();
 
     @ApiOperation("Find a user")
-    UserResponse findById(Integer id);
+    UserResponse findById(@ApiParam(value = "The user ID", example = "1") Integer id);
 
     @ApiOperation("Create a new user")
-    UserResponse save(UserRequest userRequest);
+    UserResponse save(@ApiParam("The user body") UserRequest userRequest);
 
     @ApiOperation("Update a user")
-    UserResponse save(Integer id, UserSummaryRequest userRequest);
-
-    @ApiOperation("Change the password of a user")
-    void password(Integer id, UserPasswordRequest passwordRequest);
+    UserResponse save(
+        @ApiParam(value = "The user ID", example = "1") Integer id, 
+        @ApiParam("The user body") UserSummaryRequest userRequest
+    );
+    
+    @ApiOperation("changes a user password")
+    void password(
+        @ApiParam(value = "The user ID", example = "1") Integer id, 
+        @ApiParam("The user body") UserPasswordRequest userRequest
+    );
 
     @ApiOperation("Delete a user")
-    void delete(Integer id);
+    void delete(@ApiParam(value = "The user ID", example = "1") Integer id);
 }

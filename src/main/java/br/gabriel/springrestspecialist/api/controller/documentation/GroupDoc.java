@@ -6,6 +6,7 @@ import br.gabriel.springrestspecialist.api.model.request.GroupRequest;
 import br.gabriel.springrestspecialist.api.model.response.GroupResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Group")
 public interface GroupDoc {
@@ -13,14 +14,19 @@ public interface GroupDoc {
     List<GroupResponse> findAll();
 
     @ApiOperation("Find a group")
-    GroupResponse findById(Integer id);
+    GroupResponse findById(
+        @ApiParam(value = "The group ID", example = "1") Integer id
+    );
 
     @ApiOperation("Create a new group")
-    GroupResponse save(GroupRequest groupRequest);
+    GroupResponse save(@ApiParam("The group body") GroupRequest groupRequest);
 
     @ApiOperation("Update a group")
-    GroupResponse save(Integer id, GroupRequest groupRequest);
+    GroupResponse save(
+        @ApiParam(value = "The group ID", example = "1") Integer id, 
+        @ApiParam("The group body") GroupRequest groupRequest
+    );
 
     @ApiOperation("Delete a group")
-    void delete(Integer id);
+    void delete(@ApiParam(value = "The group ID", example = "1") Integer id);
 }

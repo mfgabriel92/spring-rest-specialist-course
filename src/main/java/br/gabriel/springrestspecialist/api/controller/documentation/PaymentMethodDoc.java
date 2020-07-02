@@ -8,6 +8,7 @@ import br.gabriel.springrestspecialist.api.model.request.PaymentMethodRequest;
 import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Payment method")
 public interface PaymentMethodDoc {
@@ -15,14 +16,17 @@ public interface PaymentMethodDoc {
     ResponseEntity<List<PaymentMethodResponse>> findAll();
 
     @ApiOperation("Find a payment method")
-    ResponseEntity<PaymentMethodResponse> findById(Integer id);
+    ResponseEntity<PaymentMethodResponse> findById(@ApiParam(value = "The payment method ID", example = "1") Integer id);
 
     @ApiOperation("Create a new payment method")
-    PaymentMethodResponse save(PaymentMethodRequest paymentMethodRequest);
+    PaymentMethodResponse save(@ApiParam("The payment method body") PaymentMethodRequest paymentMethodRequest);
 
     @ApiOperation("Update a payment method")
-    PaymentMethodResponse save(Integer id, PaymentMethodRequest paymentMethodRequest);
+    PaymentMethodResponse save(
+        @ApiParam(value = "The payment method ID", example = "1") Integer id, 
+        @ApiParam("The payment method body") PaymentMethodRequest paymentMethodRequest
+    );
 
     @ApiOperation("Delete a payment method")
-    void delete(Integer id);
+    void delete(@ApiParam(value = "The payment method ID", example = "1") Integer id);
 }
