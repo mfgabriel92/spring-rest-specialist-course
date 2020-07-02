@@ -1,15 +1,21 @@
 package br.gabriel.springrestspecialist.core.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -25,7 +31,12 @@ public class OpenApiConfig implements WebMvcConfigurer {
                 .apis(RequestHandlerSelectors.basePackage("br.gabriel.springrestspecialist.api"))
                 .build()
             .apiInfo(apiInfo())
-            .tags(tags()[0], tags());
+            .tags(tags()[0], tags())
+            .useDefaultResponseMessages(false)
+            .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
+            .globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
+            .globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
+            .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages());
     }
     
     @Override
@@ -64,5 +75,39 @@ public class OpenApiConfig implements WebMvcConfigurer {
             new Tag("User", "Manage the users"),
             new Tag("User group", "Manage the users groups")
         ).toArray(new Tag[0]);
+    }
+
+    private List<ResponseMessage> globalGetResponseMessages() {
+        return Arrays.asList(
+            responseMessage(HttpStatus.INTERNAL_SERVER_ERROR),
+            responseMessage(HttpStatus.NOT_ACCEPTABLE)
+        );
+    }
+    
+    private List<ResponseMessage> globalPostResponseMessages() {
+        return Arrays.asList(
+            responseMessage(HttpStatus.INTERNAL_SERVER_ERROR),
+            responseMessage(HttpStatus.BAD_REQUEST),
+            responseMessage(HttpStatus.NOT_ACCEPTABLE),
+            responseMessage(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+        );
+    }
+    
+    private List<ResponseMessage> globalPutResponseMessages() {
+        List<ResponseMessage> put = new ArrayList<>(globalPostResponseMessages());
+        put.add(responseMessage(HttpStatus.NOT_FOUND));
+        
+        return put;
+    }
+    
+    private List<ResponseMessage> globalDeleteResponseMessages() {
+        return Arrays.asList(
+            responseMessage(HttpStatus.INTERNAL_SERVER_ERROR),
+            responseMessage(HttpStatus.BAD_REQUEST)
+        );
+    }
+    
+    private ResponseMessage responseMessage(HttpStatus status) {
+        return new ResponseMessageBuilder().code(status.value()).message(status.getReasonPhrase()).build();
     }
 }
