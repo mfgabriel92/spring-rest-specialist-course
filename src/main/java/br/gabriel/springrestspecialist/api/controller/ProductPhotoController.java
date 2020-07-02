@@ -45,11 +45,13 @@ public class ProductPhotoController implements ProductPhotoDoc {
     @Autowired
     private StorageService storage;
     
+    @Override
     @GetMapping
     public ProductPhotoResponse find(@PathVariable Integer id, @PathVariable Integer productId) {
         return mapper.toModel(service.findOrFail(productId, id));
     }
     
+    @Override
     @GetMapping(produces = { MediaType.IMAGE_JPEG_VALUE , MediaType.IMAGE_PNG_VALUE })
     public ResponseEntity<InputStreamResource> show(@PathVariable Integer id, @PathVariable Integer productId) {
         try {
@@ -70,6 +72,7 @@ public class ProductPhotoController implements ProductPhotoDoc {
         }
     }
     
+    @Override
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) throws IOException {
         Product product = productRepository.findOrFail(productId);
@@ -84,6 +87,7 @@ public class ProductPhotoController implements ProductPhotoDoc {
         return mapper.toModel(service.save(photo, photoRequest.getFile().getInputStream()));
     }
     
+    @Override
     @DeleteMapping
     public ResponseEntity<Void> delete(@PathVariable Integer id, @PathVariable Integer productId) {
         try {

@@ -36,31 +36,36 @@ public class StateController implements StateDoc {
 	@Autowired
 	private StateMapper mapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public List<StateResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public StateResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 	
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public StateResponse save(@RequestBody @Valid StateRequest stateRequest) {
 	    State state = mapper.toDomainObject(stateRequest);
 		return mapper.toModel(service.save(state));
 	}
 
-	@PutMapping("{id}")
+	@Override
+    @PutMapping("{id}")
 	public StateResponse save(@PathVariable Integer id, @RequestBody @Valid StateRequest stateRequest) {
 		State state = repository.findOrFail(id);
 		mapper.copyToDomainObject(stateRequest, state);
 		return mapper.toModel(service.save(state));
 	}
 
-	@DeleteMapping("{id}")
+	@Override
+    @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);

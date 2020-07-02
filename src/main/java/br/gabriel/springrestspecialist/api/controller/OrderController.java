@@ -45,6 +45,7 @@ public class OrderController implements OrderDoc {
     @Autowired
     private OrderSummaryMapper summaryMapper;
     
+    @Override
     @GetMapping
     public Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable) {
         Page<Order> pagedOrders = repository.findAll(filteringBy(filter), pageable);
@@ -52,11 +53,13 @@ public class OrderController implements OrderDoc {
         return new PageImpl<>(orders, pageable, pagedOrders.getTotalElements());
     }
     
+    @Override
     @GetMapping("{code}")
     public OrderResponse findById(@PathVariable String code) {
         return mapper.toModel(service.findByCodeOrFail(code));
     }
     
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse save(@RequestBody @Valid OrderRequest orderRequest) {

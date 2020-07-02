@@ -18,9 +18,7 @@ import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
-import io.swagger.annotations.Api;
 
-@Api(tags = "Restaurant payment method")
 @RestController
 @RequestMapping("/restaurants/{id}/payment-methods")
 public class RestaurantPaymentMethodController implements RestaurantPaymentMethodDoc {
@@ -33,18 +31,21 @@ public class RestaurantPaymentMethodController implements RestaurantPaymentMetho
     @Autowired
     private PaymentMethodMapper mapper;
     
+    @Override
     @GetMapping
     public List<PaymentMethodResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
         return mapper.toCollectionModel(restaurant.getPaymentMethods());
     }
     
+    @Override
     @PutMapping("{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addPaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {
         restaurantService.addPaymentMethod(id, paymentMethodId);
     }
     
+    @Override
     @DeleteMapping("{paymentMethodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {

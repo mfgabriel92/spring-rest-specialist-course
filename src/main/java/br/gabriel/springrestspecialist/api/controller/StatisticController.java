@@ -18,6 +18,7 @@ public class StatisticController implements StatisticDoc {
     @Autowired
     private OrderQueryService orderQueryService;
     
+    @Override
     @GetMapping("daily-sales")
     public List<DailySales> dailySales(DailySalesFilter filter) {
         return orderQueryService.getDailySales(filter);

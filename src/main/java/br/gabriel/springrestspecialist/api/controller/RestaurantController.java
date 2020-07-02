@@ -43,62 +43,72 @@ public class RestaurantController implements RestaurantDoc {
 	@Autowired
     private RestaurantSummaryMapper summaryMapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public Page<RestaurantSummaryResponse> findAll(Pageable pageable) {
 	    Page<Restaurant> pagedRestaurants = repository.findAll(pageable);
 	    List<RestaurantSummaryResponse> restaurants = summaryMapper.toCollectionModel(pagedRestaurants.getContent());
 		return new PageImpl<>(restaurants, pageable, pagedRestaurants.getTotalElements());
 	}
 
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public RestaurantResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 	
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestaurantResponse save(@RequestBody @Valid RestaurantRequest restaurantRequest) {
 	    Restaurant restaurant = mapper.toDomainObject(restaurantRequest);
 		return mapper.toModel(service.save(restaurant));
 	}
 	
-	@PutMapping("/{id}")
+	@Override
+    @PutMapping("/{id}")
 	public RestaurantResponse save(@PathVariable Integer id, @RequestBody @Valid RestaurantRequest restaurantRequest) {
 		Restaurant restaurant = repository.findOrFail(id);
 		mapper.copyToDomainObject(restaurantRequest, restaurant);
 		return mapper.toModel(service.save(restaurant));
 	}
 	
-	@PutMapping("/{id}/activate")
+	@Override
+    @PutMapping("/{id}/activate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void activate(@PathVariable Integer id) {
 	    service.activate(id);
 	}
 	
-	@PutMapping("/activate")
+	@Override
+    @PutMapping("/activate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void activate(@RequestBody List<Integer> ids) {
         service.activate(ids);
     }
 	
-	@PutMapping("/{id}/deactivate")
+	@Override
+    @PutMapping("/{id}/deactivate")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
     public void deactivate(@PathVariable Integer id) {
         service.deactivate(id);
     }
 	
-	@PutMapping("/deactivate")
+	@Override
+    @PutMapping("/deactivate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deactivate(@RequestBody List<Integer> ids) {
         service.deactivate(ids);
     }
 	
-	@PutMapping("/{id}/open")
+	@Override
+    @PutMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void open(@PathVariable Integer id) {
         service.open(id);
     }
     
+    @Override
     @PutMapping("/{id}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void close(@PathVariable Integer id) {

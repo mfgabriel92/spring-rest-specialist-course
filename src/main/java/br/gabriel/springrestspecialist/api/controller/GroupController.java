@@ -36,31 +36,36 @@ public class GroupController implements GroupDoc {
 	@Autowired
 	private GroupMapper mapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public List<GroupResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public GroupResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 	
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public GroupResponse save(@RequestBody @Valid GroupRequest groupRequest) {
 	    Group group = mapper.toDomainObject(groupRequest);
 		return mapper.toModel(service.save(group));
 	}
 
-	@PutMapping("{id}")
+	@Override
+    @PutMapping("{id}")
 	public GroupResponse save(@PathVariable Integer id, @RequestBody @Valid GroupRequest groupRequest) {
 		Group group = repository.findOrFail(id);
 		mapper.copyToDomainObject(groupRequest, group);
 		return mapper.toModel(service.save(group));
 	}
 
-	@DeleteMapping("{id}")
+	@Override
+    @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);

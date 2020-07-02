@@ -31,16 +31,19 @@ public class RestaurantProductController implements RestaurantProductDoc {
     @Autowired
     private ProductMapper mapper;
     
+    @Override
     @GetMapping
     public List<ProductResponse> findAll(@PathVariable Integer id) {
         return mapper.toCollectionModel(service.findAll(id));
     }
     
+    @Override
     @GetMapping("{productId}")
-    public ProductResponse findAll(@PathVariable Integer id, @PathVariable Integer productId) {
+    public ProductResponse findById(@PathVariable Integer id, @PathVariable Integer productId) {
         return mapper.toModel(service.findOrFail(productId, id));
     }
     
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse save(@PathVariable Integer id, @RequestBody @Valid ProductRequest productRequest) {
@@ -48,6 +51,7 @@ public class RestaurantProductController implements RestaurantProductDoc {
         return mapper.toModel(service.save(id, product));
     }
     
+    @Override
     @PutMapping("{productId}")
     public ProductResponse save(@PathVariable Integer id, @PathVariable Integer productId, @RequestBody @Valid ProductRequest productRequest) {
         Product product = service.findOrFail(productId, id);

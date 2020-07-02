@@ -40,26 +40,30 @@ public class CuisineController implements CuisineDoc {
 	@Autowired
 	private CuisineMapper mapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public Page<CuisineResponse> findAll(Pageable pageable) {
 	    Page<Cuisine> pagedCuisines = repository.findAll(pageable);
         List<CuisineResponse> cuisines = mapper.toCollectionModel(pagedCuisines.getContent());
         return new PageImpl<>(cuisines, pageable, pagedCuisines.getTotalElements());
 	}
 
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public CuisineResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CuisineResponse save(@RequestBody @Valid CuisineRequest cuisineRequest) {
 	    Cuisine cuisine = mapper.toDomainObject(cuisineRequest);
 		return mapper.toModel(service.save(cuisine));
 	}
 
-	@PutMapping("{id}")
+	@Override
+    @PutMapping("{id}")
 	public CuisineResponse save(@PathVariable Integer id, @RequestBody @Valid CuisineRequest cuisineRequest) {
 	    Cuisine cuisine = mapper.toDomainObject(cuisineRequest);
 		Cuisine current = repository.findOrFail(id);
@@ -68,7 +72,8 @@ public class CuisineController implements CuisineDoc {
 		return mapper.toModel(service.save(current));
 	}
 
-	@DeleteMapping("{id}")
+	@Override
+    @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);

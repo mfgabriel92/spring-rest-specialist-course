@@ -31,18 +31,21 @@ public class UserGroupController implements UserGroupDoc {
     @Autowired
     private GroupMapper mapper;
     
+    @Override
     @GetMapping
     public List<GroupResponse> findAll(@PathVariable Integer id) {
         User user = repository.findOrFail(id);
         return mapper.toCollectionModel(user.getGroups());
     }
     
+    @Override
     @PutMapping("{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void save(@PathVariable Integer id, @PathVariable Integer groupId) {
         service.addToGroup(id, groupId);
     }
     
+    @Override
     @DeleteMapping("{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id, @PathVariable Integer groupId) {

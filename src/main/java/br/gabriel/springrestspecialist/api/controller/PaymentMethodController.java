@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.PaymetMethodDoc;
+import br.gabriel.springrestspecialist.api.controller.documentation.PaymentMethodDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.PaymentMethodMapper;
 import br.gabriel.springrestspecialist.api.model.request.PaymentMethodRequest;
 import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
@@ -29,7 +29,7 @@ import br.gabriel.springrestspecialist.domain.service.PaymentMethodService;
 
 @RestController
 @RequestMapping("/payment-methods")
-public class PaymentMethodController implements PaymetMethodDoc {
+public class PaymentMethodController implements PaymentMethodDoc {
 	@Autowired
 	private PaymentMethodRepository repository;
 	
@@ -39,7 +39,8 @@ public class PaymentMethodController implements PaymetMethodDoc {
 	@Autowired
 	private PaymentMethodMapper mapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public ResponseEntity<List<PaymentMethodResponse>> findAll() {
 	    List<PaymentMethodResponse> paymentMethods = mapper.toCollectionModel(repository.findAll());
 	    
@@ -48,7 +49,8 @@ public class PaymentMethodController implements PaymetMethodDoc {
 		    .body(paymentMethods);
 	}
 	
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public ResponseEntity<PaymentMethodResponse> findById(@PathVariable Integer id) {
 	    PaymentMethodResponse paymentMethod = mapper.toModel(repository.findOrFail(id));
 	    
@@ -57,21 +59,24 @@ public class PaymentMethodController implements PaymetMethodDoc {
             .body(paymentMethod);
 	}
 	
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PaymentMethodResponse save(@RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
 	    PaymentMethod paymentMethod = mapper.toDomainObject(paymentMethodRequest);
 		return mapper.toModel(service.save(paymentMethod));
 	}
 
-	@PutMapping("{id}")
+	@Override
+    @PutMapping("{id}")
 	public PaymentMethodResponse save(@PathVariable Integer id, @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
 		PaymentMethod paymentMethod = repository.findOrFail(id);
 		mapper.copyToDomainObject(paymentMethodRequest, paymentMethod);
 		return mapper.toModel(service.save(paymentMethod));
 	}
 
-	@DeleteMapping("{id}")
+	@Override
+    @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);

@@ -17,18 +17,21 @@ public class OrderStatusController implements OrderStatusDoc {
     @Autowired
     private OrderStatusService service;
     
+    @Override
     @PutMapping("confirm")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirm(@PathVariable String code) {
         service.confirm(code);
     }
     
+    @Override
     @PutMapping("deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deliver(@PathVariable String code) {
         service.deliver(code);
     }
     
+    @Override
     @PutMapping("cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancel(@PathVariable String code) {

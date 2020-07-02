@@ -31,18 +31,21 @@ public class GroupPermissionController implements GroupPermissionDoc {
     @Autowired
     private PermissionMapper mapper;
     
+    @Override
     @GetMapping
     public List<PermissionResponse> findAll(@PathVariable Integer id) {
         Group group = repository.findOrFail(id);
         return mapper.toCollectionModel(group.getPermissions());
     }
     
+    @Override
     @PutMapping("{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void save(@PathVariable Integer id, @PathVariable Integer permissionId) {
         service.addPermission(id, permissionId);
     }
     
+    @Override
     @DeleteMapping("{permissionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id, @PathVariable Integer permissionId) {

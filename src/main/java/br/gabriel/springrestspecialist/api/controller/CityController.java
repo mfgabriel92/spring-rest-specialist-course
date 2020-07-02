@@ -36,16 +36,19 @@ public class CityController implements CityDoc {
 	@Autowired
 	private CityMapper mapper;
 
+	@Override
 	@GetMapping
 	public List<CityResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
+	@Override
 	@GetMapping("{id}")
 	public CityResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CityResponse save(@RequestBody @Valid CityRequest cityRequest) {
@@ -53,6 +56,7 @@ public class CityController implements CityDoc {
 		return mapper.toModel(service.save(city));
 	}
 
+	@Override
 	@PutMapping("{id}")
 	public CityResponse save(@PathVariable Integer id, @RequestBody @Valid CityRequest cityRequest) {
 		City city = repository.findOrFail(id);
@@ -60,6 +64,7 @@ public class CityController implements CityDoc {
 		return mapper.toModel(service.save(city));
 	}
 
+	@Override
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {

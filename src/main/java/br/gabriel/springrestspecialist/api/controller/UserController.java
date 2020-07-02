@@ -42,37 +42,43 @@ public class UserController implements UserDoc {
 	@Autowired
     private UserSummaryMapper summaryMapper;
 
-	@GetMapping
+	@Override
+    @GetMapping
 	public List<UserResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
-	@GetMapping("{id}")
+	@Override
+    @GetMapping("{id}")
 	public UserResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 	
-	@PostMapping
+	@Override
+    @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserResponse save(@RequestBody @Valid UserRequest userRequest) {
 	    User user = mapper.toDomainObject(userRequest);
 		return mapper.toModel(service.save(user));
 	}
 
-	@PutMapping("{id}")
+	@Override
+    @PutMapping("{id}")
 	public UserResponse save(@PathVariable Integer id, @RequestBody @Valid UserSummaryRequest userRequest) {
 		User user = repository.findOrFail(id);
 		summaryMapper.copyToDomainObject(userRequest, user);
 		return mapper.toModel(service.save(user));
 	}
 	
-	@PutMapping("{id}/password")
+	@Override
+    @PutMapping("{id}/password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-    public void save(@PathVariable Integer id, @RequestBody @Valid UserPasswordRequest passwordRequest) {
+    public void password(@PathVariable Integer id, @RequestBody @Valid UserPasswordRequest passwordRequest) {
 	    service.changePassword(id, passwordRequest.getCurrentPassword(), passwordRequest.getNewPassword());
     }
 
-	@DeleteMapping("{id}")
+	@Override
+    @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
 		service.deleteById(id);

@@ -31,18 +31,21 @@ public class RestaurantUserController implements RestaurantUserDoc {
     @Autowired
     private UserMapper mapper;
     
+    @Override
     @GetMapping
     public List<UserResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
         return mapper.toCollectionModel(restaurant.getUsers());
     }
     
+    @Override
     @PutMapping("{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
         restaurantService.addUser(id, userId);
     }
     
+    @Override
     @DeleteMapping("{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
