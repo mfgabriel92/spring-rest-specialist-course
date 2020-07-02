@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,6 +23,7 @@ public class ExceptionMessage {
 	
 	private List<Object> objects;
 	
+	@ApiModel("Object")
 	@Getter
 	@Builder
 	public static class Object {

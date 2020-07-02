@@ -7,6 +7,8 @@ import br.gabriel.springrestspecialist.api.model.response.GroupResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Group")
 public interface GroupDoc {
@@ -14,6 +16,10 @@ public interface GroupDoc {
     List<GroupResponse> findAll();
 
     @ApiOperation("Find a group")
+    @ApiResponses({
+        @ApiResponse(code = 400, message = "Bad Request"),
+        @ApiResponse(code = 404, message = "Not Found")
+    })
     GroupResponse findById(
         @ApiParam(value = "The group ID", example = "1", required = true) Integer id
     );

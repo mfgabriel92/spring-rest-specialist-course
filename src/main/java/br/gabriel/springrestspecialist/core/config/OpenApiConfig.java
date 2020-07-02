@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
+import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -36,7 +40,8 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
             .globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
             .globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
-            .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages());
+            .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
+            .additionalModels(additionalModels()[0], additionalModels());
     }
     
     @Override
@@ -109,5 +114,15 @@ public class OpenApiConfig implements WebMvcConfigurer {
     
     private ResponseMessage responseMessage(HttpStatus status) {
         return new ResponseMessageBuilder().code(status.value()).message(status.getReasonPhrase()).build();
+    }
+    
+    private ResolvedType[] additionalModels() {
+        List<ResolvedType> resolvedTypes = new ArrayList<>();
+        
+        resolvedTypes.add(
+            new TypeResolver().resolve(ExceptionMessage.class)
+        );
+        
+        return resolvedTypes.toArray(new ResolvedType[0]);
     }
 }

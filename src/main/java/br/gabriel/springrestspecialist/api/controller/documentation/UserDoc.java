@@ -9,6 +9,8 @@ import br.gabriel.springrestspecialist.api.model.response.UserResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "User")
 public interface UserDoc {
@@ -16,6 +18,10 @@ public interface UserDoc {
     List<UserResponse> findAll();
 
     @ApiOperation("Find a user")
+    @ApiResponses({
+        @ApiResponse(code = 400, message = "Bad Request"),
+        @ApiResponse(code = 404, message = "Not Found")
+    })
     UserResponse findById(@ApiParam(value = "The user ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new user")

@@ -11,6 +11,8 @@ import br.gabriel.springrestspecialist.api.model.response.RestaurantSummaryRespo
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Restaurant")
 public interface RestaurantDoc {
@@ -18,6 +20,10 @@ public interface RestaurantDoc {
     Page<RestaurantSummaryResponse> findAll(Pageable pageable);
 
     @ApiOperation("Find a restaurant")
+    @ApiResponses({
+        @ApiResponse(code = 400, message = "Bad Request"),
+        @ApiResponse(code = 404, message = "Not Found")
+    })
     RestaurantResponse findById(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new restaurant")
