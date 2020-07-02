@@ -15,18 +15,18 @@ public interface GroupDoc {
 
     @ApiOperation("Find a group")
     GroupResponse findById(
-        @ApiParam(value = "The group ID", example = "1") Integer id
+        @ApiParam(value = "The group ID", example = "1", required = true) Integer id
     );
 
     @ApiOperation("Create a new group")
-    GroupResponse save(@ApiParam("The group body") GroupRequest groupRequest);
+    GroupResponse save(@ApiParam(value = "The group body", required = true) GroupRequest groupRequest);
 
     @ApiOperation("Update a group")
     GroupResponse save(
-        @ApiParam(value = "The group ID", example = "1") Integer id, 
-        @ApiParam("The group body") GroupRequest groupRequest
+        @ApiParam(value = "The group ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The group body", required = true) GroupRequest groupRequest
     );
 
     @ApiOperation("Delete a group")
-    void delete(@ApiParam(value = "The group ID", example = "1") Integer id);
+    void delete(@ApiParam(value = "The group ID", example = "1", required = true) Integer id);
 }

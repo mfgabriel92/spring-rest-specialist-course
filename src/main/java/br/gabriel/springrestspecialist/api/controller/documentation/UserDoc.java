@@ -16,23 +16,23 @@ public interface UserDoc {
     List<UserResponse> findAll();
 
     @ApiOperation("Find a user")
-    UserResponse findById(@ApiParam(value = "The user ID", example = "1") Integer id);
+    UserResponse findById(@ApiParam(value = "The user ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new user")
-    UserResponse save(@ApiParam("The user body") UserRequest userRequest);
+    UserResponse save(@ApiParam(value = "The user body", required = true) UserRequest userRequest);
 
     @ApiOperation("Update a user")
     UserResponse save(
-        @ApiParam(value = "The user ID", example = "1") Integer id, 
-        @ApiParam("The user body") UserSummaryRequest userRequest
+        @ApiParam(value = "The user ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The user body", required = true) UserSummaryRequest userRequest
     );
     
     @ApiOperation("changes a user password")
     void password(
-        @ApiParam(value = "The user ID", example = "1") Integer id, 
-        @ApiParam("The user body") UserPasswordRequest userRequest
+        @ApiParam(value = "The user ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The user body", required = true) UserPasswordRequest userRequest
     );
 
     @ApiOperation("Delete a user")
-    void delete(@ApiParam(value = "The user ID", example = "1") Integer id);
+    void delete(@ApiParam(value = "The user ID", example = "1", required = true) Integer id);
 }

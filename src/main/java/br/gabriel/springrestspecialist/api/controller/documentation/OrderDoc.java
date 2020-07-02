@@ -17,8 +17,8 @@ public interface OrderDoc {
     Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable);
 
     @ApiOperation("Find an order")
-    OrderResponse findById(@ApiParam(value = "The code of the order", example = "e84397d9-e1aa-4116-b110-f032c0a13b16") String code);
+    OrderResponse findById(@ApiParam(value = "The code of the order", example = "e84397d9-e1aa-4116-b110-f032c0a13b16", required = true) String code);
 
     @ApiOperation("Create a new order")
-    OrderResponse save(@ApiParam("The body of the order") OrderRequest orderRequest);
+    OrderResponse save(@ApiParam(value = "The body of the order", required = true) OrderRequest orderRequest);
 }

@@ -18,32 +18,32 @@ public interface RestaurantDoc {
     Page<RestaurantSummaryResponse> findAll(Pageable pageable);
 
     @ApiOperation("Find a restaurant")
-    RestaurantResponse findById(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    RestaurantResponse findById(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new restaurant")
-    RestaurantResponse save(RestaurantRequest restaurantRequest);
+    RestaurantResponse save(@ApiParam(value = "The restaurant body", required = true) RestaurantRequest restaurantRequest);
 
     @ApiOperation("Update a restaurant")
     RestaurantResponse save(
-        @ApiParam(value = "The restaurant ID", example = "1") Integer id, 
-        @ApiParam("The restaurant body") RestaurantRequest restaurantRequest
+        @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The restaurant body", required = true) RestaurantRequest restaurantRequest
     );
 
     @ApiOperation("Activate a restaurant")
-    void activate(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    void activate(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Activate a list of restaurants")
-    void activate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]") List<Integer> ids);
+    void activate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) List<Integer> ids);
 
     @ApiOperation("Deactivate a restaurant")
-    void deactivate(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    void deactivate(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Deactivate a list of restaurant")
-    void deactivate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]") List<Integer> ids);
+    void deactivate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) List<Integer> ids);
 
     @ApiOperation("Set a restaurant as open")
-    void open(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    void open(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Set a restaurant as closed")
-    void close(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    void close(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 }

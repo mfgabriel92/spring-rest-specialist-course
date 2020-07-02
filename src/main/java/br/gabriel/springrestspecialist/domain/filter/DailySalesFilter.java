@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class DailySalesFilter {
-    @ApiParam(value = "The restaurant ID", example = "1")
+    @ApiParam(value = "The restaurant ID", example = "1", required = true)
     private Integer restaurantId;
     
     @ApiParam(value = "The initial date of the filtering", example = "2020-06-01T01:51:57Z")

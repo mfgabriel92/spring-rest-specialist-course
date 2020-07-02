@@ -15,17 +15,17 @@ public interface CuisineDoc {
     Page<CuisineResponse> findAll(Pageable pageable);
 
     @ApiOperation("Find a cuisine")
-    CuisineResponse findById(@ApiParam(value = "The cuisine ID", example = "1") Integer id);
+    CuisineResponse findById(@ApiParam(value = "The cuisine ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new cuisine")
-    CuisineResponse save(@ApiParam("The cuisine body") CuisineRequest cuisineRequest);
+    CuisineResponse save(@ApiParam(value = "The cuisine body", required = true) CuisineRequest cuisineRequest);
 
     @ApiOperation("Update a cuisine")
     CuisineResponse save(
-        @ApiParam(value = "The cuisine ID", example = "1") Integer id, 
-        @ApiParam("The cuisine body") CuisineRequest cuisineRequest
+        @ApiParam(value = "The cuisine ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The cuisine body", required = true) CuisineRequest cuisineRequest
     );
 
     @ApiOperation("Delete a cuisine")
-    void delete(@ApiParam(value = "The cuisine ID", example = "1") Integer id);
+    void delete(@ApiParam(value = "The cuisine ID", example = "1", required = true) Integer id);
 }

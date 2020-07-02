@@ -11,24 +11,24 @@ import io.swagger.annotations.ApiParam;
 @Api(tags = "Restaurant product")
 public interface RestaurantProductDoc {
     @ApiOperation("Find all products of a restaurant")
-    List<ProductResponse> findAll(@ApiParam(value = "The restaurant ID", example = "1") Integer id);
+    List<ProductResponse> findAll(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Find a product of a restaurant")
     ProductResponse findById(
-        @ApiParam(value = "The restaurant ID", example = "1") Integer id, 
-        @ApiParam(value = "The product ID", example = "1") Integer productId
+        @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The product ID", example = "1", required = true) Integer productId
     );
 
     @ApiOperation("Create a new product for a restaurant")
     ProductResponse save(
-        @ApiParam(value = "The restaurant ID", example = "1") Integer id,
-        @ApiParam(value = "The product ID", example = "1") ProductRequest productRequest
+        @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id,
+        @ApiParam(value = "The product body", required = true) ProductRequest productRequest
     );
 
     @ApiOperation("Update a product of a restaurant")
     ProductResponse save(
-        @ApiParam(value = "The restaurant ID", example = "1") Integer id, 
-        @ApiParam(value = "The product ID", example = "1") Integer productId, 
-        @ApiParam("The product body") ProductRequest productRequest
+        @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The product ID", example = "1", required = true) Integer productId, 
+        @ApiParam(value = "The product body", required = true) ProductRequest productRequest
     );
 }

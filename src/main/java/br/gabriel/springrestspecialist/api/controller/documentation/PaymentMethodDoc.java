@@ -16,17 +16,17 @@ public interface PaymentMethodDoc {
     ResponseEntity<List<PaymentMethodResponse>> findAll();
 
     @ApiOperation("Find a payment method")
-    ResponseEntity<PaymentMethodResponse> findById(@ApiParam(value = "The payment method ID", example = "1") Integer id);
+    ResponseEntity<PaymentMethodResponse> findById(@ApiParam(value = "The payment method ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Create a new payment method")
-    PaymentMethodResponse save(@ApiParam("The payment method body") PaymentMethodRequest paymentMethodRequest);
+    PaymentMethodResponse save(@ApiParam(value = "The payment method body", required = true) PaymentMethodRequest paymentMethodRequest);
 
     @ApiOperation("Update a payment method")
     PaymentMethodResponse save(
-        @ApiParam(value = "The payment method ID", example = "1") Integer id, 
-        @ApiParam("The payment method body") PaymentMethodRequest paymentMethodRequest
+        @ApiParam(value = "The payment method ID", example = "1", required = true) Integer id, 
+        @ApiParam(value = "The payment method body", required = true) PaymentMethodRequest paymentMethodRequest
     );
 
     @ApiOperation("Delete a payment method")
-    void delete(@ApiParam(value = "The payment method ID", example = "1") Integer id);
+    void delete(@ApiParam(value = "The payment method ID", example = "1", required = true) Integer id);
 }
