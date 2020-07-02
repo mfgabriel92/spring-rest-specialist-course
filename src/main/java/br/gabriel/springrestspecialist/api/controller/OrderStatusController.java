@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.OrderStatusDoc;
 import br.gabriel.springrestspecialist.domain.service.OrderStatusService;
 
 @RestController
 @RequestMapping("/orders/{code}")
-public class OrderStatusController {
+public class OrderStatusController implements OrderStatusDoc {
     @Autowired
     private OrderStatusService service;
     

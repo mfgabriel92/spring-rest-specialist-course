@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.StateDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.StateMapper;
 import br.gabriel.springrestspecialist.api.model.request.StateRequest;
 import br.gabriel.springrestspecialist.api.model.response.StateResponse;
@@ -25,7 +26,7 @@ import br.gabriel.springrestspecialist.domain.service.StateService;
 
 @RestController
 @RequestMapping("/states")
-public class StateController {
+public class StateController implements StateDoc {
 	@Autowired
 	private StateRepository repository;
 	

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.PaymetMethodDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.PaymentMethodMapper;
 import br.gabriel.springrestspecialist.api.model.request.PaymentMethodRequest;
 import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
@@ -28,7 +29,7 @@ import br.gabriel.springrestspecialist.domain.service.PaymentMethodService;
 
 @RestController
 @RequestMapping("/payment-methods")
-public class PaymentMethodController {
+public class PaymentMethodController implements PaymetMethodDoc {
 	@Autowired
 	private PaymentMethodRepository repository;
 	

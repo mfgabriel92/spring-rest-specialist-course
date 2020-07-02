@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.net.HttpHeaders;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.ProductPhotoDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.ProductPhotoMapper;
 import br.gabriel.springrestspecialist.api.model.request.ProductPhotoRequest;
 import br.gabriel.springrestspecialist.api.model.response.ProductPhotoResponse;
@@ -31,7 +32,7 @@ import br.gabriel.springrestspecialist.domain.service.StorageService.FileObject;
 
 @RestController
 @RequestMapping("/restaurants/{id}/products/{productId}/photo")
-public class ProductPhotoController {
+public class ProductPhotoController implements ProductPhotoDoc {
     @Autowired
     private ProductPhotoService service;
     

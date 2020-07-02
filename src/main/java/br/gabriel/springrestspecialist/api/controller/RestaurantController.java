@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.RestaurantDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
@@ -29,7 +30,7 @@ import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 
 @RestController
 @RequestMapping("/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantDoc {
 	@Autowired
 	private RestaurantRepository repository;
 

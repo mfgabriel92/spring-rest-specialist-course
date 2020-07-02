@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.GroupDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.GroupMapper;
 import br.gabriel.springrestspecialist.api.model.request.GroupRequest;
 import br.gabriel.springrestspecialist.api.model.response.GroupResponse;
@@ -25,7 +26,7 @@ import br.gabriel.springrestspecialist.domain.service.GroupService;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupController {
+public class GroupController implements GroupDoc {
 	@Autowired
 	private GroupRepository repository;
 	

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.UserGroupDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.GroupMapper;
 import br.gabriel.springrestspecialist.api.model.response.GroupResponse;
 import br.gabriel.springrestspecialist.domain.model.User;
@@ -20,7 +21,7 @@ import br.gabriel.springrestspecialist.domain.service.UserService;
 
 @RestController
 @RequestMapping("/users/{id}/groups")
-public class UserGroupController {
+public class UserGroupController implements UserGroupDoc {
     @Autowired
     private UserRepository repository;
     

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.UserDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.UserMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.UserSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.UserPasswordRequest;
@@ -28,7 +29,7 @@ import br.gabriel.springrestspecialist.domain.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController implements UserDoc {
 	@Autowired
 	private UserRepository repository;
 	

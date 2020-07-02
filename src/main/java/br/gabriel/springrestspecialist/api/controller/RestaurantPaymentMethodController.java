@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.gabriel.springrestspecialist.api.controller.documentation.RestaurantPaymentMethodDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.PaymentMethodMapper;
 import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
+import io.swagger.annotations.Api;
 
+@Api(tags = "Restaurant payment method")
 @RestController
 @RequestMapping("/restaurants/{id}/payment-methods")
-public class RestaurantPaymentMethodController {
+public class RestaurantPaymentMethodController implements RestaurantPaymentMethodDoc {
     @Autowired
     private RestaurantRepository restaurantRepository;
     
