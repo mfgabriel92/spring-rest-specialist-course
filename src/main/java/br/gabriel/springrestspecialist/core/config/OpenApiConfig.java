@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -15,6 +16,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
 import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
+import br.gabriel.springrestspecialist.core.openapi.PageableDoc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -41,7 +43,8 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .globalResponseMessage(RequestMethod.POST, globalPostResponseMessages())
             .globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
             .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
-            .additionalModels(additionalModels()[0], additionalModels());
+            .additionalModels(additionalModels()[0], additionalModels())
+            .directModelSubstitute(Pageable.class, PageableDoc.class);
     }
     
     @Override
