@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
 import br.gabriel.springrestspecialist.domain.service.OrderService;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderDoc {
     @Autowired
     private OrderRepository repository;

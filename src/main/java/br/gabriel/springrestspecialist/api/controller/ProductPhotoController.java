@@ -31,7 +31,7 @@ import br.gabriel.springrestspecialist.domain.service.StorageService;
 import br.gabriel.springrestspecialist.domain.service.StorageService.FileObject;
 
 @RestController
-@RequestMapping("/restaurants/{id}/products/{productId}/photo")
+@RequestMapping(path = "/restaurants/{id}/products/{productId}/photo", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductPhotoController implements ProductPhotoDoc {
     @Autowired
     private ProductPhotoService service;
