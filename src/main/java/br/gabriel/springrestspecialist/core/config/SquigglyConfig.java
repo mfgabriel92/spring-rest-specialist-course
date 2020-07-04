@@ -1,5 +1,8 @@
 package br.gabriel.springrestspecialist.core.config;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +21,13 @@ public class SquigglyConfig {
         FilterRegistrationBean<SquigglyRequestFilter> filterRegistration = new FilterRegistrationBean<>();
         filterRegistration.setFilter(new SquigglyRequestFilter());
         filterRegistration.setOrder(1);
+        filterRegistration.setUrlPatterns(urlPatterns());
         
         return filterRegistration;
+    }
+    
+    private List<String> urlPatterns() {
+        return Arrays.asList("/orders/*", "/restaurants/*");
     }
 }
  

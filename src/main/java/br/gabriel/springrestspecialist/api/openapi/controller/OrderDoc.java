@@ -8,6 +8,8 @@ import br.gabriel.springrestspecialist.api.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.api.model.response.OrderSummaryResponse;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -15,9 +17,15 @@ import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Order")
 public interface OrderDoc {
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "fields", value = "Fields to be filtered", paramType = "query", type = "string")
+    })
     @ApiOperation("List all the orders")
     Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable);
 
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "fields", value = "Fields to be filtered", paramType = "query", type = "string")
+    })
     @ApiOperation("Find an order")
     @ApiResponses({
         @ApiResponse(code = 400, message = "Bad Request"),

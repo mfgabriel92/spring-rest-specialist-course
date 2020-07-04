@@ -22,14 +22,11 @@ import br.gabriel.springrestspecialist.api.model.response.CuisineResponse;
 import br.gabriel.springrestspecialist.api.openapi.model.CuisineResponseDoc;
 import br.gabriel.springrestspecialist.api.openapi.model.PageableDoc;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
@@ -55,8 +52,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .additionalModels(additionalModels()[0], additionalModels())
             .directModelSubstitute(Pageable.class, PageableDoc.class)
             .alternateTypeRules(alternateTypeRules())
-            .ignoredParameterTypes(ServletWebRequest.class)
-            .globalOperationParameters(globalOperationParameters());
+            .ignoredParameterTypes(ServletWebRequest.class);
     }
     
     @Override
@@ -148,20 +144,5 @@ public class OpenApiConfig implements WebMvcConfigurer {
                 CuisineResponseDoc.class
             )
         ).toArray(new AlternateTypeRule[0]);
-    }
-    
-    private List<Parameter> globalOperationParameters() {
-        return Arrays.asList(
-            parameterBuilder("fields", "Fields to be filtered", "query", "string")
-        );
-    }
-
-    private Parameter parameterBuilder(String name, String desc, String type, String ref) {
-        return new ParameterBuilder()
-            .name(name)
-            .description(desc)
-            .parameterType(type)
-            .modelRef(new ModelRef(ref))
-            .build();
     }
 }
