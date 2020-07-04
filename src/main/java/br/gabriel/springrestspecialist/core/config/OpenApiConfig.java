@@ -25,7 +25,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
 import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
-import br.gabriel.springrestspecialist.api.openapi.model.PageableDoc;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.PageableDoc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
