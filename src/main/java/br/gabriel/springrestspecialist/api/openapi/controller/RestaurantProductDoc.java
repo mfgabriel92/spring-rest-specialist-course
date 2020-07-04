@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Restaurant product")
+@Api(tags = "Restaurant")
 public interface RestaurantProductDoc {
     @ApiOperation("Find all products of a restaurant")
     @ApiResponses({

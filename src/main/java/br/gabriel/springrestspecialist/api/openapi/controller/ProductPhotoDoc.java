@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Restaurant product")
+@Api(tags = "Restaurant")
 public interface ProductPhotoDoc {
     @ApiOperation("Find a product photo of a product in JSON format")
     @ApiResponses({

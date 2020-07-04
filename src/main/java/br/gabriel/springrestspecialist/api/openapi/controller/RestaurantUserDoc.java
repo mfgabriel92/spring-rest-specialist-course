@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Restaurant user")
+@Api(tags = "Restaurant")
 public interface RestaurantUserDoc {
     @ApiOperation("List all users of a restaurant")
     @ApiResponses({

@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Group permission")
+@Api(tags = "Group")
 public interface GroupPermissionDoc {
     @ApiOperation("List all the permissions of a group")
     @ApiResponses({
