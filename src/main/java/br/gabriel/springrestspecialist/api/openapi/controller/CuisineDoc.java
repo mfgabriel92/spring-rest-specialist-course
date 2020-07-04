@@ -1,4 +1,4 @@
-package br.gabriel.springrestspecialist.api.controller.documentation;
+package br.gabriel.springrestspecialist.api.openapi.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

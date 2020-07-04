@@ -1,4 +1,4 @@
-package br.gabriel.springrestspecialist.core.openapi;
+package br.gabriel.springrestspecialist.api.openapi.model;
 
 import java.util.List;
 

@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.UserDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.UserMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.UserSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.UserPasswordRequest;
 import br.gabriel.springrestspecialist.api.model.request.UserRequest;
 import br.gabriel.springrestspecialist.api.model.request.UserSummaryRequest;
 import br.gabriel.springrestspecialist.api.model.response.UserResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.UserDoc;
 import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 import br.gabriel.springrestspecialist.domain.service.UserService;

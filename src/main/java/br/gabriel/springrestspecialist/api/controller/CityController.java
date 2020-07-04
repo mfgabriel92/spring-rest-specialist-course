@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.CityDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.CityMapper;
 import br.gabriel.springrestspecialist.api.model.request.CityRequest;
 import br.gabriel.springrestspecialist.api.model.response.CityResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.CityDoc;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;

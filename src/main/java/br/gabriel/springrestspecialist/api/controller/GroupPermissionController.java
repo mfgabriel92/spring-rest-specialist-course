@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.GroupPermissionDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.PermissionMapper;
 import br.gabriel.springrestspecialist.api.model.response.PermissionResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.GroupPermissionDoc;
 import br.gabriel.springrestspecialist.domain.model.Group;
 import br.gabriel.springrestspecialist.domain.repository.GroupRepository;
 import br.gabriel.springrestspecialist.domain.service.GroupService;

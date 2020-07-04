@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.OrderStatusDoc;
+import br.gabriel.springrestspecialist.api.openapi.controller.OrderStatusDoc;
 import br.gabriel.springrestspecialist.domain.service.OrderStatusService;
 
 @RestController

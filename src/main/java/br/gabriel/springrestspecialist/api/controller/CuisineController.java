@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.CuisineDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.CuisineMapper;
 import br.gabriel.springrestspecialist.api.model.request.CuisineRequest;
 import br.gabriel.springrestspecialist.api.model.response.CuisineResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.CuisineDoc;
 import br.gabriel.springrestspecialist.domain.model.Cuisine;
 import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
 import br.gabriel.springrestspecialist.domain.service.CuisineService;

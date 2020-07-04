@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.GroupDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.GroupMapper;
 import br.gabriel.springrestspecialist.api.model.request.GroupRequest;
 import br.gabriel.springrestspecialist.api.model.response.GroupResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.GroupDoc;
 import br.gabriel.springrestspecialist.domain.model.Group;
 import br.gabriel.springrestspecialist.domain.repository.GroupRepository;
 import br.gabriel.springrestspecialist.domain.service.GroupService;

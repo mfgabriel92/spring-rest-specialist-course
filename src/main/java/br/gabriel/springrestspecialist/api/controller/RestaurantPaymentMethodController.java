@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.RestaurantPaymentMethodDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.PaymentMethodMapper;
 import br.gabriel.springrestspecialist.api.model.response.PaymentMethodResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.RestaurantPaymentMethodDoc;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;

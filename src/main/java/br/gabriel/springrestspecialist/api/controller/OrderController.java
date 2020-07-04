@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.OrderDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.OrderMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.OrderSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.OrderRequest;
 import br.gabriel.springrestspecialist.api.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.api.model.response.OrderSummaryResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.OrderDoc;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import br.gabriel.springrestspecialist.domain.model.Order;
 import br.gabriel.springrestspecialist.domain.repository.OrderRepository;

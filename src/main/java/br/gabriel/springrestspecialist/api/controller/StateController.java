@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.StateDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.StateMapper;
 import br.gabriel.springrestspecialist.api.model.request.StateRequest;
 import br.gabriel.springrestspecialist.api.model.response.StateResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.StateDoc;
 import br.gabriel.springrestspecialist.domain.model.State;
 import br.gabriel.springrestspecialist.domain.repository.StateRepository;
 import br.gabriel.springrestspecialist.domain.service.StateService;

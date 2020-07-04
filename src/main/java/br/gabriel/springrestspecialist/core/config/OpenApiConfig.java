@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,10 +17,14 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
 import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
-import br.gabriel.springrestspecialist.core.openapi.PageableDoc;
+import br.gabriel.springrestspecialist.api.model.response.CuisineResponse;
+import br.gabriel.springrestspecialist.api.openapi.model.CuisineResponseDoc;
+import br.gabriel.springrestspecialist.api.openapi.model.PageableDoc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.Tag;
@@ -44,7 +49,11 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .globalResponseMessage(RequestMethod.PUT, globalPutResponseMessages())
             .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
             .additionalModels(additionalModels()[0], additionalModels())
-            .directModelSubstitute(Pageable.class, PageableDoc.class);
+            .directModelSubstitute(Pageable.class, PageableDoc.class)
+            .alternateTypeRules(AlternateTypeRules.newRule(
+                new TypeResolver().resolve(Page.class, CuisineResponse.class),
+                CuisineResponseDoc.class
+            ));
     }
     
     @Override
@@ -127,5 +136,14 @@ public class OpenApiConfig implements WebMvcConfigurer {
         );
         
         return resolvedTypes.toArray(new ResolvedType[0]);
+    }
+    
+    private AlternateTypeRule[] alternateTypeRules() {
+        return Arrays.asList(
+            AlternateTypeRules.newRule(
+                new TypeResolver().resolve(Page.class, CuisineResponse.class),
+                CuisineResponseDoc.class
+            )
+        ).toArray(new AlternateTypeRule[0]);
     }
 }

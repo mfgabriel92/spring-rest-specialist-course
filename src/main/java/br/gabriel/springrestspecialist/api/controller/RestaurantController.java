@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.RestaurantDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantMapper;
 import br.gabriel.springrestspecialist.api.model.mapper.RestaurantSummaryMapper;
 import br.gabriel.springrestspecialist.api.model.request.RestaurantRequest;
 import br.gabriel.springrestspecialist.api.model.response.RestaurantResponse;
 import br.gabriel.springrestspecialist.api.model.response.RestaurantSummaryResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.RestaurantDoc;
 import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;

@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.RestaurantProductDoc;
 import br.gabriel.springrestspecialist.api.model.mapper.ProductMapper;
 import br.gabriel.springrestspecialist.api.model.request.ProductRequest;
 import br.gabriel.springrestspecialist.api.model.response.ProductResponse;
+import br.gabriel.springrestspecialist.api.openapi.controller.RestaurantProductDoc;
 import br.gabriel.springrestspecialist.domain.model.Product;
 import br.gabriel.springrestspecialist.domain.service.ProductService;
 

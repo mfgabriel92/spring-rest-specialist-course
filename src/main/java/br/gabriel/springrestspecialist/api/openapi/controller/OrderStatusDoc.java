@@ -1,4 +1,4 @@
-package br.gabriel.springrestspecialist.api.controller.documentation;
+package br.gabriel.springrestspecialist.api.openapi.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

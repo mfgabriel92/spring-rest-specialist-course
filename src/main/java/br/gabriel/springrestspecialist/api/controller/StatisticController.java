@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gabriel.springrestspecialist.api.controller.documentation.StatisticDoc;
+import br.gabriel.springrestspecialist.api.openapi.controller.StatisticDoc;
 import br.gabriel.springrestspecialist.domain.filter.DailySalesFilter;
 import br.gabriel.springrestspecialist.domain.model.aggregate.DailySales;
 import br.gabriel.springrestspecialist.domain.service.OrderQueryService;
