@@ -74,7 +74,6 @@ public class OpenApiConfig implements WebMvcConfigurer {
             new Tag("Group", "Manage the groups"),
             new Tag("Group permission", "Manage the groups permissions"),
             new Tag("Order", "Manage the orders"),
-            new Tag("Order status", "Manage the orders status"),
             new Tag("Payment method", "Manage the payment methods"),
             new Tag("Product photo", "Manage the products photos"),
             new Tag("Restaurant", "Manage the restaurants"),

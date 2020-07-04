@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Order status")
+@Api(tags = "Order")
 public interface OrderStatusDoc {
     @ApiOperation("Confirm an order")
     @ApiResponses({
