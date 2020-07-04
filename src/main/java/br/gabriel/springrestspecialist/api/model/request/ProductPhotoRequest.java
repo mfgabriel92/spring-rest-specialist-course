@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductPhotoRequest {
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(hidden = true)
     @NotNull
     @FileSize("500KB")
     @ContentType({ MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE })

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.net.HttpHeaders;
 
@@ -74,17 +76,17 @@ public class ProductPhotoController implements ProductPhotoDoc {
     
     @Override
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest) throws IOException {
+    public ProductPhotoResponse save(@PathVariable Integer id, @PathVariable Integer productId, @Valid ProductPhotoRequest photoRequest, @RequestPart MultipartFile file) throws IOException {
         Product product = productRepository.findOrFail(productId);
 
         ProductPhoto photo = new ProductPhoto();
-        photo.setFilename(photoRequest.getFile().getOriginalFilename());
-        photo.setContentType(photoRequest.getFile().getContentType());
+        photo.setFilename(file.getOriginalFilename());
+        photo.setContentType(file.getContentType());
         photo.setDescription(photoRequest.getDescription());
-        photo.setSize((int) photoRequest.getFile().getSize());
+        photo.setSize((int) file.getSize());
         photo.setProduct(product);
         
-        return mapper.toModel(service.save(photo, photoRequest.getFile().getInputStream()));
+        return mapper.toModel(service.save(photo, file.getInputStream()));
     }
     
     @Override

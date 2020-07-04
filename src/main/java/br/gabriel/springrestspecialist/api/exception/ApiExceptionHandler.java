@@ -2,6 +2,7 @@ package br.gabriel.springrestspecialist.api.exception;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -65,6 +67,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             ex.getRequiredType().getSimpleName()
         );
         return handleException(ExceptionType.PARAMETER_MISMATCH, ex, detail, request);
+    }
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	public ResponseEntity<Object> handleFileSizeLimitExceededException(MaxUploadSizeExceededException ex, WebRequest request) {
+	    Throwable rootCause = utils.rootCause(ex);
+	    
+	    if (rootCause instanceof FileSizeLimitExceededException) {
+	        return handleFileSizeLimitExceededException((FileSizeLimitExceededException) rootCause, request);
+        }
+	    
+	    return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, "Maximum request size exceeded", request);
     }
 	
 	@Override
@@ -149,6 +162,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
 	}
 	
+    private ResponseEntity<Object> handleFileSizeLimitExceededException(FileSizeLimitExceededException ex, WebRequest request) {
+        String detail = String.format("The file size exceeds the maximum size of %d", ex.getPermittedSize());
+        return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, detail, request);
+    }
+
 	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, WebRequest request) {
 		return handleException(exceptionType, ex, ex.getMessage(), request);
 	}

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.gabriel.springrestspecialist.api.model.request.ProductPhotoRequest;
 import br.gabriel.springrestspecialist.api.model.response.ProductPhotoResponse;
@@ -13,7 +14,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "Product photo")
+@Api(tags = "Restaurant product")
 public interface ProductPhotoDoc {
     @ApiOperation("Find a product photo of a product in JSON format")
     @ApiResponses({
@@ -39,7 +40,8 @@ public interface ProductPhotoDoc {
     ProductPhotoResponse save(
         @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
         @ApiParam(value = "The product ID", example = "1", required = true) Integer productId,
-        @ApiParam(value = "The product photo body", required = true) ProductPhotoRequest photoRequest
+        ProductPhotoRequest photoRequest,
+        @ApiParam(value = "The product photo (500KB; PNG or JPEG)", required = true) MultipartFile file
     ) throws IOException;
 
     @ApiOperation("Remove a photo of a product")

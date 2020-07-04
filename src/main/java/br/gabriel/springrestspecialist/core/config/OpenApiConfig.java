@@ -1,12 +1,20 @@
 package br.gabriel.springrestspecialist.core.config;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -47,7 +55,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .additionalModels(additionalModels()[0], additionalModels())
             .directModelSubstitute(Pageable.class, PageableDoc.class)
 //            .alternateTypeRules(alternateTypeRules())
-            .ignoredParameterTypes(ServletWebRequest.class);
+            .ignoredParameterTypes(ignoredParameterTypes());
     }
     
     @Override
@@ -75,7 +83,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
             new Tag("Group permission", "Manage the groups permissions"),
             new Tag("Order", "Manage the orders"),
             new Tag("Payment method", "Manage the payment methods"),
-            new Tag("Product photo", "Manage the products photos"),
+            new Tag("Restaurant product", "Manage the products photos"),
             new Tag("Restaurant", "Manage the restaurants"),
             new Tag("Restaurant payment method", "Manage the restaurants payment methods"),
             new Tag("Restaurant product", "Manage the restaurants products"),
@@ -143,4 +151,19 @@ public class OpenApiConfig implements WebMvcConfigurer {
 //            )
 //        ).toArray(new AlternateTypeRule[0]);
 //    }
+    
+    private Class<?>[] ignoredParameterTypes() {
+        return Arrays.asList(
+            ServletWebRequest.class,
+            URL.class,
+            URI.class,
+            URLStreamHandler.class,
+            Resource.class,
+            File.class,
+            InputStream.class,
+            Pageable.class,
+            Page.class,
+            Sort.class
+        ).toArray(new Class[0]);
+    }
 }

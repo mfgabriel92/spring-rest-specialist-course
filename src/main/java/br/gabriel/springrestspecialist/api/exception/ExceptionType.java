@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ExceptionType {
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
+	MAX_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "Max filesize exceeded"),
 	BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad request"),
 	NOT_FOUND(HttpStatus.NOT_FOUND, "Not found"),
 	CONFLICT(HttpStatus.CONFLICT, "Conflict"),
