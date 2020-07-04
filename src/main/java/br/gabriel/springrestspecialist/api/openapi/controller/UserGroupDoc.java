@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Api(tags = "User group")
+@Api(tags = "User")
 public interface UserGroupDoc {
     @ApiOperation("List all the groups of a user")
     @ApiResponses({
