@@ -43,7 +43,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
-                .apis(RequestHandlerSelectors.basePackage("br.gabriel.springrestspecialist.api"))
+                .apis(RequestHandlerSelectors.basePackage("br.gabriel.springrestspecialist.api.v1"))
                 .build()
             .apiInfo(apiInfo())
             .tags(tags()[0], tags())
@@ -71,7 +71,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
         return new ApiInfoBuilder()
             .title("Spring Rest Specialist")
             .description("Spring Rest Specialist course API")
-            .version("0.0.1")
+            .version("1")
             .build();
     }
     
@@ -82,11 +82,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
             new Tag("Group", "Manage the groups"),
             new Tag("Order", "Manage the orders"),
             new Tag("Payment method", "Manage the payment methods"),
-//            new Tag("Restaurant product", "Manage the products photos"),
             new Tag("Restaurant", "Manage the restaurants"),
-//            new Tag("Restaurant payment method", "Manage the restaurants payment methods"),
-//            new Tag("Restaurant product", "Manage the restaurants products"),
-//            new Tag("Restaurant user", "Manage the restaurants owners"),
             new Tag("State", "Manage the states"),
             new Tag("Statistic", "Manage the statistics"),
             new Tag("User", "Manage the users"),
