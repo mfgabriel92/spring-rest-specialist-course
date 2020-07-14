@@ -20,25 +20,25 @@ public class StorageConfig {
     @Autowired
     private StorageProperties storageProperties;
     
-    @Bean
-    public AmazonS3 amazonS3() {
-        String accessKey = storageProperties.getS3().getAccessKey();
-        String secretKey = storageProperties.getS3().getSecretKey();
-        Regions region = storageProperties.getS3().getRegion();
-        
-        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-        
-        return AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(credentials))
-            .withRegion(region)
-            .build();
-    }
+//    @Bean
+//    public AmazonS3 amazonS3() {
+//        String accessKey = storageProperties.getS3().getAccessKey();
+//        String secretKey = storageProperties.getS3().getSecretKey();
+//        Regions region = storageProperties.getS3().getRegion();
+//        
+//        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+//        
+//        return AmazonS3ClientBuilder.standard()
+//            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+//            .withRegion(region)
+//            .build();
+//    }
     
     @Bean
     public StorageService storageService() {
         switch (storageProperties.getStrategy()) {
-            case S3:
-                return new S3Storage();
+//            case S3:
+//                return new S3Storage();
             default:
                 return new LocalStorage();
         }
