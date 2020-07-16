@@ -38,6 +38,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    	return new BCryptPasswordEncoder();
     }
 }
