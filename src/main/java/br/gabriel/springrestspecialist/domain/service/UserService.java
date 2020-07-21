@@ -1,16 +1,16 @@
 package br.gabriel.springrestspecialist.domain.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import br.gabriel.springrestspecialist.domain.model.Group;
 import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.GroupRepository;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,6 +19,9 @@ public class UserService {
 	
 	@Autowired
     private GroupRepository groupRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
 	public User save(User user) {
@@ -26,9 +29,10 @@ public class UserService {
 	    Optional<User> existingUser = repository.findByEmail(user.getEmail());
 	    
 	    if (existingUser.isPresent() && !existingUser.get().equals(user)) {
-	        throw new ApiException(String.format("Another user is alredy using the e-mail %s", user.getEmail()));
+	        throw new ApiException(String.format("Another user is already using the e-mail %s", user.getEmail()));
 	    }
-	    
+
+	    user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return repository.save(user);
 	}
 	
@@ -43,8 +47,8 @@ public class UserService {
 	    if (user.getPassword().equals(newPassword)) {
 	        throw new ApiException("You may not use the same password");
 	    }
-	    
-	    user.setPassword(newPassword);
+
+		user.setPassword(passwordEncoder.encode(newPassword));
 	}
 
 	@Transactional
