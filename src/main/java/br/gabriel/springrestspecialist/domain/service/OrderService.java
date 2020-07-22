@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 
+import static br.gabriel.springrestspecialist.core.security.WebSecurity.getLoggedUserId;
+
 @Service
 public class OrderService {
     @Autowired
@@ -43,6 +45,8 @@ public class OrderService {
 	    validateItems(order);
 	    
 	    order.setCreatedAt(OffsetDateTime.now());
+	    order.setUser(new User());
+	    order.getUser().setId(getLoggedUserId().intValue());
 
 		return repository.save(order);
 	}

@@ -8,7 +8,6 @@ import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryRespons
 import br.gabriel.springrestspecialist.api.v1.openapi.controller.OrderDoc;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import br.gabriel.springrestspecialist.domain.model.Order;
-import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
 import br.gabriel.springrestspecialist.domain.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static br.gabriel.springrestspecialist.core.security.WebSecurity.getLoggedUserId;
 import static br.gabriel.springrestspecialist.infrastructure.repository.spec.OrderSpecs.filteringBy;
 
 @RestController
@@ -59,10 +57,6 @@ public class OrderController implements OrderDoc {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse save(@RequestBody @Valid OrderRequest orderRequest) {
         Order order = mapper.toDomainObject(orderRequest);
-
-        order.setUser(new User());
-        order.getUser().setId(getLoggedUserId().intValue());
-
         return mapper.toModel(service.save(order));
     }
 }
