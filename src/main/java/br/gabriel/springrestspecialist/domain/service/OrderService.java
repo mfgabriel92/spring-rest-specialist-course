@@ -1,24 +1,14 @@
 package br.gabriel.springrestspecialist.domain.service;
 
-import java.time.OffsetDateTime;
-
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
+import br.gabriel.springrestspecialist.domain.model.*;
+import br.gabriel.springrestspecialist.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
-import br.gabriel.springrestspecialist.domain.model.City;
-import br.gabriel.springrestspecialist.domain.model.Order;
-import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
-import br.gabriel.springrestspecialist.domain.model.Product;
-import br.gabriel.springrestspecialist.domain.model.Restaurant;
-import br.gabriel.springrestspecialist.domain.model.User;
-import br.gabriel.springrestspecialist.domain.repository.CityRepository;
-import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
-import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
-import br.gabriel.springrestspecialist.domain.repository.ProductRepository;
-import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
+import java.time.OffsetDateTime;
 
 @Service
 public class OrderService {
@@ -26,7 +16,7 @@ public class OrderService {
     private OrderRepository repository;
     
 	@Autowired
-	private RestaurantRepository restarantRepository;
+	private RestaurantRepository restaurantRepository;
 	
 	@Autowired
     private PaymentMethodRepository paymentMethodRepository;
@@ -53,9 +43,7 @@ public class OrderService {
 	    validateItems(order);
 	    
 	    order.setCreatedAt(OffsetDateTime.now());
-	    order.setUser(new User());
-	    order.getUser().setId(1);
-	    
+
 		return repository.save(order);
 	}
 	
@@ -69,7 +57,7 @@ public class OrderService {
 	    Integer restaurantId = order.getRestaurant().getId();
         Integer paymentMethodId = order.getPaymentMethod().getId();
         
-        Restaurant restaurant = restarantRepository.findOrFail(restaurantId);
+        Restaurant restaurant = restaurantRepository.findOrFail(restaurantId);
         PaymentMethod paymentMethod = paymentMethodRepository.findOrFail(paymentMethodId);
         
 	    if (!restaurant.acceptsPaymentMethod(paymentMethod)) {
