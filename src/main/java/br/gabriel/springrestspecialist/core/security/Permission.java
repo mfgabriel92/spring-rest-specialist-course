@@ -8,20 +8,20 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-public @interface Scope {
-    @PreAuthorize("hasAuthority('SCOPE_READ')")
+public @interface Permission {
+    @PreAuthorize("hasAuthority('READ_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Read {
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_WRITE')")
+    @PreAuthorize("hasAuthority('WRITE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Write {
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_DELETE')")
+    @PreAuthorize("hasAuthority('DELETE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Delete {

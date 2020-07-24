@@ -24,10 +24,10 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/v1/**").hasAuthority("READ_RESOURCE")
-                .antMatchers(HttpMethod.POST, "/v1/**").hasAuthority("WRITE_RESOURCE")
-                .antMatchers(HttpMethod.PUT, "/v1/**").hasAuthority("WRITE_RESOURCE")
-                .antMatchers(HttpMethod.DELETE, "/v1/**").hasAuthority("DELETE_RESOURCE")
+                .antMatchers(HttpMethod.GET, "/v1/**").hasAuthority("SCOPE_READ")
+                .antMatchers(HttpMethod.POST, "/v1/**").hasAuthority("SCOPE_WRITE")
+                .antMatchers(HttpMethod.PUT, "/v1/**").hasAuthority("SCOPE_WRITE")
+                .antMatchers(HttpMethod.DELETE, "/v1/**").hasAuthority("SCOPE_DELETE")
                 .antMatchers(HttpMethod.POST, "/v1/users/**").permitAll()
                 .anyRequest().authenticated().and()
             .cors().and()

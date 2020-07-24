@@ -4,7 +4,7 @@ import br.gabriel.springrestspecialist.api.mapper.CuisineMapper;
 import br.gabriel.springrestspecialist.api.v1.model.request.CuisineRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
 import br.gabriel.springrestspecialist.api.v1.openapi.controller.CuisineDoc;
-import br.gabriel.springrestspecialist.core.security.Scope;
+import br.gabriel.springrestspecialist.core.security.Permission;
 import br.gabriel.springrestspecialist.domain.model.Cuisine;
 import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
 import br.gabriel.springrestspecialist.domain.service.CuisineService;
@@ -33,7 +33,7 @@ public class CuisineController implements CuisineDoc {
 	private CuisineMapper mapper;
 
 	@Override
-	@Scope.Read
+	@Permission.Read
     @GetMapping
 	public Page<CuisineResponse> findAll(Pageable pageable) {
 	    Page<Cuisine> pagedCuisines = repository.findAll(pageable);
@@ -42,14 +42,14 @@ public class CuisineController implements CuisineDoc {
 	}
 
 	@Override
-	@Scope.Read
+	@Permission.Read
 	@GetMapping("{id}")
 	public CuisineResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
 	}
 
 	@Override
-	@Scope.Write
+	@Permission.Write
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public CuisineResponse save(@RequestBody @Valid CuisineRequest cuisineRequest) {
@@ -58,7 +58,7 @@ public class CuisineController implements CuisineDoc {
 	}
 
 	@Override
-	@Scope.Write
+	@Permission.Write
     @PutMapping("{id}")
 	public CuisineResponse save(@PathVariable Integer id, @RequestBody @Valid CuisineRequest cuisineRequest) {
 	    Cuisine cuisine = mapper.toDomainObject(cuisineRequest);
@@ -69,7 +69,7 @@ public class CuisineController implements CuisineDoc {
 	}
 
 	@Override
-	@Scope.Delete
+	@Permission.Delete
     @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
