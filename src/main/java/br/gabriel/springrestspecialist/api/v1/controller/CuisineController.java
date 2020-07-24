@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,7 +36,6 @@ public class CuisineController implements CuisineDoc {
 	@Scope.Read
     @GetMapping
 	public Page<CuisineResponse> findAll(Pageable pageable) {
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 	    Page<Cuisine> pagedCuisines = repository.findAll(pageable);
         List<CuisineResponse> cuisines = mapper.toCollectionModel(pagedCuisines.getContent());
         return new PageImpl<>(cuisines, pageable, pagedCuisines.getTotalElements());

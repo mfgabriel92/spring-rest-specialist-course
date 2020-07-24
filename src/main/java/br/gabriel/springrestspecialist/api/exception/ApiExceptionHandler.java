@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,164 +24,149 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.nio.file.AccessDeniedException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-	@Autowired
-	private ExceptionUtils utils;
-	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleUnhandledExceptions(Exception ex, WebRequest request) {
+    @Autowired
+    private ExceptionUtils utils;
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUnhandledExceptions(Exception ex, WebRequest request) {
         return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, "An internal error happened. Try again or contact us.", request);
-	}
-	
-	@ExceptionHandler(ApiException.class)
-	public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest request) {
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest request) {
         return handleException(ExceptionType.BAD_REQUEST, ex, ex.getMessage(), request);
-	}
-	
-	@ExceptionHandler(ResourceNotFoundExeption.class)
-	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundExeption ex, WebRequest request) {
-		return handleException(ExceptionType.NOT_FOUND, ex, request);
-	}
-	
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-	    Throwable rootCause = utils.rootCause(ex);
-	    String detail = ex.getMostSpecificCause().toString();
-	    
-	    if (rootCause instanceof SQLIntegrityConstraintViolationException) {
-	        return handleSQLIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause, request);
-	    }
-	    
+    }
+
+    @ExceptionHandler(ResourceNotFoundExeption.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundExeption ex, WebRequest request) {
+        return handleException(ExceptionType.NOT_FOUND, ex, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+        Throwable rootCause = utils.rootCause(ex);
+        String detail = ex.getMostSpecificCause().toString();
+
+        if (rootCause instanceof SQLIntegrityConstraintViolationException) {
+            return handleSQLIntegrityConstraintViolationException((SQLIntegrityConstraintViolationException) rootCause, request);
+        }
+
         return handleException(ExceptionType.CONFLICT, ex, detail, request);
-	}
-	
-	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
-        String detail = String.format(
-            "The parameter of value '%s' is invalid because it requires a type '%s'",
-            ex.getValue(),
-            ex.getRequiredType().getSimpleName()
-        );
+        String detail = String.format("The parameter of value '%s' is invalid because it requires a type '%s'", ex.getValue(), ex.getRequiredType().getSimpleName());
         return handleException(ExceptionType.PARAMETER_MISMATCH, ex, detail, request);
     }
-	
-	@ExceptionHandler(MaxUploadSizeExceededException.class)
-	public ResponseEntity<Object> handleFileSizeLimitExceededException(MaxUploadSizeExceededException ex, WebRequest request) {
-	    Throwable rootCause = utils.rootCause(ex);
-	    
-	    if (rootCause instanceof FileSizeLimitExceededException) {
-	        return handleFileSizeLimitExceededException((FileSizeLimitExceededException) rootCause, request);
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleFileSizeLimitExceededException(MaxUploadSizeExceededException ex, WebRequest request) {
+        Throwable rootCause = utils.rootCause(ex);
+
+        if (rootCause instanceof FileSizeLimitExceededException) {
+            return handleFileSizeLimitExceededException((FileSizeLimitExceededException) rootCause, request);
         }
-	    
-	    return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, "Maximum request size exceeded", request);
+
+        return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, "Maximum request size exceeded", request);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-		return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, "You are not allowed to execute this operation", request);
-	}
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+        return handleException(ExceptionType.ACCESS_DENIED, ex, "You are not allowed to execute this operation", request);
+    }
 
-	@Override
-	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
-		return handleException(ExceptionType.NOT_FOUND, ex, detail, request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String detail = String.format("One or more fields are invalid. Correct them and try again.");
-		ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
-		return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		Throwable rootCause = utils.rootCause(ex);
-		
-		if (rootCause instanceof InvalidFormatException) {
-			return handleInvalidFormatException((InvalidFormatException) rootCause, request);
-		} else if (rootCause instanceof UnrecognizedPropertyException) {
-			return handleUnrecognizedPropertyException((UnrecognizedPropertyException) rootCause, request);
-		} else if (rootCause instanceof IgnoredPropertyException) {
-			return handleIgnoredPropertyException((IgnoredPropertyException) rootCause, request);
-		}
-		
-        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, "There are one or more syntax errors on the request", request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ExceptionMessage.ExceptionMessageBuilder exceptionBody = ExceptionMessage.builder();
-        exceptionBody.status(status.value());
-        
-        if (body == null) {
-            body = exceptionBody
-            	.title(status.getReasonPhrase())
-            	.status(status.value())
-            	.detail("An internal error happened. Try again or contact us.")
-            	.build();
-        }
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
+        return handleException(ExceptionType.NOT_FOUND, ex, detail, request);
+    }
 
-		return super.handleExceptionInternal(ex, body, headers, status, request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-	    String detail = String.format("One or more fields are invalid. Correct them and try again.");
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String detail = String.format("One or more fields are invalid. Correct them and try again.");
         ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
         return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-	    return ResponseEntity.status(status).headers(headers).build();
-	}
-	
-	private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, WebRequest request) {
-	    return handleException(ExceptionType.CONFLICT, ex, "The resource is being used by another and cannot be deleted", request);
     }
-	
-	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
-		String detail = String.format(
-			"Property '%s' received value '%s' of type '%s' but requires a type '%s'",
-			utils.getPropertyPath(ex),
-			ex.getValue(),
-			ex.getValue().getClass().getSimpleName(), 
-			ex.getTargetType().getSimpleName()
-		);
 
-		return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, detail, request);
-	}
-	
-	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
-		String detail = String.format("Property '%s' is not a known property", utils.getPropertyPath(ex));
-		return handleException(ExceptionType.PROPERTY_UNKOWN, ex, detail, request);
-	}
-	
-	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
-		String detail = String.format("Property '%s' not meant to be passed", utils.getPropertyPath(ex));
-		return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
-	}
-	
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Throwable rootCause = utils.rootCause(ex);
+
+        if (rootCause instanceof InvalidFormatException) {
+            return handleInvalidFormatException((InvalidFormatException) rootCause, request);
+        } else if (rootCause instanceof UnrecognizedPropertyException) {
+            return handleUnrecognizedPropertyException((UnrecognizedPropertyException) rootCause, request);
+        } else if (rootCause instanceof IgnoredPropertyException) {
+            return handleIgnoredPropertyException((IgnoredPropertyException) rootCause, request);
+        }
+
+        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, "There are one or more syntax errors on the request", request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ExceptionMessage.ExceptionMessageBuilder exceptionBody = ExceptionMessage.builder();
+        exceptionBody.status(status.value());
+
+        if (body == null) {
+            body = exceptionBody.title(status.getReasonPhrase()).status(status.value()).detail("An internal error happened. Try again or contact us.").build();
+        }
+
+        return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String detail = "One or more fields are invalid. Correct them and try again.";
+        ExceptionMessage exceptionMessage = utils.buildExceptionMessage(ExceptionType.INVALID_PROPERTIES, detail, ex.getBindingResult()).build();
+        return handleException(ExceptionType.INVALID_PROPERTIES, ex, exceptionMessage.getDetail(), exceptionMessage, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return ResponseEntity.status(status).headers(headers).build();
+    }
+
+    private ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex, WebRequest request) {
+        return handleException(ExceptionType.CONFLICT, ex, "The resource is being used by another and cannot be deleted", request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, WebRequest request) {
+        String detail = String.format("Property '%s' received value '%s' of type '%s' but requires a type '%s'", utils.getPropertyPath(ex), ex.getValue(), ex.getValue().getClass().getSimpleName(), ex.getTargetType().getSimpleName());
+
+        return handleException(ExceptionType.MESSAGE_NOT_READABLE, ex, detail, request);
+    }
+
+    private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex, WebRequest request) {
+        String detail = String.format("Property '%s' is not a known property", utils.getPropertyPath(ex));
+        return handleException(ExceptionType.PROPERTY_UNKNOWN, ex, detail, request);
+    }
+
+    private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex, WebRequest request) {
+        String detail = String.format("Property '%s' not meant to be passed", utils.getPropertyPath(ex));
+        return handleException(ExceptionType.PROPERTY_IGNORED, ex, detail, request);
+    }
+
     private ResponseEntity<Object> handleFileSizeLimitExceededException(FileSizeLimitExceededException ex, WebRequest request) {
         String detail = String.format("The file size exceeds the maximum size of %d", ex.getPermittedSize());
         return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, detail, request);
     }
 
-	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, WebRequest request) {
-		return handleException(exceptionType, ex, ex.getMessage(), request);
-	}
-	
-	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
-		ExceptionMessage exceptionMessage = utils.buildExceptionMessage(exceptionType, detail).build();
+    private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, WebRequest request) {
+        return handleException(exceptionType, ex, ex.getMessage(), request);
+    }
+
+    private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, WebRequest request) {
+        ExceptionMessage exceptionMessage = utils.buildExceptionMessage(exceptionType, detail).build();
         return handleException(exceptionType, ex, exceptionMessage.getDetail(), exceptionMessage, request);
-	}
-	
-	private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, ExceptionMessage exceptionMessage, WebRequest request) {
+    }
+
+    private ResponseEntity<Object> handleException(ExceptionType exceptionType, Exception ex, String detail, ExceptionMessage exceptionMessage, WebRequest request) {
         return handleExceptionInternal(ex, exceptionMessage, new HttpHeaders(), exceptionType.getStatus(), request);
-	}
+    }
 }

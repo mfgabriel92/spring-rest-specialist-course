@@ -1,8 +1,7 @@
 package br.gabriel.springrestspecialist.api.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ExceptionType {
@@ -12,10 +11,11 @@ public enum ExceptionType {
 	NOT_FOUND(HttpStatus.NOT_FOUND, "Not found"),
 	CONFLICT(HttpStatus.CONFLICT, "Conflict"),
 	MESSAGE_NOT_READABLE(HttpStatus.BAD_REQUEST, "Message not readable"),
-	PROPERTY_UNKOWN(HttpStatus.BAD_REQUEST, "Property unknown"),
+	PROPERTY_UNKNOWN(HttpStatus.BAD_REQUEST, "Property unknown"),
 	PROPERTY_IGNORED(HttpStatus.BAD_REQUEST, "Property ignored"),
 	PARAMETER_MISMATCH(HttpStatus.BAD_REQUEST, "Parameter mistmatch"),
-	INVALID_PROPERTIES(HttpStatus.BAD_REQUEST, "Invalid properties");
+	INVALID_PROPERTIES(HttpStatus.BAD_REQUEST, "Invalid properties"),
+	ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access denied");
 	
 	private HttpStatus status;
 	
