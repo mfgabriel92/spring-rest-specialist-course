@@ -5,9 +5,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +22,10 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/v1/**").hasAuthority("READ")
-                .antMatchers(HttpMethod.POST, "/v1/**").hasAuthority("WRITE")
-                .antMatchers(HttpMethod.PUT, "/v1/**").hasAuthority("WRITE")
-                .antMatchers(HttpMethod.DELETE, "/v1/**").hasAuthority("DELETE")
+                .antMatchers(HttpMethod.GET, "/v1/**").hasAuthority("READ_RESOURCE")
+                .antMatchers(HttpMethod.POST, "/v1/**").hasAuthority("WRITE_RESOURCE")
+                .antMatchers(HttpMethod.PUT, "/v1/**").hasAuthority("WRITE_RESOURCE")
+                .antMatchers(HttpMethod.DELETE, "/v1/**").hasAuthority("DELETE_RESOURCE")
                 .antMatchers(HttpMethod.POST, "/v1/users/**").permitAll()
                 .anyRequest().authenticated().and()
             .cors().and()
@@ -41,7 +44,15 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 authorities = Collections.emptyList();
             }
 
-            return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+            JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+            Collection<GrantedAuthority> grantedAuthority = jwtGrantedAuthoritiesConverter.convert(jwt);
+
+            grantedAuthority.addAll(authorities.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList())
+            );
+
+            return grantedAuthority;
         });
 
         return jwtAuthenticationConverter;

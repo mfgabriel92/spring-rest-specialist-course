@@ -32,9 +32,9 @@ INSERT IGNORE INTO t_groups (id, name)
 VALUES (1, 'Read'), (2, 'Read & Write'), (3, 'Read, Write & Delete');
 
 INSERT IGNORE INTO t_permissions (id, name, description)
-VALUES (1, 'READ', 'Read'),
-       (2, 'WRITE', 'Write'),
-       (3, 'DELETE', 'Delete');
+VALUES (1, 'READ_RESOURCE', 'Read'),
+       (2, 'WRITE_RESOURCE', 'Write'),
+       (3, 'DELETE_RESOURCE', 'Delete');
 
 INSERT IGNORE INTO t_groups_permissions (group_id, permission_id)
 VALUES (1, 1),

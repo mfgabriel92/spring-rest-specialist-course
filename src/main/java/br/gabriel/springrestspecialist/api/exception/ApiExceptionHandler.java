@@ -1,7 +1,10 @@
 package br.gabriel.springrestspecialist.api.exception;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,12 +23,8 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
-import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
+import java.nio.file.AccessDeniedException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -79,7 +78,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	    
 	    return handleException(ExceptionType.MAX_SIZE_EXCEEDED, ex, "Maximum request size exceeded", request);
     }
-	
+
+    @ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+		return handleException(ExceptionType.INTERNAL_SERVER_ERROR, ex, "You are not allowed to execute this operation", request);
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String detail = String.format("The resource '%s' was not found", ex.getRequestURL());
