@@ -1,5 +1,6 @@
 package br.gabriel.springrestspecialist.core.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.Retention;
@@ -9,28 +10,41 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public @interface Permission {
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
     @Retention(RUNTIME)
     @Target(METHOD)
-    @interface Read {
-    }
-
+    @interface Read {}
+    
     @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
-    @interface Write {
-    }
-
+    @interface Write {}
+    
     @PreAuthorize("hasAuthority('SCOPE_DELETE') and hasAuthority('DELETE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
-    @interface Delete {
-    }
-
-    @interface Owns {
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE') or @webSecurity.canManageRestaurant(#id)")
+    @interface Delete {}
+    
+    @interface Restaurant {
+        @PreAuthorize(
+            "hasAuthority('SCOPE_WRITE')" +
+                "and hasAuthority('WRITE_RESOURCE')" +
+                "or @webSecurity.canManageRestaurant(#id)"
+        )
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface Restaurant{}
+        @interface CanWrite {}
+    }
+    
+    @interface Order {
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize(
+            "hasAuthority('WRITE_RESOURCE') or" +
+            "@webSecurity.getLoggedUserId() == returnObject.user.id or" +
+            "@webSecurity.canManageRestaurant(returnObject.restaurant.id)"
+        )
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanRead {}
     }
 }

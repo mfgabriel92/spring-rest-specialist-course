@@ -37,7 +37,7 @@ public class RestaurantProductController implements RestaurantProductDoc {
     }
     
     @Override
-    @Permission.Owns.Restaurant
+    @Permission.Restaurant.CanWrite
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse save(@PathVariable Integer id, @RequestBody @Valid ProductRequest productRequest) {
@@ -46,7 +46,7 @@ public class RestaurantProductController implements RestaurantProductDoc {
     }
     
     @Override
-    @Permission.Owns.Restaurant
+    @Permission.Restaurant.CanWrite
     @PutMapping("{productId}")
     public ProductResponse save(@PathVariable Integer id, @PathVariable Integer productId, @RequestBody @Valid ProductRequest productRequest) {
         Product product = service.findOrFail(productId, id);

@@ -6,6 +6,7 @@ import br.gabriel.springrestspecialist.api.v1.model.request.OrderRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryResponse;
 import br.gabriel.springrestspecialist.api.v1.openapi.controller.OrderDoc;
+import br.gabriel.springrestspecialist.core.security.Permission;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
 import br.gabriel.springrestspecialist.domain.model.Order;
 import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
@@ -39,6 +40,7 @@ public class OrderController implements OrderDoc {
     private OrderSummaryMapper summaryMapper;
     
     @Override
+    @Permission.Read
     @GetMapping
     public Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable) {
         Page<Order> pagedOrders = repository.findAll(filteringBy(filter), pageable);
@@ -47,6 +49,7 @@ public class OrderController implements OrderDoc {
     }
     
     @Override
+    @Permission.Order.CanRead
     @GetMapping("{code}")
     public OrderResponse findById(@PathVariable String code) {
         return mapper.toModel(service.findByCodeOrFail(code));

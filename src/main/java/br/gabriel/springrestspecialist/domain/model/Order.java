@@ -1,31 +1,17 @@
 package br.gabriel.springrestspecialist.domain.model;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.domain.AbstractAggregateRoot;
-
 import br.gabriel.springrestspecialist.domain.event.OrderConfirmedEvent;
 import br.gabriel.springrestspecialist.domain.exception.ApiException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -78,10 +64,6 @@ public class Order extends AbstractAggregateRoot<Order> {
 	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	    
 	    setGrandTotal(getSubtotal().add(getShippingFee()));
-	}
-	
-	public void setOrderToItems() {
-	    getItems().forEach(item -> item.setOrder(this));
 	}
 	
 	public void confirm() {

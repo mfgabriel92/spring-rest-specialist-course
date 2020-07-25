@@ -3,7 +3,8 @@ VALUES (1, 'Friedrick Fookes', 'ffookes0@mac.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7P
        (2, 'Orson Abdon', 'oabdon1@msn.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
        (3, 'Cherilyn Giorgio', 'cgiorgio2@umich.edu', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
        (4, 'Thorvald MacGebenay', 'tmacgebenay1@google.com.hk', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
-       (5, 'Corie Cassidy', 'ccassidy0@typepad.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP);
+       (5, 'Corie Cassidy', 'ccassidy0@typepad.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
+       (6, 'Fidelity Ivanusyev', 'fivanusyev0@yahoo.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP);
 
 INSERT IGNORE INTO t_states (id, name)
 VALUES (1, 'California');

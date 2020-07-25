@@ -87,7 +87,7 @@ public class RestaurantController implements RestaurantDoc {
     }
 	
 	@Override
-	@Permission.Owns.Restaurant
+	@Permission.Restaurant.CanWrite
     @PutMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void open(@PathVariable Integer id) {
@@ -95,7 +95,7 @@ public class RestaurantController implements RestaurantDoc {
     }
     
     @Override
-	@Permission.Owns.Restaurant
+	@Permission.Restaurant.CanWrite
     @PutMapping("/{id}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void close(@PathVariable Integer id) {
