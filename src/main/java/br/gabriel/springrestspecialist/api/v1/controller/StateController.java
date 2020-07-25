@@ -29,14 +29,14 @@ public class StateController implements StateDoc {
 	private StateMapper mapper;
 
 	@Override
-	@Permission.City.CanRead
+	@Permission.State.CanRead
     @GetMapping
 	public List<StateResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
 	@Override
-	@Permission.City.CanRead
+	@Permission.State.CanRead
     @GetMapping("{id}")
 	public StateResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));

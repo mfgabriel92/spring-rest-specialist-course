@@ -43,17 +43,17 @@ public @interface Permission {
     
     @interface Order {
         @PreAuthorize("hasAuthority('SCOPE_READ')")
-        @PostAuthorize("hasAuthority('READ_RESOURCE') or" + "@webSecurity.getLoggedUserId() == returnObject.user.id or" + "@webSecurity.canManageRestaurant(returnObject.restaurant.id)")
+        @PostAuthorize("hasAuthority('READ_RESOURCE') or @webSecurity.getLoggedUserId() == returnObject.user.id or @webSecurity.canManageRestaurant(returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanRead {}
         
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE') or" + "@webSecurity.getLoggedUserId().intValue() == #filter.userId or" + "@webSecurity.canManageRestaurant(#filter.restaurantId)")
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE') or @webSecurity.getLoggedUserId().intValue() == #filter.userId or @webSecurity.canManageRestaurant(#filter.restaurantId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanReadAll {}
         
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and " + "@webSecurity.canAlterOrderStatus(#code)")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and @webSecurity.canAlterOrderStatus(#code)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanAlterStatus {}
