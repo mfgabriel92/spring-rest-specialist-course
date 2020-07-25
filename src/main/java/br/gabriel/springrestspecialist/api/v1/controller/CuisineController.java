@@ -33,7 +33,7 @@ public class CuisineController implements CuisineDoc {
 	private CuisineMapper mapper;
 
 	@Override
-	@Permission.Read
+	@Permission.Authenticated
     @GetMapping
 	public Page<CuisineResponse> findAll(Pageable pageable) {
 	    Page<Cuisine> pagedCuisines = repository.findAll(pageable);
@@ -42,7 +42,7 @@ public class CuisineController implements CuisineDoc {
 	}
 
 	@Override
-	@Permission.Read
+	@Permission.Authenticated
 	@GetMapping("{id}")
 	public CuisineResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));

@@ -1,32 +1,23 @@
 package br.gabriel.springrestspecialist.api.v1.controller;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.Valid;
-
+import br.gabriel.springrestspecialist.api.mapper.PaymentMethodMapper;
+import br.gabriel.springrestspecialist.api.v1.model.request.PaymentMethodRequest;
+import br.gabriel.springrestspecialist.api.v1.model.response.PaymentMethodResponse;
+import br.gabriel.springrestspecialist.api.v1.openapi.controller.PaymentMethodDoc;
+import br.gabriel.springrestspecialist.core.security.Permission;
+import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
+import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
+import br.gabriel.springrestspecialist.domain.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.gabriel.springrestspecialist.api.mapper.PaymentMethodMapper;
-import br.gabriel.springrestspecialist.api.v1.model.request.PaymentMethodRequest;
-import br.gabriel.springrestspecialist.api.v1.model.response.PaymentMethodResponse;
-import br.gabriel.springrestspecialist.api.v1.openapi.controller.PaymentMethodDoc;
-import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
-import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
-import br.gabriel.springrestspecialist.domain.service.PaymentMethodService;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(path = "/v1/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +32,7 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	private PaymentMethodMapper mapper;
 
 	@Override
+	@Permission.Authenticated
     @GetMapping
 	public ResponseEntity<List<PaymentMethodResponse>> findAll() {
 	    List<PaymentMethodResponse> paymentMethods = mapper.toCollectionModel(repository.findAll());
@@ -51,7 +43,8 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	}
 	
 	@Override
-    @GetMapping("{id}")
+	@Permission.Authenticated
+	@GetMapping("{id}")
 	public ResponseEntity<PaymentMethodResponse> findById(@PathVariable Integer id) {
 	    PaymentMethodResponse paymentMethod = mapper.toModel(repository.findOrFail(id));
 	    
@@ -61,6 +54,7 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	}
 	
 	@Override
+	@Permission.Write
     @PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PaymentMethodResponse save(@RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
@@ -69,7 +63,8 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	}
 
 	@Override
-    @PutMapping("{id}")
+	@Permission.Write
+	@PutMapping("{id}")
 	public PaymentMethodResponse save(@PathVariable Integer id, @RequestBody @Valid PaymentMethodRequest paymentMethodRequest) {
 		PaymentMethod paymentMethod = repository.findOrFail(id);
 		mapper.copyToDomainObject(paymentMethodRequest, paymentMethod);
@@ -77,6 +72,7 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	}
 
 	@Override
+	@Permission.Delete
     @DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Integer id) {
