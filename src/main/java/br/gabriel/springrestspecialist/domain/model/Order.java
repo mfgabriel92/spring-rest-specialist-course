@@ -60,7 +60,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 	
 	public void calculateTotals() {
 	    subtotal = getItems().stream()
-	        .map(item -> item.getTotalPrice())
+	        .map(OrderItem::getTotalPrice)
 	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	    
 	    setGrandTotal(getSubtotal().add(getShippingFee()));

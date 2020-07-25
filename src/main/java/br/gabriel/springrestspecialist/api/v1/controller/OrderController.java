@@ -40,7 +40,7 @@ public class OrderController implements OrderDoc {
     private OrderSummaryMapper summaryMapper;
     
     @Override
-    @Permission.Read
+    @Permission.Order.CanReadAll
     @GetMapping
     public Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable) {
         Page<Order> pagedOrders = repository.findAll(filteringBy(filter), pageable);

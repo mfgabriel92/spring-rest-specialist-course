@@ -10,7 +10,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public @interface Permission {
-    @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+    @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Read {}
@@ -27,9 +27,8 @@ public @interface Permission {
     
     @interface Restaurant {
         @PreAuthorize(
-            "hasAuthority('SCOPE_WRITE')" +
-                "and hasAuthority('WRITE_RESOURCE')" +
-                "or @webSecurity.canManageRestaurant(#id)"
+            "hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE') or" +
+            "@webSecurity.canManageRestaurant(#id)"
         )
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -37,14 +36,23 @@ public @interface Permission {
     }
     
     @interface Order {
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("hasAuthority('SCOPE_READ')")
         @PostAuthorize(
-            "hasAuthority('WRITE_RESOURCE') or" +
+            "hasAuthority('READ_RESOURCE') or" +
             "@webSecurity.getLoggedUserId() == returnObject.user.id or" +
             "@webSecurity.canManageRestaurant(returnObject.restaurant.id)"
         )
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanRead {}
+    
+        @PreAuthorize(
+            "hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE') or" +
+            "@webSecurity.getLoggedUserId().intValue() == #filter.userId or" +
+            "@webSecurity.canManageRestaurant(#filter.restaurantId)"
+        )
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanReadAll {}
     }
 }

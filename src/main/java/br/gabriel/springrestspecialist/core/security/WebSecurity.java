@@ -20,8 +20,12 @@ public class WebSecurity {
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
         return jwt.getClaim("id");
     }
-
+    
     public Boolean canManageRestaurant(Integer restaurantId) {
+        if (restaurantId == null) {
+            return false;
+        }
+        
         return restaurantRepository.isOwnedBy(restaurantId, getLoggedUserId().intValue());
     }
 }
