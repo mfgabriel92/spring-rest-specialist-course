@@ -9,21 +9,28 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public @interface Permission {
-    @PreAuthorize("hasAuthority('READ_RESOURCE')")
+    @PreAuthorize("isAuthenticated()")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Read {
     }
 
-    @PreAuthorize("hasAuthority('WRITE_RESOURCE')")
+    @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Write {
     }
 
-    @PreAuthorize("hasAuthority('DELETE_RESOURCE')")
+    @PreAuthorize("hasAuthority('SCOPE_DELETE') and hasAuthority('DELETE_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
     @interface Delete {
+    }
+
+    @interface Owns {
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE') or @webSecurity.canManageRestaurant(#id)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface Restaurant{}
     }
 }

@@ -1,7 +1,9 @@
 INSERT INTO t_users (id, name, email, password, created_at)
 VALUES (1, 'Friedrick Fookes', 'ffookes0@mac.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
        (2, 'Orson Abdon', 'oabdon1@msn.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
-       (3, 'Cherilyn Giorgio', 'cgiorgio2@umich.edu', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP);
+       (3, 'Cherilyn Giorgio', 'cgiorgio2@umich.edu', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
+       (4, 'Thorvald MacGebenay', 'tmacgebenay1@google.com.hk', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP),
+       (5, 'Corie Cassidy', 'ccassidy0@typepad.com', '$2y$12$FpD4HR3pf7g.xRaF7BK7POxRvcczC84XfKHCHadCF6Q.N86xd/s1q', UTC_TIMESTAMP);
 
 INSERT IGNORE INTO t_states (id, name)
 VALUES (1, 'California');
@@ -14,6 +16,9 @@ VALUES (1, 'American');
 
 INSERT IGNORE INTO t_restaurants (id, name, shipping_fee, cuisine_id, address_zip_code, address_street_name, address_number, address_apartment, address_neighborhood, address_city_id, active, open, created_at, updated_at)
 VALUES (1, 'The Brimstone Wok', 5.75, 1, '90040', 'Joy Lane', 1384, null, null, 1, 1, 1, UTC_TIMESTAMP, UTC_TIMESTAMP);
+
+INSERT IGNORE INTO t_restaurants_users (restaurant_id, user_id)
+VALUES (1, 4);
 
 INSERT IGNORE INTO t_payment_methods (id, description)
 VALUES (1, 'Credit Card'),

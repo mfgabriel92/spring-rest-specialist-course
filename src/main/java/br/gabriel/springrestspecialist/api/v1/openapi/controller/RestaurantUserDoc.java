@@ -1,13 +1,9 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.api.v1.model.response.UserResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+
+import java.util.List;
 
 @Api(tags = "Restaurant")
 public interface RestaurantUserDoc {
@@ -19,13 +15,13 @@ public interface RestaurantUserDoc {
     List<UserResponse> findAll(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Associate an user to a restaurant")
-    void addRestaurant(
+    void assignToRestaurant(
         @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
         @ApiParam(value = "The user ID", example = "1", required = true) Integer userId
     );
 
     @ApiOperation("Disassociate an user from a restaurant")
-    void removeRestaurant(
+    void unassignFromRestaurant(
         @ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id, 
         @ApiParam(value = "The user ID", example = "1", required = true) Integer userId
     );

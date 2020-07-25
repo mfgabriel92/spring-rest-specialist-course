@@ -2,13 +2,22 @@
 <entity-mappings
     xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
     version="2.2">
     
     <named-query name="Restaurant.findByShippingFeeLessThan">
         <query>
             FROM Restaurant
             WHERE shippingFee BETWEEN 0 AND :fee
+        </query>
+    </named-query>
+
+    <named-query name="Restaurant.isOwnedBy">
+        <query>
+            SELECT case when COUNT(1) > 0 then TRUE else FALSE end
+            FROM Restaurant r
+            JOIN r.users u
+            WHERE r.id = :restaurantId
+            AND u.id = :userId
         </query>
     </named-query>
 </entity-mappings>
