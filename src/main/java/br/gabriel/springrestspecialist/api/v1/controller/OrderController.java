@@ -56,6 +56,7 @@ public class OrderController implements OrderDoc {
     }
     
     @Override
+    @Permission.Authenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse save(@RequestBody @Valid OrderRequest orderRequest) {

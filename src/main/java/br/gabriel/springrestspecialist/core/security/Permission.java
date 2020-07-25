@@ -10,6 +10,11 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public @interface Permission {
+    @PreAuthorize("isAuthenticated()")
+    @Retention(RUNTIME)
+    @Target(METHOD)
+    @interface Authenticated {}
+    
     @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE')")
     @Retention(RUNTIME)
     @Target(METHOD)
@@ -54,5 +59,13 @@ public @interface Permission {
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanReadAll {}
+    
+        @PreAuthorize(
+            "hasAuthority('SCOPE_WRITE') and " +
+            "@webSecurity.canAlterOrderStatus(#code)"
+        )
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanAlterStatus {}
     }
 }
