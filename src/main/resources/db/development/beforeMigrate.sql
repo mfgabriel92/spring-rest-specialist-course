@@ -16,5 +16,6 @@ TRUNCATE TABLE t_order_items;
 TRUNCATE TABLE t_groups_permissions;
 TRUNCATE TABLE t_users_groups;
 TRUNCATE TABLE t_product_photos;
+TRUNCATE TABLE oauth_client_details;
 
 SET foreign_key_checks = 1;

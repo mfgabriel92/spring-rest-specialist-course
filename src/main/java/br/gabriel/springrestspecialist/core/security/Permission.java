@@ -101,7 +101,7 @@ public @interface Permission {
     }
     
     @interface Statistic {
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_REPORTS_RESOURCE')")
+        @PreAuthorize("hasAuthority('SCOPE_REPORTS') and hasAuthority('READ_REPORTS_RESOURCE')")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanRead {}

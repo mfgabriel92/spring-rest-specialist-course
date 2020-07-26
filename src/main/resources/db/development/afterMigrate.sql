@@ -56,4 +56,11 @@ INSERT IGNORE INTO t_users_groups (user_id, group_id)
 VALUES (1, 3),
        (2, 2),
        (3, 1),
-       (1, 4)
+       (1, 4);
+
+INSERT IGNORE INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
+VALUES ('web-client', null, '$2y$12$mk/mJN095YrYi/FY5aDVj.kr3ntdVys.O1aEF.qRfXogoqITG8282', 'READ,WRITE,DELETE', 'password', null, null, 60 * 60, null, null, null),
+       ('background-app', null, '$2y$12$mk/mJN095YrYi/FY5aDVj.kr3ntdVys.O1aEF.qRfXogoqITG8282', 'READ,WRITE,DELETE', 'client_credentials', null, null, 60 * 60, null, null, null),
+       ('analytics-app', null, '$2y$12$mk/mJN095YrYi/FY5aDVj.kr3ntdVys.O1aEF.qRfXogoqITG8282', 'READ,WRITE,DELETE,REPORTS', 'authorization_code', 'http://another-uri.com', 'REPORTS', 60 * 60, null, null, null),
+       ('webadmin', null, '$2y$12$mk/mJN095YrYi/FY5aDVj.kr3ntdVys.O1aEF.qRfXogoqITG8282', 'READ,WRITE,DELETE', 'implicit', null, null, 60 * 60, null, null, null),
+       ('introspect', null, '$2y$12$mk/mJN095YrYi/FY5aDVj.kr3ntdVys.O1aEF.qRfXogoqITG8282', null, 'password', null, null, null, null, null, null);
