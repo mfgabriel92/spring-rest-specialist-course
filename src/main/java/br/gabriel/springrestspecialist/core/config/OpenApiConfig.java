@@ -1,14 +1,9 @@
 package br.gabriel.springrestspecialist.core.config;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLStreamHandler;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.PageableDoc;
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -20,21 +15,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-
-import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
-import br.gabriel.springrestspecialist.api.v1.openapi.model.PageableDoc;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.Tag;
+import springfox.documentation.builders.*;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableSwagger2
@@ -55,7 +51,9 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .additionalModels(additionalModels()[0], additionalModels())
             .directModelSubstitute(Pageable.class, PageableDoc.class)
 //            .alternateTypeRules(alternateTypeRules())
-            .ignoredParameterTypes(ignoredParameterTypes());
+            .ignoredParameterTypes(ignoredParameterTypes())
+            .securitySchemes(Collections.singletonList(securityScheme()))
+            .securityContexts(Collections.singletonList(securityContext()));
     }
     
     @Override
@@ -160,5 +158,38 @@ public class OpenApiConfig implements WebMvcConfigurer {
             Page.class,
             Sort.class
         ).toArray(new Class[0]);
+    }
+    
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+            .name("srs")
+            .grantTypes(grantTypes())
+            .scopes(scopes())
+            .build();
+    }
+    
+    private List<GrantType> grantTypes() {
+        return Collections.singletonList(new ResourceOwnerPasswordCredentialsGrant("http://auth.springrestspecialist.local:8081/oauth/token"));
+    }
+    
+    private List<AuthorizationScope> scopes() {
+        return Arrays.asList(
+            new AuthorizationScope("READ", "Read permission"),
+            new AuthorizationScope("WRITE", "Create/Edit permission"),
+            new AuthorizationScope("DELETE", "Delete permission")
+        );
+    }
+    
+    private SecurityContext securityContext() {
+        SecurityReference securityReference = SecurityReference
+            .builder()
+            .reference("srs")
+            .scopes(scopes().toArray(new AuthorizationScope[0]))
+            .build();
+        
+        return SecurityContext.builder()
+            .securityReferences(Collections.singletonList(securityReference))
+            .forPaths(PathSelectors.any())
+            .build();
     }
 }

@@ -24,8 +24,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/v1/users/**").permitAll()
-                .anyRequest().authenticated().and()
+                .antMatchers(HttpMethod.POST, "/v1/users/**").permitAll().and()
             .cors().and()
             .csrf().disable()
             .oauth2ResourceServer()
