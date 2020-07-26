@@ -35,12 +35,13 @@ VALUES (1, 'Bacon ‘n’ Egg Bundles', 'This is a fun way to serve bacon and eg
        (2, 'Individual Baked Eggs', 'Eggs surrounded by a strip of bacon, and topped with a square of cheese', 13.25, 1, 1);
 
 INSERT IGNORE INTO t_groups (id, name)
-VALUES (1, 'Read'), (2, 'Read & Write'), (3, 'Read, Write & Delete');
+VALUES (1, 'Read'), (2, 'Read & Write'), (3, 'Read, Write & Delete'), (4, 'Read Reports');
 
 INSERT IGNORE INTO t_permissions (id, name, description)
 VALUES (1, 'READ_RESOURCE', 'Read'),
        (2, 'WRITE_RESOURCE', 'Write'),
-       (3, 'DELETE_RESOURCE', 'Delete');
+       (3, 'DELETE_RESOURCE', 'Delete'),
+       (4, 'READ_REPORTS_RESOURCE', 'Read reports');
 
 INSERT IGNORE INTO t_groups_permissions (group_id, permission_id)
 VALUES (1, 1),
@@ -48,9 +49,11 @@ VALUES (1, 1),
        (2, 2),
        (3, 1),
        (3, 2),
-       (3, 3);
+       (3, 3),
+       (4, 4);
 
 INSERT IGNORE INTO t_users_groups (user_id, group_id)
-VALUES (1, 1),
+VALUES (1, 3),
        (2, 2),
-       (3, 3)
+       (3, 1),
+       (1, 4)

@@ -99,4 +99,11 @@ public @interface Permission {
         @Target(METHOD)
         @interface CanReadSelf {}
     }
+    
+    @interface Statistic {
+        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('READ_REPORTS_RESOURCE')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface CanRead {}
+    }
 }
