@@ -37,4 +37,8 @@ public class WebSecurity {
         Integer restaurantId = orderRepository.findByCode(orderCode).get().getRestaurant().getId();
         return belongsToRestaurant(restaurantId);
     }
+    
+    public Boolean isSameUser(Integer id) {
+        return getLoggedUserId() != null && id != null && getLoggedUserId().intValue() == id;
+    }
 }

@@ -44,7 +44,7 @@ public @interface Permission {
         @PreAuthorize("hasAuthority('SCOPE_READ')")
         @PostAuthorize(
             "hasAuthority('READ_RESOURCE') or" +
-            "@webSecurity.getLoggedUserId() == returnObject.user.id or" +
+            "@webSecurity.isSameUser(returnObject.user.id) or" +
             "@webSecurity.belongsToRestaurant(returnObject.restaurant.id)"
         )
         @Retention(RUNTIME)
@@ -53,7 +53,7 @@ public @interface Permission {
         
         @PreAuthorize(
             "hasAuthority('SCOPE_READ') and hasAuthority('READ_RESOURCE') or" +
-            "@webSecurity.getLoggedUserId().intValue() == #filter.userId or" +
+            "@webSecurity.isSameUser(#filter.userId) or" +
             "@webSecurity.belongsToRestaurant(#filter.restaurantId)"
         )
         @Retention(RUNTIME)
@@ -81,20 +81,20 @@ public @interface Permission {
     }
     
     @interface User {
-        @PreAuthorize("hasAuthority('SCOPE_READ') and @webSecurity.getLoggedUserId() == #id")
+        @PreAuthorize("hasAuthority('SCOPE_READ') and @webSecurity.isSameUser(#id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanChangePassword {}
     
         @PreAuthorize(
             "hasAuthority('SCOPE_WRITE') and hasAuthority('WRITE_RESOURCE') or" +
-            "@webSecurity.getLoggedUserId() == #id"
+            "@webSecurity.isSameUser(#id)"
         )
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanWrite {}
     
-        @PreAuthorize("hasAuthority('SCOPE_READ') and @webSecurity.getLoggedUserId() == #id")
+        @PreAuthorize("hasAuthority('SCOPE_READ') and @webSecurity.isSameUser(#id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface CanReadSelf {}
