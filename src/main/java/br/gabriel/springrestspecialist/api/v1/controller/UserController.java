@@ -7,6 +7,7 @@ import br.gabriel.springrestspecialist.api.v1.model.request.UserRequest;
 import br.gabriel.springrestspecialist.api.v1.model.request.UserSummaryRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.UserResponse;
 import br.gabriel.springrestspecialist.api.v1.openapi.controller.UserDoc;
+import br.gabriel.springrestspecialist.core.security.Permission;
 import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 import br.gabriel.springrestspecialist.domain.service.UserService;
@@ -34,12 +35,14 @@ public class UserController implements UserDoc {
     private UserSummaryMapper summaryMapper;
 
 	@Override
+	@Permission.Read
     @GetMapping
 	public List<UserResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
 	@Override
+	@Permission.User.CanReadSelf
     @GetMapping("{id}")
 	public UserResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
@@ -54,6 +57,7 @@ public class UserController implements UserDoc {
 	}
 
 	@Override
+	@Permission.User.CanWrite
     @PutMapping("{id}")
 	public UserResponse save(@PathVariable Integer id, @RequestBody @Valid UserSummaryRequest userRequest) {
 		User user = repository.findOrFail(id);
@@ -62,6 +66,7 @@ public class UserController implements UserDoc {
 	}
 	
 	@Override
+	@Permission.User.CanChangePassword
     @PutMapping("{id}/password")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
     public void password(@PathVariable Integer id, @RequestBody @Valid UserPasswordRequest passwordRequest) {

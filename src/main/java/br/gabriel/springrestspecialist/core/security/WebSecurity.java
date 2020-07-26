@@ -25,7 +25,7 @@ public class WebSecurity {
         return jwt.getClaim("id");
     }
     
-    public Boolean canManageRestaurant(Integer restaurantId) {
+    public Boolean belongsToRestaurant(Integer restaurantId) {
         if (restaurantId == null) {
             return false;
         }
@@ -33,8 +33,8 @@ public class WebSecurity {
         return restaurantRepository.isOwnedBy(restaurantId, getLoggedUserId().intValue());
     }
     
-    public Boolean canAlterOrderStatus(String orderCode) {
+    public Boolean belongsToRestaurant(String orderCode) {
         Integer restaurantId = orderRepository.findByCode(orderCode).get().getRestaurant().getId();
-        return canManageRestaurant(restaurantId);
+        return belongsToRestaurant(restaurantId);
     }
 }

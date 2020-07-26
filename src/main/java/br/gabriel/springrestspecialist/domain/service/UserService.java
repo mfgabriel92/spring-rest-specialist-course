@@ -40,11 +40,11 @@ public class UserService {
 	public void changePassword(Integer id, String currentPassword, String newPassword) {
 	    User user = repository.findOrFail(id);
 	    
-	    if (!user.isPasswordCorrect(currentPassword)) {
+	    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
 	        throw new ApiException("The current password does not match the user");
 	    }
 	    
-	    if (user.getPassword().equals(newPassword)) {
+	    if (passwordEncoder.matches(newPassword, user.getPassword())) {
 	        throw new ApiException("You may not use the same password");
 	    }
 

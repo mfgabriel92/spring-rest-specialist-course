@@ -37,7 +37,6 @@ public class RestaurantController implements RestaurantDoc {
     private RestaurantSummaryMapper summaryMapper;
 
 	@Override
-	@Permission.Read
     @GetMapping
 	public Page<RestaurantSummaryResponse> findAll(Pageable pageable) {
 	    Page<Restaurant> pagedRestaurants = repository.findAll(pageable);
@@ -46,7 +45,6 @@ public class RestaurantController implements RestaurantDoc {
 	}
 
 	@Override
-	@Permission.Read
 	@GetMapping("{id}")
 	public RestaurantResponse findById(@PathVariable Integer id) {
 		return mapper.toModel(repository.findOrFail(id));
@@ -87,7 +85,7 @@ public class RestaurantController implements RestaurantDoc {
     }
 	
 	@Override
-	@Permission.Restaurant.CanWrite
+	@Permission.Restaurant.CanAlterStatus
     @PutMapping("/{id}/open")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void open(@PathVariable Integer id) {
@@ -95,7 +93,7 @@ public class RestaurantController implements RestaurantDoc {
     }
     
     @Override
-	@Permission.Restaurant.CanWrite
+	@Permission.Restaurant.CanAlterStatus
     @PutMapping("/{id}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void close(@PathVariable Integer id) {
