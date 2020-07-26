@@ -8,6 +8,7 @@ import br.gabriel.springrestspecialist.core.security.Permission;
 import br.gabriel.springrestspecialist.domain.model.Cuisine;
 import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
 import br.gabriel.springrestspecialist.domain.service.CuisineService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/v1/cuisines", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CuisineController implements CuisineDoc {
@@ -36,8 +38,10 @@ public class CuisineController implements CuisineDoc {
 	@Permission.Authenticated
     @GetMapping
 	public Page<CuisineResponse> findAll(Pageable pageable) {
+		log.info("Querying cuisines - initializing");
 	    Page<Cuisine> pagedCuisines = repository.findAll(pageable);
-        List<CuisineResponse> cuisines = mapper.toCollectionModel(pagedCuisines.getContent());
+		List<CuisineResponse> cuisines = mapper.toCollectionModel(pagedCuisines.getContent());
+		log.info("Querying cuisines - finalizing");
         return new PageImpl<>(cuisines, pageable, pagedCuisines.getTotalElements());
 	}
 
