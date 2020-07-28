@@ -9,6 +9,8 @@ import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +41,13 @@ public class CityController implements CityDoc {
 	@Permission.City.CanRead
 	@GetMapping("{id}")
 	public CityResponse findById(@PathVariable Integer id) {
-		return mapper.toModel(repository.findOrFail(id));
+		City city = repository.findOrFail(id);
+		CityResponse response = mapper.toModel(city);
+		
+		response.add(Link.of("http://api.springrestspecialist/v1/cities/" + id));
+		response.add(Link.of("http://api.springrestspecialist/v1/cities/", IanaLinkRelations.COLLECTION));
+		
+		return response;
 	}
 	
 	@Override
