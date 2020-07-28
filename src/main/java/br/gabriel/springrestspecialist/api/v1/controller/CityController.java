@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,8 +46,8 @@ public class CityController implements CityDoc {
 		City city = repository.findOrFail(id);
 		CityResponse response = mapper.toModel(city);
 		
-		response.add(linkTo(CityController.class).slash(city.getId()).withSelfRel());
-		response.add(linkTo(CityController.class).withRel(IanaLinkRelations.COLLECTION));
+		response.add(linkTo(methodOn(CityController.class).findById(id)).withSelfRel());
+		response.add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
 		
 		return response;
 	}
