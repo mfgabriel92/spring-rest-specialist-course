@@ -1,28 +1,39 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import br.gabriel.springrestspecialist.api.v1.controller.CityController;
 import br.gabriel.springrestspecialist.api.v1.model.request.CityRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.CityResponse;
 import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.model.State;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class CityMapper {
+public class CityMapper implements RepresentationModelAssembler<City, CityResponse> {
     @Autowired
     private ModelMapper mapper;
     
+    @Override
     public CityResponse toModel(City city) {
-        return mapper.map(city, CityResponse.class);
+        CityResponse response = mapper.map(city, CityResponse.class);
+    
+        response.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
+    
+        return response;
     }
     
-    public List<CityResponse> toCollectionModel(List<City> cities) {
-        return cities.stream().map(city -> toModel(city)).collect(Collectors.toList());
+    @Override
+    public CollectionModel<CityResponse> toCollectionModel(Iterable<? extends City> entities) {
+        return RepresentationModelAssembler.super
+            .toCollectionModel(entities)
+            .add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public City toDomainObject(CityRequest cityRequest) {

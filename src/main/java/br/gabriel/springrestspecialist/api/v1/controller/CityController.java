@@ -10,16 +10,11 @@ import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,28 +32,14 @@ public class CityController implements CityDoc {
 	@Permission.City.CanRead
 	@GetMapping
 	public CollectionModel<CityResponse> findAll() {
-		List<CityResponse> cities = mapper.toCollectionModel(repository.findAll());
-		cities.forEach(city -> {
-			city.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
-		});
-		
-		CollectionModel<CityResponse> collection = CollectionModel.of(cities);
-		collection.add(linkTo(methodOn(CityController.class).findAll()).withSelfRel());
-		
-		return collection;
+		return mapper.toCollectionModel(repository.findAll());
 	}
 	
 	@Override
 	@Permission.City.CanRead
 	@GetMapping("{id}")
 	public CityResponse findById(@PathVariable Integer id) {
-		City city = repository.findOrFail(id);
-		CityResponse response = mapper.toModel(city);
-		
-		response.add(linkTo(methodOn(CityController.class).findById(id)).withSelfRel());
-		response.add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
-		
-		return response;
+		return mapper.toModel(repository.findOrFail(id));
 	}
 	
 	@Override
