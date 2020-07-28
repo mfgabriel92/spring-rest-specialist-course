@@ -10,13 +10,14 @@ import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,8 +45,8 @@ public class CityController implements CityDoc {
 		City city = repository.findOrFail(id);
 		CityResponse response = mapper.toModel(city);
 		
-		response.add(Link.of("http://api.springrestspecialist/v1/cities/" + id));
-		response.add(Link.of("http://api.springrestspecialist/v1/cities/", IanaLinkRelations.COLLECTION));
+		response.add(linkTo(CityController.class).slash(city.getId()).withSelfRel());
+		response.add(linkTo(CityController.class).withRel(IanaLinkRelations.COLLECTION));
 		
 		return response;
 	}
