@@ -9,6 +9,7 @@ import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.repository.CityRepository;
 import br.gabriel.springrestspecialist.domain.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,12 +32,20 @@ public class CityController implements CityDoc {
 	
 	@Autowired
 	private CityMapper mapper;
-
+	
 	@Override
 	@Permission.City.CanRead
 	@GetMapping
-	public List<CityResponse> findAll() {
-		return mapper.toCollectionModel(repository.findAll());
+	public CollectionModel<CityResponse> findAll() {
+		List<CityResponse> cities = mapper.toCollectionModel(repository.findAll());
+		cities.forEach(city -> {
+			city.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
+		});
+		
+		CollectionModel<CityResponse> collection = CollectionModel.of(cities);
+		collection.add(linkTo(methodOn(CityController.class).findAll()).withSelfRel());
+		
+		return collection;
 	}
 	
 	@Override
