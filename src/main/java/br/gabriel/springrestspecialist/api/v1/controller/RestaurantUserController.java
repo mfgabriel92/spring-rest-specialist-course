@@ -8,11 +8,10 @@ import br.gabriel.springrestspecialist.domain.model.Restaurant;
 import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/restaurants/{id}/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +28,7 @@ public class RestaurantUserController implements RestaurantUserDoc {
     @Override
     @Permission.Read
     @GetMapping
-    public List<UserResponse> findAll(@PathVariable Integer id) {
+    public CollectionModel<UserResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
         return mapper.toCollectionModel(restaurant.getUsers());
     }

@@ -1,21 +1,16 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.api.v1.model.request.UserPasswordRequest;
 import br.gabriel.springrestspecialist.api.v1.model.request.UserRequest;
 import br.gabriel.springrestspecialist.api.v1.model.request.UserSummaryRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.UserResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "User")
 public interface UserDoc {
     @ApiOperation("List all the users")
-    List<UserResponse> findAll();
+    CollectionModel<UserResponse> findAll();
 
     @ApiOperation("Find a user")
     @ApiResponses({

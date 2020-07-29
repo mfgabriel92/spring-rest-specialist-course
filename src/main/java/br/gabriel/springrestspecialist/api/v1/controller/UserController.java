@@ -12,12 +12,12 @@ import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 import br.gabriel.springrestspecialist.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,7 +37,7 @@ public class UserController implements UserDoc {
 	@Override
 	@Permission.Read
     @GetMapping
-	public List<UserResponse> findAll() {
+	public CollectionModel<UserResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	

@@ -2,8 +2,7 @@ package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
 import br.gabriel.springrestspecialist.api.v1.model.response.UserResponse;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Restaurant")
 public interface RestaurantUserDoc {
@@ -12,7 +11,7 @@ public interface RestaurantUserDoc {
         @ApiResponse(code = 400, message = "Bad Request"),
         @ApiResponse(code = 404, message = "Not Found")
     })
-    List<UserResponse> findAll(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
+    CollectionModel<UserResponse> findAll(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Associate an user to a restaurant")
     void assignToRestaurant(
