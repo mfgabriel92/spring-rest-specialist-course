@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping(path = "/v1/restaurants/{id}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantUserController implements RestaurantUserDoc {
@@ -30,7 +33,10 @@ public class RestaurantUserController implements RestaurantUserDoc {
     @GetMapping
     public CollectionModel<UserResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
-        return mapper.toCollectionModel(restaurant.getUsers());
+        
+        return mapper.toCollectionModel(restaurant.getUsers())
+                     .removeLinks()
+                     .add(linkTo(methodOn(RestaurantUserController.class).findAll(id)).withSelfRel());
     }
     
     @Override
