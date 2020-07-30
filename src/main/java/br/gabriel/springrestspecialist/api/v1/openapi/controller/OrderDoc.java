@@ -1,19 +1,12 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import br.gabriel.springrestspecialist.api.v1.model.request.OrderRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryResponse;
 import br.gabriel.springrestspecialist.domain.filter.OrderFilter;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 @Api(tags = "Order")
 public interface OrderDoc {
@@ -21,7 +14,7 @@ public interface OrderDoc {
         @ApiImplicitParam(name = "fields", value = "Fields to be filtered", paramType = "query", type = "string")
     })
     @ApiOperation("List all the orders")
-    Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable);
+    PagedModel<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable);
 
     @ApiImplicitParams({
         @ApiImplicitParam(name = "fields", value = "Fields to be filtered", paramType = "query", type = "string")

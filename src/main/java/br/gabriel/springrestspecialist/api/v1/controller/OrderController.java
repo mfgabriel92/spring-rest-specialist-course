@@ -13,14 +13,14 @@ import br.gabriel.springrestspecialist.domain.repository.OrderRepository;
 import br.gabriel.springrestspecialist.domain.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static br.gabriel.springrestspecialist.infrastructure.repository.spec.OrderSpecs.filteringBy;
 
@@ -39,13 +39,15 @@ public class OrderController implements OrderDoc {
     @Autowired
     private OrderSummaryMapper summaryMapper;
     
+    @Autowired
+    private PagedResourcesAssembler<Order> pagedResourcesAssembler;
+    
     @Override
     @Permission.Order.CanReadAll
     @GetMapping
-    public Page<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable) {
-        Page<Order> pagedOrders = repository.findAll(filteringBy(filter), pageable);
-        List<OrderSummaryResponse> orders = summaryMapper.toCollectionModel(pagedOrders.getContent());
-        return new PageImpl<>(orders, pageable, pagedOrders.getTotalElements());
+    public PagedModel<OrderSummaryResponse> findAll(OrderFilter filter, Pageable pageable) {
+        Page<Order> orders = repository.findAll(filteringBy(filter), pageable);
+        return pagedResourcesAssembler.toModel(orders, summaryMapper);
     }
     
     @Override
