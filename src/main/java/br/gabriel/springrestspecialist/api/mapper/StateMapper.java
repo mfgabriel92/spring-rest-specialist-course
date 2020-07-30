@@ -1,27 +1,38 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import br.gabriel.springrestspecialist.api.v1.controller.StateController;
 import br.gabriel.springrestspecialist.api.v1.model.request.StateRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.StateResponse;
 import br.gabriel.springrestspecialist.domain.model.State;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class StateMapper {
+public class StateMapper implements RepresentationModelAssembler<State, StateResponse> {
     @Autowired
     private ModelMapper mapper;
     
+    @Override
     public StateResponse toModel(State state) {
-        return mapper.map(state, StateResponse.class);
+        StateResponse response = mapper.map(state, StateResponse.class);
+        
+        response.add(linkTo(methodOn(StateController.class).findById(state.getId())).withSelfRel());
+        
+        return response;
     }
     
-    public List<StateResponse> toCollectionModel(List<State> states) {
-        return states.stream().map(state -> toModel(state)).collect(Collectors.toList());
+    @Override
+    public CollectionModel<StateResponse> toCollectionModel(Iterable<? extends State> entities) {
+        return RepresentationModelAssembler.super
+            .toCollectionModel(entities)
+            .add(linkTo(methodOn(StateController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public State toDomainObject(StateRequest stateRequest) {

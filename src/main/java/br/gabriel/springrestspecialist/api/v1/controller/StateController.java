@@ -9,12 +9,12 @@ import br.gabriel.springrestspecialist.domain.model.State;
 import br.gabriel.springrestspecialist.domain.repository.StateRepository;
 import br.gabriel.springrestspecialist.domain.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/states", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,7 +31,7 @@ public class StateController implements StateDoc {
 	@Override
 	@Permission.State.CanRead
     @GetMapping
-	public List<StateResponse> findAll() {
+	public CollectionModel<StateResponse> findAll() {
 		return mapper.toCollectionModel(repository.findAll());
 	}
 	
