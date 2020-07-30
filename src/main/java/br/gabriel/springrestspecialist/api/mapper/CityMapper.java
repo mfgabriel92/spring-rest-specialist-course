@@ -7,8 +7,6 @@ import br.gabriel.springrestspecialist.domain.model.City;
 import br.gabriel.springrestspecialist.domain.model.State;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +25,6 @@ public class CityMapper implements RepresentationModelAssembler<City, CityRespon
         response.add(linkTo(methodOn(CityController.class).findById(city.getId())).withSelfRel());
     
         return response;
-    }
-    
-    @Override
-    public CollectionModel<CityResponse> toCollectionModel(Iterable<? extends City> entities) {
-        return RepresentationModelAssembler.super
-            .toCollectionModel(entities)
-            .add(linkTo(methodOn(CityController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public City toDomainObject(CityRequest cityRequest) {

@@ -32,7 +32,7 @@ public class StateMapper implements RepresentationModelAssembler<State, StateRes
     public CollectionModel<StateResponse> toCollectionModel(Iterable<? extends State> entities) {
         return RepresentationModelAssembler.super
             .toCollectionModel(entities)
-            .add(linkTo(methodOn(StateController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+            .add(linkTo(StateController.class).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public State toDomainObject(StateRequest stateRequest) {

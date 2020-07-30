@@ -34,7 +34,7 @@ public class UserMapper implements RepresentationModelAssembler<User, UserRespon
     public CollectionModel<UserResponse> toCollectionModel(Iterable<? extends User> entities) {
         return RepresentationModelAssembler.super
             .toCollectionModel(entities)
-            .add(linkTo(methodOn(UserController.class).findAll()).withRel(IanaLinkRelations.COLLECTION));
+            .add(linkTo(UserController.class).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public User toDomainObject(UserRequest userRequest) {

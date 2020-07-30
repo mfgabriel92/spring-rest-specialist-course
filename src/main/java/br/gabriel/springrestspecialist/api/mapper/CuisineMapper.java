@@ -1,27 +1,38 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import br.gabriel.springrestspecialist.api.v1.controller.CuisineController;
 import br.gabriel.springrestspecialist.api.v1.model.request.CuisineRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
 import br.gabriel.springrestspecialist.domain.model.Cuisine;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class CuisineMapper {
+public class CuisineMapper implements RepresentationModelAssembler<Cuisine, CuisineResponse> {
     @Autowired
     private ModelMapper mapper;
     
+    @Override
     public CuisineResponse toModel(Cuisine cuisine) {
-        return mapper.map(cuisine, CuisineResponse.class);
+        CuisineResponse response = mapper.map(cuisine, CuisineResponse.class);
+        
+        response.add(linkTo(methodOn(CuisineController.class).findById(cuisine.getId())).withSelfRel());
+        
+        return response;
     }
     
-    public List<CuisineResponse> toCollectionModel(List<Cuisine> cuisines) {
-        return cuisines.stream().map(cuisine -> toModel(cuisine)).collect(Collectors.toList());
+    @Override
+    public CollectionModel<CuisineResponse> toCollectionModel(Iterable<? extends Cuisine> entities) {
+        return RepresentationModelAssembler.super
+            .toCollectionModel(entities)
+            .add(linkTo(CuisineController.class).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public Cuisine toDomainObject(CuisineRequest cuisineRequest) {
