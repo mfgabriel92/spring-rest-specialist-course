@@ -10,9 +10,6 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -35,9 +32,5 @@ public class OrderSummaryMapper implements RepresentationModelAssembler<Order, O
         return RepresentationModelAssembler.super
             .toCollectionModel(entities)
             .add(linkTo(OrderController.class).withRel(IanaLinkRelations.COLLECTION));
-    }
-    
-    public List<OrderSummaryResponse> toCollectionModel(List<Order> orders) {
-        return orders.stream().map(order -> toModel(order)).collect(Collectors.toList());
     }
 }
