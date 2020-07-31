@@ -22,21 +22,13 @@ public class OrderMapper implements RepresentationModelAssembler<Order, OrderRes
     @Override
     public OrderResponse toModel(Order order) {
         OrderResponse response = mapper.map(order, OrderResponse.class);
-        
-        TemplateVariables templateVariables = new TemplateVariables(
-            new TemplateVariable("page", REQUEST_PARAM),
-            new TemplateVariable("size", REQUEST_PARAM),
-            new TemplateVariable("sort", REQUEST_PARAM)
-        );
     
-        String url = linkTo(OrderController.class).toUri().toString();
-        
         response.add(linkTo(methodOn(OrderController.class).findById(order.getCode())).withSelfRel());
         response.getPaymentMethod().add(linkTo(methodOn(PaymentMethodController.class).findById(order.getPaymentMethod().getId())).withSelfRel());
         response.getRestaurant().add(linkTo(methodOn(RestaurantController.class).findById(order.getRestaurant().getId())).withSelfRel());
         response.getUser().add(linkTo(methodOn(UserController.class).findById(order.getUser().getId())).withSelfRel());
         response.getItems().forEach(item -> item.add(linkTo(methodOn(RestaurantProductController.class).findById(order.getRestaurant().getId(), item.getProductId())).withSelfRel()));
-        response.add(Link.of(UriTemplate.of(url, templateVariables),IanaLinkRelations.COLLECTION));
+        response.add(Link.of(UriTemplate.of(getUrl(), getTemplateVariables()),IanaLinkRelations.COLLECTION));
         
         return response;
     }
@@ -47,5 +39,21 @@ public class OrderMapper implements RepresentationModelAssembler<Order, OrderRes
     
     public void copyToDomainObject(OrderRequest orderRequest, Order order) {
         mapper.map(orderRequest, order);
+    }
+    
+    private String getUrl() {
+        return linkTo(OrderController.class).toUri().toString();
+    }
+    
+    private TemplateVariables getTemplateVariables() {
+        return new TemplateVariables(
+            new TemplateVariable("page", REQUEST_PARAM),
+            new TemplateVariable("size", REQUEST_PARAM),
+            new TemplateVariable("sort", REQUEST_PARAM),
+            new TemplateVariable("userId", REQUEST_PARAM),
+            new TemplateVariable("restaurantId", REQUEST_PARAM),
+            new TemplateVariable("initialDate", REQUEST_PARAM),
+            new TemplateVariable("endingDate", REQUEST_PARAM)
+        );
     }
 }
