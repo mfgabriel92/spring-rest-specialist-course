@@ -1,5 +1,6 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
+import br.gabriel.springrestspecialist.api.v1.controller.ProductPhotoController;
 import br.gabriel.springrestspecialist.api.v1.controller.RestaurantProductController;
 import br.gabriel.springrestspecialist.api.v1.model.request.ProductRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.ProductResponse;
@@ -22,6 +23,7 @@ public class ProductMapper implements RepresentationModelAssembler<Product, Prod
         ProductResponse response = mapper.map(product, ProductResponse.class);
     
         response.add(linkTo(methodOn(RestaurantProductController.class).findById(product.getRestaurant().getId(), product.getId())).withSelfRel());
+        response.add(linkTo(methodOn(ProductPhotoController.class).find(product.getRestaurant().getId(), product.getId())).withRel("photo"));
         
         return response;
     }
