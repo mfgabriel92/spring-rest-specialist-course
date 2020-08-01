@@ -1,13 +1,8 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.api.v1.model.response.PaymentMethodResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Restaurant")
 public interface RestaurantPaymentMethodDoc {
@@ -16,7 +11,7 @@ public interface RestaurantPaymentMethodDoc {
         @ApiResponse(code = 400, message = "Bad Request"),
         @ApiResponse(code = 404, message = "Not Found")
     })
-    List<PaymentMethodResponse> findAll(@ApiParam(value = "The restaurant ID", required = true) Integer id);
+    CollectionModel<PaymentMethodResponse> findAll(@ApiParam(value = "The restaurant ID", required = true) Integer id);
 
     @ApiOperation("Associate a payment method to a restaurant")
     void addPaymentMethod(

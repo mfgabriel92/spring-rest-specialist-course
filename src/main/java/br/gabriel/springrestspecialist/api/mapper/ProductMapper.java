@@ -1,27 +1,38 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import br.gabriel.springrestspecialist.api.v1.controller.RestaurantProductController;
 import br.gabriel.springrestspecialist.api.v1.model.request.ProductRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.ProductResponse;
 import br.gabriel.springrestspecialist.domain.model.Product;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class ProductMapper {
+public class ProductMapper implements RepresentationModelAssembler<Product, ProductResponse> {
     @Autowired
     private ModelMapper mapper;
     
+    @Override
     public ProductResponse toModel(Product product) {
-        return mapper.map(product, ProductResponse.class);
+        ProductResponse response = mapper.map(product, ProductResponse.class);
+        
+        response.add(linkTo(methodOn(RestaurantProductController.class).findById(product.getRestaurant().getId(), product.getId())).withSelfRel());
+        
+        return response;
     }
     
-    public List<ProductResponse> toCollectionModel(List<Product> cities) {
-        return cities.stream().map(product -> toModel(product)).collect(Collectors.toList());
+    @Override
+    public CollectionModel<ProductResponse> toCollectionModel(Iterable<? extends Product> entities) {
+        return RepresentationModelAssembler.super
+            .toCollectionModel(entities)
+            .add(linkTo(RestaurantProductController.class).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public Product toDomainObject(ProductRequest productRequest) {

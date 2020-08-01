@@ -1,19 +1,14 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import java.util.List;
-
 import br.gabriel.springrestspecialist.api.v1.model.request.GroupRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.GroupResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Group")
 public interface GroupDoc {
     @ApiOperation("List all the groups")
-    List<GroupResponse> findAll();
+    CollectionModel<GroupResponse> findAll();
 
     @ApiOperation("Find a group")
     @ApiResponses({

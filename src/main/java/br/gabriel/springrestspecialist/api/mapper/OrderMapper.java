@@ -6,11 +6,11 @@ import br.gabriel.springrestspecialist.api.v1.model.response.OrderResponse;
 import br.gabriel.springrestspecialist.domain.model.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.TemplateVariable.VariableType.REQUEST_PARAM;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -28,9 +28,15 @@ public class OrderMapper implements RepresentationModelAssembler<Order, OrderRes
         response.getRestaurant().add(linkTo(methodOn(RestaurantController.class).findById(order.getRestaurant().getId())).withSelfRel());
         response.getUser().add(linkTo(methodOn(UserController.class).findById(order.getUser().getId())).withSelfRel());
         response.getItems().forEach(item -> item.add(linkTo(methodOn(RestaurantProductController.class).findById(order.getRestaurant().getId(), item.getProductId())).withSelfRel()));
-        response.add(Link.of(UriTemplate.of(getUrl(), getTemplateVariables()),IanaLinkRelations.COLLECTION));
         
         return response;
+    }
+    
+    @Override
+    public CollectionModel<OrderResponse> toCollectionModel(Iterable<? extends Order> entities) {
+        return RepresentationModelAssembler.super
+            .toCollectionModel(entities)
+            .add(linkTo(OrderController.class).withRel(IanaLinkRelations.COLLECTION));
     }
     
     public Order toDomainObject(OrderRequest orderRequest) {
@@ -39,21 +45,5 @@ public class OrderMapper implements RepresentationModelAssembler<Order, OrderRes
     
     public void copyToDomainObject(OrderRequest orderRequest, Order order) {
         mapper.map(orderRequest, order);
-    }
-    
-    private String getUrl() {
-        return linkTo(OrderController.class).toUri().toString();
-    }
-    
-    private TemplateVariables getTemplateVariables() {
-        return new TemplateVariables(
-            new TemplateVariable("page", REQUEST_PARAM),
-            new TemplateVariable("size", REQUEST_PARAM),
-            new TemplateVariable("sort", REQUEST_PARAM),
-            new TemplateVariable("userId", REQUEST_PARAM),
-            new TemplateVariable("restaurantId", REQUEST_PARAM),
-            new TemplateVariable("initialDate", REQUEST_PARAM),
-            new TemplateVariable("endingDate", REQUEST_PARAM)
-        );
     }
 }

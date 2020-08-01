@@ -9,6 +9,7 @@ import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
 import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
 import br.gabriel.springrestspecialist.domain.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -34,8 +34,8 @@ public class PaymentMethodController implements PaymentMethodDoc {
 	@Override
 	@Permission.Authenticated
     @GetMapping
-	public ResponseEntity<List<PaymentMethodResponse>> findAll() {
-	    List<PaymentMethodResponse> paymentMethods = mapper.toCollectionModel(repository.findAll());
+	public ResponseEntity<CollectionModel<PaymentMethodResponse>> findAll() {
+		CollectionModel<PaymentMethodResponse> paymentMethods = mapper.toCollectionModel(repository.findAll());
 	    
 		return ResponseEntity.ok()
 		    .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))

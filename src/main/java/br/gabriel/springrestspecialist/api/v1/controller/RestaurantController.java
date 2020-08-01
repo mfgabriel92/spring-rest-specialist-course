@@ -12,8 +12,9 @@ import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,15 @@ public class RestaurantController implements RestaurantDoc {
 	
 	@Autowired
     private RestaurantSummaryMapper summaryMapper;
+	
+	@Autowired
+	private PagedResourcesAssembler<Restaurant> pagedResourcesAssembler;
 
 	@Override
     @GetMapping
-	public Page<RestaurantSummaryResponse> findAll(Pageable pageable) {
-	    Page<Restaurant> pagedRestaurants = repository.findAll(pageable);
-	    List<RestaurantSummaryResponse> restaurants = summaryMapper.toCollectionModel(pagedRestaurants.getContent());
-		return new PageImpl<>(restaurants, pageable, pagedRestaurants.getTotalElements());
+	public PagedModel<RestaurantSummaryResponse> findAll(Pageable pageable) {
+	    Page<Restaurant> restaurants = repository.findAll(pageable);
+	    return pagedResourcesAssembler.toModel(restaurants, summaryMapper);
 	}
 
 	@Override

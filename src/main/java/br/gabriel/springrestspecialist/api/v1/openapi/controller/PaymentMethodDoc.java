@@ -1,21 +1,15 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-
 import br.gabriel.springrestspecialist.api.v1.model.request.PaymentMethodRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.PaymentMethodResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Payment method")
 public interface PaymentMethodDoc {
     @ApiOperation("List all the payment methods")
-    ResponseEntity<List<PaymentMethodResponse>> findAll();
+    ResponseEntity<CollectionModel<PaymentMethodResponse>> findAll();
 
     @ApiOperation("Find a payment method")
     @ApiResponses({

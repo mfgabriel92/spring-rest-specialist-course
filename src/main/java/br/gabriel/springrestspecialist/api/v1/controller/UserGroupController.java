@@ -8,11 +8,10 @@ import br.gabriel.springrestspecialist.domain.model.User;
 import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 import br.gabriel.springrestspecialist.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/users/{id}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +28,7 @@ public class UserGroupController implements UserGroupDoc {
     @Override
     @Permission.User.CanReadSelf
     @GetMapping
-    public List<GroupResponse> findAll(@PathVariable Integer id) {
+    public CollectionModel<GroupResponse> findAll(@PathVariable Integer id) {
         User user = repository.findOrFail(id);
         return mapper.toCollectionModel(user.getGroups());
     }

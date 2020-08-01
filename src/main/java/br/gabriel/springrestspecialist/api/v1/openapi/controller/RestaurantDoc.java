@@ -4,15 +4,15 @@ import br.gabriel.springrestspecialist.api.v1.model.request.RestaurantRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.RestaurantResponse;
 import br.gabriel.springrestspecialist.api.v1.model.response.RestaurantSummaryResponse;
 import io.swagger.annotations.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import java.util.List;
 
 @Api(tags = "Restaurant")
 public interface RestaurantDoc {
     @ApiOperation("LIst all the restaurants")
-    Page<RestaurantSummaryResponse> findAll(Pageable pageable);
+    PagedModel<RestaurantSummaryResponse> findAll(Pageable pageable);
 
     @ApiOperation("Find a restaurant")
     @ApiResponses({

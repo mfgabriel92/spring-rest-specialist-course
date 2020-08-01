@@ -8,12 +8,12 @@ import br.gabriel.springrestspecialist.core.security.Permission;
 import br.gabriel.springrestspecialist.domain.model.Product;
 import br.gabriel.springrestspecialist.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/restaurants/{id}/products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,7 +26,7 @@ public class RestaurantProductController implements RestaurantProductDoc {
     
     @Override
     @GetMapping
-    public List<ProductResponse> findAll(@PathVariable Integer id) {
+    public CollectionModel<ProductResponse> findAll(@PathVariable Integer id) {
         return mapper.toCollectionModel(service.findAll(id));
     }
     
