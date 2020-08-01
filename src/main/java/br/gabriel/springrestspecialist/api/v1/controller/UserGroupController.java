@@ -9,9 +9,12 @@ import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 import br.gabriel.springrestspecialist.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/v1/users/{id}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,22 +33,28 @@ public class UserGroupController implements UserGroupDoc {
     @GetMapping
     public CollectionModel<GroupResponse> findAll(@PathVariable Integer id) {
         User user = repository.findOrFail(id);
-        return mapper.toCollectionModel(user.getGroups());
+        CollectionModel<GroupResponse> groupResponses = mapper.toCollectionModel(user.getGroups())
+                                                              .add(linkTo(methodOn(UserGroupController.class).associate(id, null)).withRel("associate"));
+    
+        groupResponses.getContent().forEach(groupResponse ->
+            groupResponse.add(linkTo(methodOn(GroupPermissionController.class).associate(id, user.getId())).withRel("disassociate")));
+            
+        return groupResponses;
     }
     
     @Override
     @Permission.Write
     @PutMapping("{groupId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void save(@PathVariable Integer id, @PathVariable Integer groupId) {
+    public ResponseEntity<Void> associate(@PathVariable Integer id, @PathVariable Integer groupId) {
         service.addToGroup(id, groupId);
+        return ResponseEntity.noContent().build();
     }
     
     @Override
     @Permission.Delete
     @DeleteMapping("{groupId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id, @PathVariable Integer groupId) {
+    public ResponseEntity<Void> disassociate(@PathVariable Integer id, @PathVariable Integer groupId) {
         service.removeFromGroup(id, groupId);
+        return ResponseEntity.noContent().build();
     }
 }
