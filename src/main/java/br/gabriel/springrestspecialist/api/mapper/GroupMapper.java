@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
 import br.gabriel.springrestspecialist.api.v1.controller.GroupController;
+import br.gabriel.springrestspecialist.api.v1.controller.GroupPermissionController;
 import br.gabriel.springrestspecialist.api.v1.model.request.GroupRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.GroupResponse;
 import br.gabriel.springrestspecialist.domain.model.Group;
@@ -22,8 +23,9 @@ public class GroupMapper implements RepresentationModelAssembler<Group, GroupRes
     @Override
     public GroupResponse toModel(Group group) {
         GroupResponse response = mapper.map(group, GroupResponse.class);
-        
+    
         response.add(linkTo(methodOn(GroupController.class).findById(group.getId())).withSelfRel());
+        response.add(linkTo(methodOn(GroupPermissionController.class).findAll(group.getId())).withRel("permissions"));
         
         return response;
     }
