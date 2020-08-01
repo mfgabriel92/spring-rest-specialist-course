@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -146,11 +147,11 @@ public class OpenApiConfig implements WebMvcConfigurer {
         
         return Arrays.asList(
             AlternateTypeRules.newRule(
-                typeResolver.resolve(Page.class, CuisineResponse.class),
+                typeResolver.resolve(PagedModel.class, CuisineResponse.class),
                 CuisineResponseDoc.class
             ),
             AlternateTypeRules.newRule(
-                typeResolver.resolve(Page.class, OrderSummaryResponse.class),
+                typeResolver.resolve(PagedModel.class, OrderSummaryResponse.class),
                 OrderSummaryResponseDoc.class
             ),
             AlternateTypeRules.newRule(
