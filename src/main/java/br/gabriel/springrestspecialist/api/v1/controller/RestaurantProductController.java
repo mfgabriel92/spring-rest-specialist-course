@@ -9,11 +9,15 @@ import br.gabriel.springrestspecialist.domain.model.Product;
 import br.gabriel.springrestspecialist.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/v1/restaurants/{id}/products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,7 +31,8 @@ public class RestaurantProductController implements RestaurantProductDoc {
     @Override
     @GetMapping
     public CollectionModel<ProductResponse> findAll(@PathVariable Integer id) {
-        return mapper.toCollectionModel(service.findAll(id));
+        return mapper.toCollectionModel(service.findAll(id))
+                     .add(linkTo(methodOn(RestaurantProductController.class).findAll(id)).withRel(IanaLinkRelations.COLLECTION));
     }
     
     @Override
