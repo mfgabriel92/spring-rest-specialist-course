@@ -6,6 +6,7 @@ import br.gabriel.springrestspecialist.domain.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,24 +18,26 @@ public class OrderStatusController implements OrderStatusDoc {
     @Override
     @Permission.Order.CanAlterStatus
     @PutMapping("confirm")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirm(@PathVariable String code) {
+    public ResponseEntity<Void> confirm(@PathVariable String code) {
         service.confirm(code);
+        return ResponseEntity.noContent().build();
     }
     
     @Override
     @Permission.Order.CanAlterStatus
     @PutMapping("deliver")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deliver(@PathVariable String code) {
+    public ResponseEntity<Void> deliver(@PathVariable String code) {
         service.deliver(code);
+        return ResponseEntity.noContent().build();
     }
     
     @Override
     @Permission.Order.CanAlterStatus
     @PutMapping("cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancel(@PathVariable String code) {
+    public ResponseEntity<Void> cancel(@PathVariable String code) {
         service.cancel(code);
+        return ResponseEntity.noContent().build();
     }
 }
