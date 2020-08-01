@@ -12,7 +12,7 @@ public class PagedModelDoc {
     @ApiModelProperty(value = "Total number of elements by page", example = "20")
     private Integer pageSize;
     
-    @ApiModelProperty(value = "Current number or elemebts by page", example = "5")
+    @ApiModelProperty(value = "Current number or elements by page", example = "5")
     private Integer totalElements;
     
     @ApiModelProperty(value = "Total number of pages", example = "12")

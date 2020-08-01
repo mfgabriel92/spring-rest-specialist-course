@@ -4,6 +4,7 @@ import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
 import br.gabriel.springrestspecialist.api.v1.model.response.CityResponse;
 import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
 import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryResponse;
+import br.gabriel.springrestspecialist.api.v1.model.response.StateResponse;
 import br.gabriel.springrestspecialist.api.v1.openapi.model.*;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
@@ -157,6 +158,10 @@ public class OpenApiConfig implements WebMvcConfigurer {
             AlternateTypeRules.newRule(
                 typeResolver.resolve(CollectionModel.class, CityResponse.class),
                 CityResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(CollectionModel.class, StateResponse.class),
+                StateResponseDoc.class
             )
         ).toArray(new AlternateTypeRule[0]);
     }
