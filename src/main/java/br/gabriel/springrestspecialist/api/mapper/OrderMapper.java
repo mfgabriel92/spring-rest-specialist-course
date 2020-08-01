@@ -28,9 +28,18 @@ public class OrderMapper implements RepresentationModelAssembler<Order, OrderRes
         response.getRestaurant().add(linkTo(methodOn(RestaurantController.class).findById(order.getRestaurant().getId())).withSelfRel());
         response.getUser().add(linkTo(methodOn(UserController.class).findById(order.getUser().getId())).withSelfRel());
         response.getItems().forEach(item -> item.add(linkTo(methodOn(RestaurantProductController.class).findById(order.getRestaurant().getId(), item.getProductId())).withSelfRel()));
-        response.add(linkTo(methodOn(OrderStatusController.class).confirm(order.getCode())).withRel("confirm"));
-        response.add(linkTo(methodOn(OrderStatusController.class).deliver(order.getCode())).withRel("deliver"));
-        response.add(linkTo(methodOn(OrderStatusController.class).cancel(order.getCode())).withRel("cancel"));
+        
+        if (order.canConfirm()) {
+            response.add(linkTo(methodOn(OrderStatusController.class).confirm(order.getCode())).withRel("confirm"));
+        }
+        
+        if (order.canDeliver()) {
+            response.add(linkTo(methodOn(OrderStatusController.class).deliver(order.getCode())).withRel("deliver"));
+        }
+        
+        if (order.canCancel()) {
+            response.add(linkTo(methodOn(OrderStatusController.class).cancel(order.getCode())).withRel("cancel"));
+        }
         
         return response;
     }

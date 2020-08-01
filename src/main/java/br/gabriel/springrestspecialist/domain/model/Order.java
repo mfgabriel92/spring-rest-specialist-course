@@ -82,6 +82,18 @@ public class Order extends AbstractAggregateRoot<Order> {
         setStatus(OrderStatus.CANCELED);
         setCanceledAt(OffsetDateTime.now());
     }
+    
+    public Boolean canConfirm() {
+		return getStatus().canAlterTo(OrderStatus.CONFIRMED);
+	}
+	
+	public Boolean canDeliver() {
+		return getStatus().canAlterTo(OrderStatus.DELIVERED);
+	}
+	
+	public Boolean canCancel() {
+		return getStatus().canAlterTo(OrderStatus.CANCELED);
+	}
 	
 	private void setStatus(OrderStatus status) {
 	    if (!getStatus().canAlterTo(status)) {

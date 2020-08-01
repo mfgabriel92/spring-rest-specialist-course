@@ -9,7 +9,7 @@ public enum OrderStatus {
 	DELIVERED(CONFIRMED),
 	CANCELED(CREATED);
     
-    private List<OrderStatus> allowedStatuses;
+    private final List<OrderStatus> allowedStatuses;
 
     OrderStatus(OrderStatus... allowedStatuses) {
         this.allowedStatuses = Arrays.asList(allowedStatuses);
