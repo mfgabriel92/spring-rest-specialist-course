@@ -9,8 +9,8 @@ import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -34,24 +34,31 @@ public class RestaurantUserController implements RestaurantUserDoc {
     public CollectionModel<UserResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
         
-        return mapper.toCollectionModel(restaurant.getUsers())
-                     .removeLinks()
-                     .add(linkTo(methodOn(RestaurantUserController.class).findAll(id)).withSelfRel());
+        CollectionModel<UserResponse> userResponses = mapper.toCollectionModel(restaurant.getUsers()).removeLinks()
+                     .add(linkTo(methodOn(RestaurantUserController.class).findAll(id)).withSelfRel())
+                     .add(linkTo(methodOn(RestaurantUserController.class).assignToRestaurant(id, null)).withRel("assign-user"));
+        
+        userResponses.getContent()
+                     .forEach(userResponse -> userResponse
+                         .add(linkTo(methodOn(RestaurantUserController.class)
+                         .unassignFromRestaurant(id, userResponse.getId())).withRel("unassign-user")));
+        
+        return userResponses;
     }
     
     @Override
     @Permission.Write
     @PutMapping("{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void assignToRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
+    public ResponseEntity<Void> assignToRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
         restaurantService.addUser(id, userId);
+        return ResponseEntity.noContent().build();
     }
     
     @Override
     @Permission.Write
     @DeleteMapping("{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void unassignFromRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
+    public ResponseEntity<Void> unassignFromRestaurant(@PathVariable Integer id, @PathVariable Integer userId) {
         restaurantService.removeUser(id, userId);
+        return ResponseEntity.noContent().build();
     }
 }

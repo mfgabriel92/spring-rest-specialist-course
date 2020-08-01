@@ -1,6 +1,7 @@
 package br.gabriel.springrestspecialist.api.mapper;
 
 import br.gabriel.springrestspecialist.api.v1.controller.RestaurantController;
+import br.gabriel.springrestspecialist.api.v1.controller.RestaurantUserController;
 import br.gabriel.springrestspecialist.api.v1.model.request.RestaurantRequest;
 import br.gabriel.springrestspecialist.api.v1.model.response.RestaurantResponse;
 import br.gabriel.springrestspecialist.domain.model.City;
@@ -26,6 +27,7 @@ public class RestaurantMapper implements RepresentationModelAssembler<Restaurant
         RestaurantResponse response = mapper.map(restaurant, RestaurantResponse.class);
         
         response.add(linkTo(methodOn(RestaurantController.class).findById(restaurant.getId())).withSelfRel());
+        response.add(linkTo(methodOn(RestaurantUserController.class).findAll(restaurant.getId())).withRel("users"));
         
         if (restaurant.canActivate()) {
             response.add(linkTo(methodOn(RestaurantController.class).activate(restaurant.getId())).withRel("activate"));
