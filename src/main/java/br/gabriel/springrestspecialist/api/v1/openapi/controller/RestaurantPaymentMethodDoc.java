@@ -3,6 +3,7 @@ package br.gabriel.springrestspecialist.api.v1.openapi.controller;
 import br.gabriel.springrestspecialist.api.v1.model.response.PaymentMethodResponse;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Restaurant")
 public interface RestaurantPaymentMethodDoc {
@@ -14,13 +15,13 @@ public interface RestaurantPaymentMethodDoc {
     CollectionModel<PaymentMethodResponse> findAll(@ApiParam(value = "The restaurant ID", required = true) Integer id);
 
     @ApiOperation("Associate a payment method to a restaurant")
-    void addPaymentMethod(
+    ResponseEntity<Void> addPaymentMethod(
         @ApiParam(value = "The restaurant ID", required = true) Integer id, 
         @ApiParam(value = "The restaurant body", required = true) Integer paymentMethodId
     );
 
     @ApiOperation("Disassociate a payment method from a restaurant")
-    void removePaymentMethod(
+    ResponseEntity<Void> removePaymentMethod(
         @ApiParam(value = "The restaurant ID", required = true) Integer id, 
         @ApiParam(value = "The restaurant body", required = true) Integer paymentMethodId
     );

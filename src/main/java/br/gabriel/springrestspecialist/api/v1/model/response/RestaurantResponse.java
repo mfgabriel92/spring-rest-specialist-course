@@ -7,6 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Relation(collectionRelation = "restaurants")
 @Getter
@@ -17,6 +18,8 @@ public class RestaurantResponse extends RepresentationModel<RestaurantResponse> 
     private String name;
     
     private BigDecimal shippingFee;
+    
+    private List<PaymentMethodResponse> paymentMethods;
     
     @JsonProperty("cuisine")
     private String cuisineName;

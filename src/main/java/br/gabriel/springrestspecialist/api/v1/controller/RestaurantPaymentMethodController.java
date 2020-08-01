@@ -8,9 +8,12 @@ import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
 import br.gabriel.springrestspecialist.domain.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "/v1/restaurants/{id}/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,20 +31,27 @@ public class RestaurantPaymentMethodController implements RestaurantPaymentMetho
     @GetMapping
     public CollectionModel<PaymentMethodResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
-        return mapper.toCollectionModel(restaurant.getPaymentMethods());
+        CollectionModel<PaymentMethodResponse> paymentMethodResponses = mapper.toCollectionModel(restaurant.getPaymentMethods());
+        
+        paymentMethodResponses.getContent().forEach(paymentMethodResponse ->
+            paymentMethodResponse.add(linkTo(methodOn(RestaurantPaymentMethodController.class)
+                .removePaymentMethod(id, paymentMethodResponse.getId()))
+                .withRel("remove-payment-method")));
+        
+        return paymentMethodResponses;
     }
     
     @Override
     @PutMapping("{paymentMethodId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addPaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {
+    public ResponseEntity<Void> addPaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {
         restaurantService.addPaymentMethod(id, paymentMethodId);
+        return ResponseEntity.noContent().build();
     }
     
     @Override
     @DeleteMapping("{paymentMethodId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removePaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {
+    public ResponseEntity<Void> removePaymentMethod(@PathVariable Integer id, @PathVariable Integer paymentMethodId) {
         restaurantService.removePaymentMethod(id, paymentMethodId);
+        return ResponseEntity.noContent().build();
     }
 }
