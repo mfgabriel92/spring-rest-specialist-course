@@ -23,6 +23,7 @@ public class RootEntryPointController {
         rootEntryPointModel.add(linkTo(PermissionController.class).withRel("permissions"));
         rootEntryPointModel.add(linkTo(RestaurantController.class).withRel("restaurants"));
         rootEntryPointModel.add(linkTo(StateController.class).withRel("states"));
+        rootEntryPointModel.add(linkTo(StatisticController.class).withRel("statistics"));
         rootEntryPointModel.add(linkTo(UserController.class).withRel("users"));
     
         return rootEntryPointModel;
