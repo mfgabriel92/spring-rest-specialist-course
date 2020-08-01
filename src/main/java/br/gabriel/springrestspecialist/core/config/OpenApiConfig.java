@@ -1,8 +1,10 @@
 package br.gabriel.springrestspecialist.core.config;
 
 import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
-import br.gabriel.springrestspecialist.api.v1.openapi.model.LinksDoc;
-import br.gabriel.springrestspecialist.api.v1.openapi.model.PageableDoc;
+import br.gabriel.springrestspecialist.api.v1.model.response.CityResponse;
+import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
+import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryResponse;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.*;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +21,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.*;
+import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -53,7 +58,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
             .additionalModels(additionalModels()[0], additionalModels())
             .directModelSubstitute(Pageable.class, PageableDoc.class)
             .directModelSubstitute(Links.class, LinksDoc.class)
-//            .alternateTypeRules(alternateTypeRules())
+            .alternateTypeRules(alternateTypeRules())
             .ignoredParameterTypes(ignoredParameterTypes())
             .securitySchemes(Collections.singletonList(securityScheme()))
             .securityContexts(Collections.singletonList(securityContext()));
@@ -136,18 +141,24 @@ public class OpenApiConfig implements WebMvcConfigurer {
         return resolvedTypes.toArray(new ResolvedType[0]);
     }
     
-//    private AlternateTypeRule[] alternateTypeRules() {
-//        return Arrays.asList(
-//            AlternateTypeRules.newRule(
-//                new TypeResolver().resolve(Page.class, CuisineResponse.class),
-//                CuisineResponseDoc.class
-//            ),
-//            AlternateTypeRules.newRule(
-//                new TypeResolver().resolve(Page.class, OrderSummaryResponse.class),
-//                OrderSummaryResponseDoc.class
-//            )
-//        ).toArray(new AlternateTypeRule[0]);
-//    }
+    private AlternateTypeRule[] alternateTypeRules() {
+        TypeResolver typeResolver = new TypeResolver();
+        
+        return Arrays.asList(
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(Page.class, CuisineResponse.class),
+                CuisineResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(Page.class, OrderSummaryResponse.class),
+                OrderSummaryResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(CollectionModel.class, CityResponse.class),
+                CityResponseDoc.class
+            )
+        ).toArray(new AlternateTypeRule[0]);
+    }
     
     private Class<?>[] ignoredParameterTypes() {
         return Arrays.asList(
