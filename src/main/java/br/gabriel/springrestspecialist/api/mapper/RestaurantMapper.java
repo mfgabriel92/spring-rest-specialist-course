@@ -27,6 +27,22 @@ public class RestaurantMapper implements RepresentationModelAssembler<Restaurant
         
         response.add(linkTo(methodOn(RestaurantController.class).findById(restaurant.getId())).withSelfRel());
         
+        if (restaurant.canActivate()) {
+            response.add(linkTo(methodOn(RestaurantController.class).activate(restaurant.getId())).withRel("activate"));
+        }
+    
+        if (restaurant.canDeactivate()) {
+            response.add(linkTo(methodOn(RestaurantController.class).deactivate(restaurant.getId())).withRel("deactivate"));
+        }
+    
+        if (restaurant.canOpen()) {
+            response.add(linkTo(methodOn(RestaurantController.class).open(restaurant.getId())).withRel("open"));
+        }
+    
+        if (restaurant.canClose()) {
+            response.add(linkTo(methodOn(RestaurantController.class).close(restaurant.getId())).withRel("close"));
+        }
+        
         return response;
     }
     

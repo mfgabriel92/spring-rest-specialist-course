@@ -17,10 +17,10 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/v1/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,7 +64,7 @@ public class RestaurantController implements RestaurantDoc {
 	
 	@Override
 	@Permission.Write
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
 	public RestaurantResponse save(@PathVariable Integer id, @RequestBody @Valid RestaurantRequest restaurantRequest) {
 		Restaurant restaurant = repository.findOrFail(id);
 		mapper.copyToDomainObject(restaurantRequest, restaurant);
@@ -73,33 +73,33 @@ public class RestaurantController implements RestaurantDoc {
 
 	@Override
 	@Permission.Write
-    @PutMapping("/activate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void activate(@RequestBody List<Integer> ids) {
-        service.activate(ids);
+    @PutMapping("{id}/activate")
+    public ResponseEntity<Void> activate(@PathVariable Integer id) {
+        service.activate(id);
+        return ResponseEntity.noContent().build();
     }
 
 	@Override
 	@Permission.Write
-    @PutMapping("/deactivate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deactivate(@RequestBody List<Integer> ids) {
-        service.deactivate(ids);
+    @PutMapping("{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable Integer id) {
+        service.deactivate(id);
+		return ResponseEntity.noContent().build();
     }
 	
 	@Override
 	@Permission.Restaurant.CanAlterStatus
-    @PutMapping("/{id}/open")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void open(@PathVariable Integer id) {
+    @PutMapping("{id}/open")
+    public ResponseEntity<Void> open(@PathVariable Integer id) {
         service.open(id);
+		return ResponseEntity.noContent().build();
     }
     
     @Override
 	@Permission.Restaurant.CanAlterStatus
-    @PutMapping("/{id}/close")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void close(@PathVariable Integer id) {
+    @PutMapping("{id}/close")
+    public ResponseEntity<Void> close(@PathVariable Integer id) {
         service.close(id);
+		return ResponseEntity.noContent().build();
     }
 }

@@ -6,8 +6,7 @@ import br.gabriel.springrestspecialist.api.v1.model.response.RestaurantSummaryRe
 import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Restaurant")
 public interface RestaurantDoc {
@@ -31,14 +30,14 @@ public interface RestaurantDoc {
     );
 
     @ApiOperation("Activate a list of restaurants")
-    void activate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) List<Integer> ids);
+    ResponseEntity<Void> activate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) Integer id);
 
     @ApiOperation("Deactivate a list of restaurant")
-    void deactivate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) List<Integer> ids);
+    ResponseEntity<Void> deactivate(@ApiParam(value = "The list of restaurants ID", example = "[1, 2]", required = true) Integer id);
 
     @ApiOperation("Set a restaurant as open")
-    void open(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
+    ResponseEntity<Void> open(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 
     @ApiOperation("Set a restaurant as closed")
-    void close(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
+    ResponseEntity<Void> close(@ApiParam(value = "The restaurant ID", example = "1", required = true) Integer id);
 }

@@ -1,23 +1,12 @@
 package br.gabriel.springrestspecialist.domain.service;
 
-import java.util.List;
-
+import br.gabriel.springrestspecialist.domain.exception.ApiException;
+import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
+import br.gabriel.springrestspecialist.domain.model.*;
+import br.gabriel.springrestspecialist.domain.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import br.gabriel.springrestspecialist.domain.exception.ApiException;
-import br.gabriel.springrestspecialist.domain.exception.ResourceNotFoundExeption;
-import br.gabriel.springrestspecialist.domain.model.City;
-import br.gabriel.springrestspecialist.domain.model.Cuisine;
-import br.gabriel.springrestspecialist.domain.model.PaymentMethod;
-import br.gabriel.springrestspecialist.domain.model.Restaurant;
-import br.gabriel.springrestspecialist.domain.model.User;
-import br.gabriel.springrestspecialist.domain.repository.CityRepository;
-import br.gabriel.springrestspecialist.domain.repository.CuisineRepository;
-import br.gabriel.springrestspecialist.domain.repository.PaymentMethodRepository;
-import br.gabriel.springrestspecialist.domain.repository.RestaurantRepository;
-import br.gabriel.springrestspecialist.domain.repository.UserRepository;
 
 @Service
 public class RestaurantService {
@@ -60,26 +49,8 @@ public class RestaurantService {
 	}
 	
 	@Transactional
-    public void activate(List<Integer> ids) {
-        try {
-            ids.forEach(this::activate);
-        } catch (ResourceNotFoundExeption e) {
-            throw new ApiException(e.getMessage());
-        }
-    }
-	
-	@Transactional
     public void deactivate(Integer id) {
         repository.findOrFail(id).deactivate();
-    }
-	
-	@Transactional
-    public void deactivate(List<Integer> ids) {
-	    try {
-            ids.forEach(this::deactivate);
-        } catch (ResourceNotFoundExeption e) {
-            throw new ApiException(e.getMessage());
-        }
     }
 	
 	@Transactional

@@ -1,31 +1,18 @@
 package br.gabriel.springrestspecialist.domain.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.Valid;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -109,7 +96,23 @@ public class Restaurant {
         getUsers().remove(user);
     }
     
-    public boolean acceptsPaymentMethod(PaymentMethod paymentMethod) {
+    public Boolean acceptsPaymentMethod(PaymentMethod paymentMethod) {
         return getPaymentMethods().contains(paymentMethod);
     }
+    
+	public Boolean canOpen() {
+		return !getOpen() && getActive();
+	}
+	
+	public Boolean canClose() {
+		return getOpen() && getActive();
+	}
+	
+	public Boolean canActivate() {
+		return !getActive();
+	}
+	
+	public Boolean canDeactivate() {
+		return getActive();
+	}
 }
