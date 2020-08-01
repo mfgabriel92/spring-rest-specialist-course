@@ -31,7 +31,8 @@ public class RestaurantPaymentMethodController implements RestaurantPaymentMetho
     @GetMapping
     public CollectionModel<PaymentMethodResponse> findAll(@PathVariable Integer id) {
         Restaurant restaurant = restaurantRepository.findOrFail(id);
-        CollectionModel<PaymentMethodResponse> paymentMethodResponses = mapper.toCollectionModel(restaurant.getPaymentMethods());
+        CollectionModel<PaymentMethodResponse> paymentMethodResponses = mapper.toCollectionModel(restaurant.getPaymentMethods())
+            .add(linkTo(methodOn(RestaurantPaymentMethodController.class).addPaymentMethod(id, null)).withRel("add-payment-method"));
         
         paymentMethodResponses.getContent().forEach(paymentMethodResponse ->
             paymentMethodResponse.add(linkTo(methodOn(RestaurantPaymentMethodController.class)
