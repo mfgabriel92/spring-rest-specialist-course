@@ -148,7 +148,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
                 CuisineResponseDoc.class
             ),
             AlternateTypeRules.newRule(
-                typeResolver.resolve(Page.class, OrderSummaryResponse.class),
+                typeResolver.resolve(PagedModel.class, OrderSummaryResponse.class),
                 OrderSummaryResponseDoc.class
             ),
             AlternateTypeRules.newRule(

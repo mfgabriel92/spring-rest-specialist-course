@@ -1,6 +1,6 @@
 package br.gabriel.springrestspecialist.api.v1.openapi.model.response;
 
-import br.gabriel.springrestspecialist.api.v1.openapi.controller.CityDoc;
+import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
 import br.gabriel.springrestspecialist.api.v1.openapi.model.LinksDoc;
 import br.gabriel.springrestspecialist.api.v1.openapi.model.PagedModelDoc;
 import io.swagger.annotations.ApiModel;
@@ -22,6 +22,6 @@ public class CuisineResponseDoc {
     @Getter
     @Setter
     private static class Embedded {
-        private List<CityDoc> cuisines;
+        private List<CuisineResponse> cuisines;
     }
 }
