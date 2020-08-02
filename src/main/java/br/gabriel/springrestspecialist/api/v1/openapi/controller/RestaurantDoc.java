@@ -7,9 +7,11 @@ import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Restaurant")
 public interface RestaurantDoc {
+    @ApiIgnore
     @ApiOperation("LIst all the restaurants")
     PagedModel<RestaurantSummaryResponse> findAll(Pageable pageable);
 

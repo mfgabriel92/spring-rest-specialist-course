@@ -95,7 +95,8 @@ public class OpenApiConfig implements WebMvcConfigurer {
             new Tag("Statistic", "Manage the statistics"),
             new Tag("User", "Manage the users"),
             new Tag("User", "Manage the users groups"),
-            new Tag("Permission", "Manage the permissions")
+            new Tag("Permission", "Manage the permissions"),
+            new Tag("Root", "Manage the root entry points")
         ).toArray(new Tag[0]);
     }
 
