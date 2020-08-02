@@ -1,11 +1,10 @@
 package br.gabriel.springrestspecialist.core.config;
 
 import br.gabriel.springrestspecialist.api.exception.ExceptionMessage;
-import br.gabriel.springrestspecialist.api.v1.model.response.CityResponse;
-import br.gabriel.springrestspecialist.api.v1.model.response.CuisineResponse;
-import br.gabriel.springrestspecialist.api.v1.model.response.OrderSummaryResponse;
-import br.gabriel.springrestspecialist.api.v1.model.response.StateResponse;
-import br.gabriel.springrestspecialist.api.v1.openapi.model.*;
+import br.gabriel.springrestspecialist.api.v1.model.response.*;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.LinksDoc;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.PageableDoc;
+import br.gabriel.springrestspecialist.api.v1.openapi.model.response.*;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +48,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
                 .apis(RequestHandlerSelectors.basePackage("br.gabriel.springrestspecialist.api.v1"))
+                .paths(PathSelectors.any())
                 .build()
             .apiInfo(apiInfo())
             .tags(tags()[0], tags())
@@ -134,13 +134,9 @@ public class OpenApiConfig implements WebMvcConfigurer {
     }
     
     private ResolvedType[] additionalModels() {
-        List<ResolvedType> resolvedTypes = new ArrayList<>();
-        
-        resolvedTypes.add(
+        return Collections.singletonList(
             new TypeResolver().resolve(ExceptionMessage.class)
-        );
-        
-        return resolvedTypes.toArray(new ResolvedType[0]);
+        ).toArray(new ResolvedType[0]);
     }
     
     private AlternateTypeRule[] alternateTypeRules() {
@@ -152,7 +148,7 @@ public class OpenApiConfig implements WebMvcConfigurer {
                 CuisineResponseDoc.class
             ),
             AlternateTypeRules.newRule(
-                typeResolver.resolve(PagedModel.class, OrderSummaryResponse.class),
+                typeResolver.resolve(Page.class, OrderSummaryResponse.class),
                 OrderSummaryResponseDoc.class
             ),
             AlternateTypeRules.newRule(
@@ -162,6 +158,10 @@ public class OpenApiConfig implements WebMvcConfigurer {
             AlternateTypeRules.newRule(
                 typeResolver.resolve(CollectionModel.class, StateResponse.class),
                 StateResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(CollectionModel.class, PaymentMethodResponse.class),
+                PaymentMethodResponseDoc.class
             )
         ).toArray(new AlternateTypeRule[0]);
     }

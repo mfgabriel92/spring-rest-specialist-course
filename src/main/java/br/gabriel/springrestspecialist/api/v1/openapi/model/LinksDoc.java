@@ -15,6 +15,6 @@ public class LinksDoc {
     @Setter
     private static class LinkModel {
         private String href;
-        private Boolean templated = Boolean.FALSE;
+        private Boolean templated;
     }
 }
