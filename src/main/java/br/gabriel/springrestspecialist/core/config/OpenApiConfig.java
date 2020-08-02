@@ -174,6 +174,14 @@ public class OpenApiConfig implements WebMvcConfigurer {
             AlternateTypeRules.newRule(
                 typeResolver.resolve(CollectionModel.class, ProductResponse.class),
                 ProductResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(CollectionModel.class, RestaurantResponse.class),
+                RestaurantResponseDoc.class
+            ),
+            AlternateTypeRules.newRule(
+                typeResolver.resolve(CollectionModel.class, UserResponse.class),
+                UserResponseDoc.class
             )
         ).toArray(new AlternateTypeRule[0]);
     }
